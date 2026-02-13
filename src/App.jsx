@@ -29,25 +29,25 @@ export default function App() {
 						className='roulette__stat-img roulette__stat-img--level'
 						src='../img/bg-statistic.png'
 					/>
-					<table className='roulette__stat-table'>
-						<tr className='roulette__stat-item '>
+					<div className='roulette__stat-grid'>
+						<div className='roulette__stat-item '>
 							{arrInfo.map(item => (
-								<td
+								<div
 									className='roulette__stat-cell roulette__stat-cell--level'
 									key={`level-${item.id}`}
 									style={{ '--level-cell': `${item.level}%` }}
-								></td>
+								></div>
 							))}
-						</tr>
-						<tr className='roulette__stat-item'>
+						</div>
+						<div className='roulette__stat-item'>
 							{arrInfo.map(item => (
-								<td
+								<div
 									className='roulette__stat-cell roulette__stat-cell--number'
 									key={item.id}
-								></td>
+								></div>
 							))}
-						</tr>
-					</table>
+						</div>
+					</div>
 				</header>
 			</div>
 		</main>
