@@ -1,0 +1,29 @@
+html{
+  overflow-y: hidden;
+  overflow-x: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+body{
+  width: 100vw;
+  height: 100vh;
+  background-image: url(../../img/bg-page.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'Aveni-Cons', sans-serif;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@font-face {
+    font-family: 'Aveni-Cons';
+    src:
+         url('../../fonts/AvenirNextCyr-Demi.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}

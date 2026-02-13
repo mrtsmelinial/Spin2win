@@ -1,0 +1,74 @@
+.roulette {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.roulette__container {
+	height: 100%;
+	width: 1130px;
+	background-image: url(../../img/bg-green.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.roulette__stat {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.roulette__stat-img {
+	position: absolute;
+	top: 0;
+}
+
+.roulette__stat-table {
+	width: 100%;
+	height: 60px;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin-top: 11px;
+	margin-inline-start: 17px;
+	margin-inline-end: 19.4px;
+	z-index: 100;
+	border: 1px solid;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.roulette__stat-item {
+	width: 100%;
+	height: 50%;
+	display: flex;
+}
+
+.roulette__stat-cell {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&:not(&:first-child) {
+		border-left: 1px solid;
+	}
+
+	&:not(.roulette__stat-cell--level) {
+		border-top: 1px solid;
+	}
+
+	&.roulette__stat-cell--level::after {
+		position: absolute;
+		content: '';
+		width: 100%;
+		height: 100%;
+		bottom: var(--level-cell);
+		background-color: rgb(11 37 29);
+	}
+}
