@@ -6,7 +6,7 @@
 	justify-content: center;
 }
 
-.roulette__container {
+.roulette__game-container {
 	position: relative;
 	height: 100%;
 	width: 1130px;
@@ -16,7 +16,7 @@
 	background-size: cover;
 }
 
-.roulette__stat {
+.roulette__statistic {
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -32,27 +32,27 @@
 .roulette__stat-grid {
 	width: 100%;
 	height: 60px;
-	margin-top: 11px;
+	margin-block: 11px;
 	margin-inline-start: 17px;
 	margin-inline-end: 19.4px;
 	border: 1px solid;
 	border-radius: 10px;
 	overflow: hidden;
 	z-index: 100;
-  display: grid;
+	display: grid;
 }
 
 .roulette__stat-item {
 	width: 100%;
-  height: 100%;
+	height: 100%;
 	display: grid;
-  grid-template-columns: repeat(37, auto);
+	grid-template-columns: repeat(37, auto);
 }
 
 .roulette__stat-cell {
 	position: relative;
 	width: 100%;
-  height: 100%;
+	height: 100%;
 
 	&:not(&:first-child) {
 		border-left: 1px solid;
@@ -72,8 +72,7 @@
 	}
 }
 
-
-.roulette__history{
+.roulette__history {
 	position: absolute;
 	top: 100px;
 	left: 36px;
@@ -85,18 +84,186 @@
 	overflow: hidden;
 }
 
-.roulette__history-item{
+.roulette__history-item {
 	display: grid;
 	place-items: center;
 	font-size: 24px;
 	min-width: 0;
 	min-height: 0;
 
-	&:not(:last-child){
+	&:not(:last-child) {
 		border-bottom: 1px solid;
 	}
 }
 
-.roulette__history-number{
+.roulette__history-number {
 	padding-top: 4px;
+}
+
+.roulette__wrapper {
+	width: 100%;
+	height: 100%;
+	display: grid;
+}
+
+.roulette__control {
+	width: 47%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.roulette__control-top {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin-top: 14px;
+	padding-left: 64px;
+}
+
+.roulette__button {
+	width: 60px;
+	height: 40px;
+	background-color: transparent;
+	border: none;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	cursor: pointer;
+	z-index: 1000;
+
+	&.roulette__button--fullscreen {
+		background-image: url(../../img/fullscr-min-white.svg);
+	}
+
+	&.roulette__button--mute {
+		background-image: url(../../img/audio-muted.svg);
+	}
+
+	&.roulette__button--menu {
+		position: relative;
+		margin-right: auto;
+		width: 100px;
+		height: 68px;
+		background-image: url(../../img/menu.svg);
+		background-size: cover;
+		transform: translateY(-40px);
+		border-radius: 8px;
+
+		&::after{
+			position: absolute;
+			content: 'MENU';
+			color: #fff;
+			font-size: 24px;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		&:active{
+			background-color: #0011ff;
+			filter: invert(1);
+		}
+	}
+}
+
+.roulette__balance {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	font-size: 24px;
+	color: rgb(221 202 124);
+}
+
+.roulette__icon-coin {
+	width: 30px;
+	aspect-ratio: 1/1;
+}
+
+.roulette__control-center {
+	width: 100%;
+	height: 100%;
+	padding-left: 64px;
+}
+.roulette__control-bottom {
+	width: 100%;
+	height: 204px;
+	padding-left: 30px;
+	padding-right: 44px;
+	display: flex;
+	align-items: start;
+	justify-content: end;
+}
+
+.roulette__spinner-bg {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background-image: url(/img/roulette-bg.svg);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.roulette__spinner-wheel {
+	width: 100%;
+	height: 100%;
+	background-image: url(/img/roulette-wheel.svg);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.roulette__spinner-num {
+	width: 100%;
+	height: 100%;
+	background-image: url(/img/roulette-num-black-center.svg);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.roulette__pointer {
+	position: absolute;
+	width: 34px;
+	height: 60px;
+	top: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-image: url(/img/roulette-pointer.svg);
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: 100;
+}
+
+.roulette__winning {
+	width: 126px;
+	height: 28px;
+	text-align: center;
+	display: grid;
+	place-items: center;
+	font-size: 22px;
+	color: rgb(221 202 124);
+}
+
+.roulette__jackpot-text{
+	width: 126px;
+	height: 28px;
+	text-align: center;
+	display: grid;
+	place-items: center;
+	background-image: url(../../img/jackpot-mega.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.roulette__session{
+	height: 28px;
+	text-align: center;
+	display: grid;
+	place-items: center;
+	font-size: 24px;
+	color: rgb(221 202 124);
 }

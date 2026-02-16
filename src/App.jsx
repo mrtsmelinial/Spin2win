@@ -37,11 +37,10 @@ const rouletteData = Array.from({ length: 37 }, (_, i) => {
 export default function App() {
 	const arrInfo = createArrayInfo()
 
-
 	return (
 		<main className='roulette'>
-			<div className='roulette__container'>
-				<header className='roulette__stat'>
+			<div className='roulette__game-container'>
+				<div className='roulette__statistic'>
 					<img
 						className='roulette__stat-img roulette__stat-img--wrapper'
 						src='../img/bg-statistic-and-last-events.png'
@@ -69,7 +68,7 @@ export default function App() {
 							))}
 						</div>
 					</div>
-				</header>
+				</div>
 				<div className='roulette__history'>
 					{rouletteData.slice(10, 20).map((item, index) => (
 						<div
@@ -82,6 +81,38 @@ export default function App() {
 							<span className='roulette__history-number'>{item.number}</span>
 						</div>
 					))}
+				</div>
+				<div className='roulette__wrapper'>
+					<div className='roulette__control'>
+						<div className='roulette__control-top'>
+							<button
+								className='roulette__button roulette__button--fullscreen'
+								type='button'
+							></button>
+							<div className='roulette__balance'>
+								<img className='roulette__icon-coin' src='../img/coins.svg' />
+								<span>$10000,00</span>
+							</div>
+							<button
+								className='roulette__button roulette__button--mute'
+								type='button'
+							></button>
+						</div>
+						<div className='roulette__control-center'>
+							<div className='roulette__spinner-bg'>
+								<div className='roulette__pointer'></div>
+								<div className='roulette__spinner-wheel'>
+									<div className='roulette__spinner-num'></div>
+								</div>
+							</div>
+						</div>
+						<div className='roulette__control-bottom'>
+							<button className='roulette__button roulette__button--menu'></button>
+							<div className='roulette__session'># 650 825</div>
+							<div className='roulette__jackpot-text'></div>
+							<div className='roulette__winning'>$2000,00</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</main>
