@@ -103,7 +103,9 @@
 .roulette__wrapper {
 	width: 100%;
 	height: 100%;
-	display: grid;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .roulette__control {
@@ -113,6 +115,13 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
+}
+
+.roulette__bet {
+	width: 53%;
+	height: 100%;
+	display: flex;
+	align-items: flex-start;
 }
 
 .roulette__control-top {
@@ -153,7 +162,7 @@
 		transform: translateY(-40px);
 		border-radius: 8px;
 
-		&::after{
+		&::after {
 			position: absolute;
 			content: 'MENU';
 			color: #fff;
@@ -163,7 +172,7 @@
 			transform: translateX(-50%);
 		}
 
-		&:active{
+		&:active {
 			background-color: #0011ff;
 			filter: invert(1);
 		}
@@ -247,7 +256,7 @@
 	color: rgb(221 202 124);
 }
 
-.roulette__jackpot-text{
+.roulette__jackpot-text {
 	width: 126px;
 	height: 28px;
 	text-align: center;
@@ -259,11 +268,84 @@
 	background-size: contain;
 }
 
-.roulette__session{
+.roulette__session {
 	height: 28px;
 	text-align: center;
 	display: grid;
 	place-items: center;
 	font-size: 24px;
 	color: rgb(221 202 124);
+}
+
+.roulette__cell {
+	margin-top: 14px;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	grid-template-rows: repeat(6, 1fr);
+	gap: 4px;
+}
+
+.roulette__cell-footer {
+	grid-column: span 6 / span 6;
+	margin-top: 4px;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	grid-template-rows: 1fr;
+	gap: 4px;
+}
+
+.roulette__cell-item {
+	width: 70px;
+	aspect-ratio: 1/1;
+	border: 1px solid;
+	border-radius: 6px;
+	display: grid;
+	place-items: center;
+	font-size: 30px;
+
+	&.roulette__cell-item--zero {
+		grid-column: span 2 / span 2;
+		width: 100%;
+		aspect-ratio: 2/1;
+		background-color: var(--cell-color-g);
+	}
+
+	&.roulette__cell-item--more-bets {
+		grid-column: span 2 / span 2;
+		grid-column-start: 3;
+		width: 100%;
+		aspect-ratio: 2/1;
+		font-size: 20px;
+	}
+}
+
+.roulette__bet-controls {
+	margin-top: 14px;
+	width: 100%;
+	height: 440px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.roulette__bet-button{
+	width: 110px;
+	height: 70px;
+	border: 1px solid #fff;
+	border-radius: 6px;
+	background-color: transparent;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 20px;
+	z-index: 100;
+	color: #fff;
+}
+
+.roulette__bet-icon{
+	width: 40px;
+	height: 40px;
+	margin-bottom: -6px;
 }
