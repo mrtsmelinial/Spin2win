@@ -123,6 +123,8 @@
 	height: 100%;
 	display: flex;
 	align-items: flex-start;
+	justify-content: end;
+	z-index: 100;
 }
 
 .roulette__control-top {
@@ -279,6 +281,7 @@
 }
 
 .roulette__cell {
+	width: 100%;
 	margin-top: 14px;
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
@@ -303,6 +306,7 @@
 	display: grid;
 	place-items: center;
 	font-size: 30px;
+	color: currentColor;
 
 	&.roulette__cell-item--zero {
 		grid-column: span 2 / span 2;
@@ -317,18 +321,38 @@
 		width: 100%;
 		aspect-ratio: 2/1;
 		font-size: 20px;
+		background-color: transparent;
+	}
+}
+
+.roulette__cell-item-add{
+	width: 100%;
+	height: 70px;
+	border: 1px solid;
+	border-radius: 6px;
+	display: grid;
+	place-items: center;
+	font-size: 30px;
+	color: currentColor;
+	background-color: transparent;
+
+	&.roulette__cell-item-add--size-2{
+		grid-column: span 2 / span 2;
+	}
+	&.roulette__cell-item-add--size-3{
+		grid-column: span 3 / span 3;
 	}
 }
 
 .roulette__bet-controls {
 	margin-top: 14px;
-	width: 100%;
+	min-width: 160px;
+	max-width: 160px;
 	height: 440px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
-	border: 1px solid;
 }
 
 .roulette__bet-button {
@@ -370,7 +394,17 @@
 
 .roulette__total-bet{
 	position: absolute;
-	bottom: 140px;
-	right: 0;
-	border: 1px;
+	bottom: 90px;
+	right: 24px;
+	display: flex;
+	flex-direction: column;
+}
+
+.roulette__total-text{
+	font-size: 20px;
+}
+
+.roulette__total-sum{
+	font-size: 30px;
+	margin-left: auto;
 }

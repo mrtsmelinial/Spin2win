@@ -1,4 +1,67 @@
-import React from 'react'
+import React, { useState } from 'react'
+
+const addBetsArray = [
+	{
+		title: 'A',
+		size: 2,
+	},
+	{
+		title: 'B',
+		size: 2,
+	},
+	{
+		title: 'C',
+		size: 2,
+	},
+	{
+		title: 'D',
+		size: 2,
+	},
+	{
+		title: 'E',
+		size: 2,
+	},
+	{
+		title: 'F',
+		size: 2,
+	},
+	{
+		title: 'RED',
+		size: 3,
+	},
+	{
+		title: 'BLACK',
+		size: 3,
+	},
+	{
+		title: 'EVEN',
+		size: 3,
+	},
+	{
+		title: 'ODD',
+		size: 3,
+	},
+	{
+		title: '1-18',
+		size: 3,
+	},
+	{
+		title: '19-36',
+		size: 3,
+	},
+	{
+		title: '1-12',
+		size: 2,
+	},
+	{
+		title: '13-24',
+		size: 2,
+	},
+	{
+		title: '25-36',
+		size: 2,
+	},
+]
 
 function createArrayInfo() {
 	const arr = []
@@ -37,6 +100,7 @@ const rouletteData = Array.from({ length: 37 }, (_, i) => {
 const sortedData = [...rouletteData.filter(item => item.number !== 0)]
 
 export default function App() {
+	const [onAddBets, setOnAddBets] = useState(false)
 	const arrInfo = createArrayInfo()
 
 	return (
@@ -117,24 +181,43 @@ export default function App() {
 					</div>
 					<div className='roulette__bet'>
 						<div className='roulette__cell'>
-							{sortedData.map((item, index) => (
-								<div
-									className='roulette__cell-item'
-									key={index}
-									style={{
-										backgroundColor: `var(--cell-color-${item.color})`,
-									}}
-								>
-									{item.number}
-								</div>
-							))}
+							{onAddBets
+								? addBetsArray.map((item, index) => (
+										<button
+											className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size}`}
+											key={index}
+											type='button'
+										>
+											{item.title}
+										</button>
+									))
+								: sortedData.map((item, index) => (
+										<button
+											className='roulette__cell-item'
+											key={index}
+											style={{
+												backgroundColor: `var(--cell-color-${item.color})`,
+											}}
+											type='button'
+										>
+											{item.number}
+										</button>
+									))}
+
 							<div className='roulette__cell-footer'>
-								<div className='roulette__cell-item roulette__cell-item--zero'>
+								<button
+									className='roulette__cell-item roulette__cell-item--zero'
+									type='button'
+								>
 									0
-								</div>
-								<div className='roulette__cell-item roulette__cell-item--more-bets'>
-									ADD.BETS
-								</div>
+								</button>
+								<button
+									className='roulette__cell-item roulette__cell-item--more-bets'
+									type='button'
+									onClick={() => setOnAddBets(prev => !prev)}
+								>
+									{onAddBets ? 'MAIN BETS' : 'ADD.BETS'}
+								</button>
 							</div>
 						</div>
 						<div className='roulette__bet-controls'>
@@ -215,8 +298,8 @@ export default function App() {
 							</button>
 						</div>
 						<div className='roulette__total-bet'>
-							<span>TOTAL AMOUNT OF BET:</span>
-							<span>0,00</span>
+							<span className='roulette__total-text'>TOTAL AMOUNT OF BET:</span>
+							<span className='roulette__total-sum'>0,00</span>
 						</div>
 					</div>
 				</div>
