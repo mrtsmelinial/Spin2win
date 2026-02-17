@@ -1,13 +1,10 @@
-html {
-	overflow-y: hidden;
-	overflow-x: hidden;
+html,body {
 	width: 100vw;
-	height: 100vh;
+	max-height: 100vh;
+	min-height: 100vh;
 }
 
 body {
-	width: 100vw;
-	height: 100vh;
 	background-image: url(../../img/bg-page.jpg);
 	background-position: center;
 	background-repeat: no-repeat;

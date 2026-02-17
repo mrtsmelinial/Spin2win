@@ -188,10 +188,12 @@ export default function App() {
 								<span>CLEAR</span>
 							</button>
 							<button className='roulette__bet-button' type='button'>
-								<span>x2</span>
+								<span className='roulette__bet-text roulette__bet-text--big'>
+									x2
+								</span>
 							</button>
 							<button className='roulette__bet-button' type='button'>
-								<span>2,00</span>
+								<span className='roulette__bet-text'>2,00</span>
 								<span>BET</span>
 							</button>
 							<button className='roulette__bet-button' type='button'>
@@ -211,6 +213,10 @@ export default function App() {
 								</svg>
 								<span>REBET</span>
 							</button>
+						</div>
+						<div className='roulette__total-bet'>
+							<span>TOTAL AMOUNT OF BET:</span>
+							<span>0,00</span>
 						</div>
 					</div>
 				</div>
