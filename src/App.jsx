@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const addBetsArray = [
 	{
@@ -63,6 +63,12 @@ const addBetsArray = [
 	},
 ]
 
+const sumBet = ['0,50', '1,00', '2,00', '5,00']
+
+
+ 
+
+
 function createArrayInfo() {
 	const arr = []
 
@@ -101,7 +107,69 @@ const sortedData = [...rouletteData.filter(item => item.number !== 0)]
 
 export default function App() {
 	const [onAddBets, setOnAddBets] = useState(false)
+	const [currentBetIndex, setCurrentBetIndex] = useState(0)
 	const arrInfo = createArrayInfo()
+
+	const handleClick = () => {
+		setCurrentBetIndex(prev => (prev + 1) % sumBet.length)
+	}
+
+	const [isFullScreen, setIsFullScreen] = useState(false)
+
+	const toggleFullScreen = () => {
+		if (!isFullScreen) {
+			const elem = document.documentElement
+
+			if (elem.requestFullscreen) {
+				elem.requestFullscreen()
+			} else if (elem.mozRequestFullScreen) {
+				elem.mozRequestFullScreen()
+			} else if (elem.webkitRequestFullscreen) {
+				elem.webkitRequestFullscreen()
+			} else if (elem.msRequestFullscreen) {
+				elem.msRequestFullscreen()
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen()
+			} else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen()
+			} else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen()
+			} else if (document.msExitFullscreen) {
+				document.msExitFullscreen()
+			}
+		}
+	}
+
+	useEffect(() => {
+		const handleFullScreenChange = () => {
+			setIsFullScreen(
+				document.fullscreenElement ||
+					document.webkitFullscreenElement ||
+					document.mozFullScreenElement ||
+					document.msFullscreenElement,
+			)
+		}
+
+		document.addEventListener('fullscreenchange', handleFullScreenChange)
+		document.addEventListener('webkitfullscreenchange', handleFullScreenChange)
+		document.addEventListener('mozfullscreenchange', handleFullScreenChange)
+		document.addEventListener('MSFullscreenChange', handleFullScreenChange)
+
+		return () => {
+			document.removeEventListener('fullscreenchange', handleFullScreenChange)
+			document.removeEventListener(
+				'webkitfullscreenchange',
+				handleFullScreenChange,
+			)
+			document.removeEventListener(
+				'mozfullscreenchange',
+				handleFullScreenChange,
+			)
+			document.removeEventListener('MSFullscreenChange', handleFullScreenChange)
+		}
+	}, [])
 
 	return (
 		<main className='roulette'>
@@ -154,6 +222,7 @@ export default function App() {
 							<button
 								className='roulette__button roulette__button--fullscreen'
 								type='button'
+								onClick={toggleFullScreen}
 							></button>
 							<div className='roulette__balance'>
 								<img className='roulette__icon-coin' src='../img/coins.svg' />
@@ -170,6 +239,27 @@ export default function App() {
 								<div className='roulette__spinner-wheel'>
 									<div className='roulette__spinner-num'></div>
 								</div>
+								<svg
+									version='1.1'
+									xmlns='http://www.w3.org/2000/svg'
+									viewBox='0 0 712.7 712.7'
+									class='roulette__time'
+								>
+									<path
+										className='load0-st1'
+										d='M296.4,19.6C136.5,47.8,15,187.4,15,355.4c0,188.3,152.7,341,341,341s341-152.7,341-341
+              c0-168-121.5-307.6-281.4-335.8'
+									></path>
+									<path
+										className='load1-st0'
+										d='M296.4,19.6C136.5,47.8,15,187.4,15,355.4c0,188.3,152.7,341,341,341s341-152.7,341-341
+              c0-168-121.5-307.6-281.4-335.8'
+										style={{
+											strokeDasharray: 2023.01,
+											strokeDashoffset: 1898.31,
+										}}
+									></path>
+								</svg>
 							</div>
 						</div>
 						<div className='roulette__control-bottom'>
@@ -275,8 +365,14 @@ export default function App() {
 									x2
 								</span>
 							</button>
-							<button className='roulette__bet-button' type='button'>
-								<span className='roulette__bet-text'>2,00</span>
+							<button
+								className='roulette__bet-button'
+								type='button'
+								onClick={handleClick}
+							>
+								<span className='roulette__bet-text'>
+									{sumBet[currentBetIndex]}
+								</span>
 								<span>BET</span>
 							</button>
 							<button className='roulette__bet-button' type='button'>

@@ -201,6 +201,14 @@
 	height: 100%;
 	padding-left: 64px;
 }
+.roulette__time {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	width: 95%;
+	height: 95%;
+}
 .roulette__control-bottom {
 	width: 100%;
 	height: 204px;
@@ -299,6 +307,7 @@
 }
 
 .roulette__cell-item {
+	position: relative;
 	width: 70px;
 	aspect-ratio: 1/1;
 	border: 1px solid;
@@ -324,8 +333,7 @@
 		background-color: transparent;
 	}
 }
-
-.roulette__cell-item-add{
+.roulette__cell-item-add {
 	width: 100%;
 	height: 70px;
 	border: 1px solid;
@@ -336,10 +344,10 @@
 	color: currentColor;
 	background-color: transparent;
 
-	&.roulette__cell-item-add--size-2{
+	&.roulette__cell-item-add--size-2 {
 		grid-column: span 2 / span 2;
 	}
-	&.roulette__cell-item-add--size-3{
+	&.roulette__cell-item-add--size-3 {
 		grid-column: span 3 / span 3;
 	}
 }
@@ -392,7 +400,7 @@
 	}
 }
 
-.roulette__total-bet{
+.roulette__total-bet {
 	position: absolute;
 	bottom: 90px;
 	right: 24px;
@@ -400,11 +408,27 @@
 	flex-direction: column;
 }
 
-.roulette__total-text{
+.roulette__total-text {
 	font-size: 20px;
 }
 
-.roulette__total-sum{
+.roulette__total-sum {
 	font-size: 30px;
 	margin-left: auto;
+}
+
+.load0-st1 {
+	fill: none;
+	stroke: #00261d;
+	stroke-width: 30;
+	stroke-linecap: round;
+	stroke-miterlimit: 10;
+}
+.load1-st0 {
+	fill: none;
+	stroke: #21b502;
+	stroke-width: 15;
+	stroke-linecap: round;
+	stroke-miterlimit: 10;
+	transition: stroke-dashoffset 1s linear;
 }
