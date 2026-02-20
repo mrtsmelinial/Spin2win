@@ -1,7 +1,7 @@
 import React from 'react'
 import History from './component/History'
 import Statistic from './component/Statistic'
-import ControlColumn from './component/ControlColumn'
+import ControlColumn from './component/ControlColumn/ControlColumn'
 import BetColumn from './component/BetColumn'
 
 export default function App() {
