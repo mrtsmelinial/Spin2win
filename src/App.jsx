@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const addBetsArray = [
 	{
@@ -64,10 +64,6 @@ const addBetsArray = [
 ]
 
 const sumBet = ['0,50', '1,00', '2,00', '5,00']
-
-
- 
-
 
 function createArrayInfo() {
 	const arr = []
@@ -171,6 +167,75 @@ export default function App() {
 		}
 	}, [])
 
+	const progressRef = useRef(null)
+	const wheelRef = useRef(null)
+
+	useEffect(() => {
+		startTimer()
+	}, [])
+
+	const startTimer = () => {
+		const path = progressRef.current
+		const duration = 15000
+		const length = path.getTotalLength()
+
+		path.style.transition = 'none'
+		path.style.strokeDasharray = length
+		path.style.strokeDashoffset = 0
+
+		let startTime = null
+
+		const animate = time => {
+			if (!startTime) startTime = time
+			const progress = time - startTime
+			const percent = Math.min(progress / duration, 1)
+
+			path.style.strokeDashoffset = length * percent
+
+			if (percent < 1) {
+				requestAnimationFrame(animate)
+			} else {
+				startSpin()
+			}
+		}
+
+		requestAnimationFrame(animate)
+	}
+
+	const startSpin = () => {
+		const wheel = wheelRef.current
+
+		const spinDuration = 30000 // 30 сек
+		const extraSpins = 20
+		const finalDegree = Math.floor(Math.random() * 360)
+
+		const totalRotation = extraSpins * 360 + finalDegree
+
+		wheel.style.transition = `transform ${spinDuration}ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`
+		wheel.style.transform = `rotate(${totalRotation}deg)`
+
+		wheel.addEventListener('transitionend', handleSpinEnd, {
+			once: true,
+		})
+	}
+
+	const handleSpinEnd = () => {
+		const wheel = wheelRef.current
+
+		// получаем текущий угол
+		const computedStyle = window.getComputedStyle(wheel)
+		const matrix = new DOMMatrix(computedStyle.transform)
+		const currentRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI)
+
+		// сбрасываем без анимации
+		wheel.style.transition = 'none'
+		wheel.style.transform = `rotate(${currentRotation}deg)`
+
+		// перезапускаем таймер
+		setTimeout(() => {
+			startTimer()
+		}, 100)
+	}
 	return (
 		<main className='roulette'>
 			<div className='roulette__game-container'>
@@ -236,7 +301,7 @@ export default function App() {
 						<div className='roulette__control-center'>
 							<div className='roulette__spinner-bg'>
 								<div className='roulette__pointer'></div>
-								<div className='roulette__spinner-wheel'>
+								<div className='roulette__spinner-wheel' ref={wheelRef}>
 									<div className='roulette__spinner-num'></div>
 								</div>
 								<svg
@@ -252,12 +317,9 @@ export default function App() {
 									></path>
 									<path
 										className='load1-st0'
+										ref={progressRef}
 										d='M296.4,19.6C136.5,47.8,15,187.4,15,355.4c0,188.3,152.7,341,341,341s341-152.7,341-341
               c0-168-121.5-307.6-281.4-335.8'
-										style={{
-											strokeDasharray: 2023.01,
-											strokeDashoffset: 1898.31,
-										}}
 									></path>
 								</svg>
 							</div>
@@ -265,7 +327,14 @@ export default function App() {
 						<div className='roulette__control-bottom'>
 							<button className='roulette__button roulette__button--menu'></button>
 							<div className='roulette__session'># 650 825</div>
-							<div className='roulette__jackpot-text'></div>
+							<div className='roulette__jackpot'>
+								<div className='roulette__jackpot-list'>
+									<div className='roulette__jackpot-img roulette__jackpot-img--big'></div>
+									<div className='roulette__jackpot-img roulette__jackpot-img--super'></div>
+									<div className='roulette__jackpot-img roulette__jackpot-img--mega'></div>
+									<div className='roulette__jackpot-img roulette__jackpot-img--big'></div>
+								</div>
+							</div>
 							<div className='roulette__winning'>$2000,00</div>
 						</div>
 					</div>
@@ -283,7 +352,7 @@ export default function App() {
 									))
 								: sortedData.map((item, index) => (
 										<button
-											className='roulette__cell-item'
+											className='roulette__cell-item active'
 											key={index}
 											style={{
 												backgroundColor: `var(--cell-color-${item.color})`,
@@ -291,6 +360,7 @@ export default function App() {
 											type='button'
 										>
 											{item.number}
+											<div className='roulette__cell-bet'>2.00</div>
 										</button>
 									))}
 

@@ -267,16 +267,39 @@
 	color: rgb(221 202 124);
 }
 
-.roulette__jackpot-text {
+.roulette__jackpot {
+	position: relative;
 	width: 126px;
 	height: 28px;
 	text-align: center;
-	display: grid;
-	place-items: center;
-	background-image: url(../../img/jackpot-mega.png);
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	overflow: hidden;
+}
+
+.roulette__jackpot-list {
+	position: absolute;
+	height: 100%;
+	display: flex;
+}
+
+.roulette__jackpot-img {
+	width: 126px;
+	height: 28px;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
+
+	&.roulette__jackpot-img--big {
+		background-image: url(../../img/jackpot-big.png);
+	}
+	&.roulette__jackpot-img--super {
+		background-image: url(../../img/jackpot-super.png);
+	}
+	&.roulette__jackpot-img--mega {
+		background-image: url(../../img/jackpot-mega.png);
+	}
 }
 
 .roulette__session {
@@ -310,7 +333,7 @@
 	position: relative;
 	width: 70px;
 	aspect-ratio: 1/1;
-	border: 1px solid;
+	border: 1px solid #fff;
 	border-radius: 6px;
 	display: grid;
 	place-items: center;
@@ -332,7 +355,20 @@
 		font-size: 20px;
 		background-color: transparent;
 	}
+
+	&.active {
+		background-color: rgb(253, 224, 71) !important;
+		color: rgb(185 28 28);
+	}
 }
+
+.roulette__cell-bet {
+	position: absolute;
+	bottom: 0;
+	font-size: 16px;
+	color: black;
+}
+
 .roulette__cell-item-add {
 	width: 100%;
 	height: 70px;
