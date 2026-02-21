@@ -1,5 +1,6 @@
 import React from 'react'
 import Jackpots from './Jackpots'
+import JacpotsAmount from './JacpotsAmount'
 
 export default function ControlColumnBottom() {
   return (
@@ -7,7 +8,7 @@ export default function ControlColumnBottom() {
 			<button className='roulette__button roulette__button--menu'></button>
 			<div className='roulette__session'># 650 825</div>
 			<Jackpots/>
-			<div className='roulette__winning'>$2000,00</div>
+			<JacpotsAmount/>
 		</div>
 	)
 }

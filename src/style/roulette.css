@@ -257,17 +257,12 @@
 	z-index: 100;
 }
 
-.roulette__winning {
-	width: 126px;
-	height: 28px;
-	text-align: center;
-	display: grid;
-	place-items: center;
+.roulette__jackpot-amount {
 	font-size: 22px;
 	color: rgb(221 202 124);
 }
 
-.roulette__jackpot {
+.roulette__jackpot, .roulette__jackpot-amount {
 	position: relative;
 	width: 126px;
 	height: 28px;
@@ -278,29 +273,26 @@
 	overflow: hidden;
 }
 
-.roulette__jackpot-list {
+.roulette__jackpot-list, .roulette__amount-list {
 	position: absolute;
+	left: 0px;
 	height: 100%;
 	display: flex;
+	align-items: center;
 }
 
-.roulette__jackpot-img {
+.roulette__jackpot-item, .roulette__amount-item {
 	width: 126px;
 	height: 28px;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: contain;
+	display: flex;
+	justify-content: center;
 
-	&.roulette__jackpot-img--big {
-		background-image: url(../../img/jackpot-big.png);
-	}
-	&.roulette__jackpot-img--super {
-		background-image: url(../../img/jackpot-super.png);
-	}
-	&.roulette__jackpot-img--mega {
-		background-image: url(../../img/jackpot-mega.png);
+	&.roulette__jackpot-item--right{
+		justify-content: end;
+		padding-right: 14px;
 	}
 }
+
 
 .roulette__session {
 	height: 28px;
