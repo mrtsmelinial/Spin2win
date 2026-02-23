@@ -262,7 +262,8 @@
 	color: rgb(221 202 124);
 }
 
-.roulette__jackpot, .roulette__jackpot-amount {
+.roulette__jackpot,
+.roulette__jackpot-amount {
 	position: relative;
 	width: 126px;
 	height: 28px;
@@ -273,7 +274,8 @@
 	overflow: hidden;
 }
 
-.roulette__jackpot-list, .roulette__amount-list {
+.roulette__jackpot-list,
+.roulette__amount-list {
 	position: absolute;
 	left: 0px;
 	height: 100%;
@@ -281,18 +283,18 @@
 	align-items: center;
 }
 
-.roulette__jackpot-item, .roulette__amount-item {
+.roulette__jackpot-item,
+.roulette__amount-item {
 	width: 126px;
 	height: 28px;
 	display: flex;
 	justify-content: center;
 
-	&.roulette__jackpot-item--right{
+	&.roulette__jackpot-item--right {
 		justify-content: end;
 		padding-right: 14px;
 	}
 }
-
 
 .roulette__session {
 	height: 28px;
@@ -331,6 +333,7 @@
 	place-items: center;
 	font-size: 30px;
 	color: currentColor;
+	transition: all 0.2s;
 
 	&.roulette__cell-item--zero {
 		grid-column: span 2 / span 2;
@@ -362,21 +365,27 @@
 }
 
 .roulette__cell-item-add {
+	position: relative;
 	width: 100%;
 	height: 70px;
-	border: 1px solid;
+	border: 1px solid #fff;
 	border-radius: 6px;
 	display: grid;
 	place-items: center;
 	font-size: 30px;
 	color: currentColor;
 	background-color: transparent;
+	transition: all 0.2s;
 
 	&.roulette__cell-item-add--size-2 {
 		grid-column: span 2 / span 2;
 	}
 	&.roulette__cell-item-add--size-3 {
 		grid-column: span 3 / span 3;
+	}
+	&.active {
+		background-color: rgb(253, 224, 71) !important;
+		color: rgb(185 28 28);
 	}
 }
 

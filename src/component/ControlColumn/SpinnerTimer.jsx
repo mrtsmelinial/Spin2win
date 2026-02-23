@@ -6,7 +6,7 @@ export default function SpinnerTimer({progressRef}) {
 			version='1.1'
 			xmlns='http://www.w3.org/2000/svg'
 			viewBox='0 0 712.7 712.7'
-			class='roulette__time'
+			className='roulette__time'
 		>
 			<path
 				className='load0-st1'

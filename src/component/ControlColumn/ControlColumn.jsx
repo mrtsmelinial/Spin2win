@@ -4,12 +4,12 @@ import ControlColumnCenter from './ControlColumnCenter'
 import ControlColumnBottom from './ControlColumnBottom'
 
 export default function ControlColumn() {
-
+	
 	return (
 		<div className='roulette__control'>
-			<ControlColumnTop/>
-			<ControlColumnCenter/>
-			<ControlColumnBottom/>
+			<ControlColumnTop  />
+			<ControlColumnCenter />
+			<ControlColumnBottom />
 		</div>
 	)
 }
