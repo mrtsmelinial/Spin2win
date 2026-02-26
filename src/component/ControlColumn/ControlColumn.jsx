@@ -3,12 +3,11 @@ import ControlColumnTop from './ControlColumnTop'
 import ControlColumnCenter from './ControlColumnCenter'
 import ControlColumnBottom from './ControlColumnBottom'
 
-export default function ControlColumn() {
-	
+export default function ControlColumn({ onSpinComplete, initialCell }) {
 	return (
 		<div className='roulette__control'>
-			<ControlColumnTop  />
-			<ControlColumnCenter />
+			<ControlColumnTop />
+			<ControlColumnCenter onSpinComplete={onSpinComplete} initialCell={initialCell} />
 			<ControlColumnBottom />
 		</div>
 	)

@@ -4,7 +4,7 @@ import BetColumnControls from './BetColumnControls'
 import BetColumnTotalBet from './BetColumnTotalBet'
 import { useRoulette } from '../../context/RouletteContext'
 
-const sumBet = ['0,50', '1,00', '2,00', '5,00']
+const sumBet = ['0,10', '1,00', '2,00', '5,00', '10,00']
 
 const redNumbers = new Set([
 	1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,

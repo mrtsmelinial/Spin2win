@@ -72,28 +72,31 @@
 	}
 }
 
+.roulette__history-wrapper {
+    position: absolute;
+    top: 100px;
+    left: 36px;
+    width: 35px;
+    height: 381px;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
 .roulette__history {
-	position: absolute;
-	top: 100px;
-	left: 36px;
-	width: 35px;
-	height: 381px;
-	display: grid;
-	grid-template-rows: repeat(10, 1fr);
-	border-radius: 6px;
-	overflow: hidden;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .roulette__history-item {
-	display: grid;
-	place-items: center;
-	font-size: 24px;
-	min-width: 0;
-	min-height: 0;
+  	height: 38px;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
 
-	&:not(:last-child) {
-		border-bottom: 1px solid;
-	}
+    &:not(:last-child) {
+        border-bottom: 1px solid;
+    }
 }
 
 .roulette__history-number {
@@ -237,11 +240,27 @@
 }
 
 .roulette__spinner-num {
+	position: absolute;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
-	background-image: url(/img/roulette-num-black-center.svg);
+	background-image: url(/img/roulette-num-green-center.svg);
 	background-position: center;
 	background-repeat: no-repeat;
+	font-size: 44px;
+
+	&.green {
+		background-image: url(/img/roulette-num-green-center.svg);
+	}
+	&.red {
+		background-image: url(/img/roulette-num-red-center.svg);
+	}
+	&.black {
+		background-image: url(/img/roulette-num-black-center.svg);
+	}
 }
 
 .roulette__pointer {
@@ -467,5 +486,4 @@
 	stroke-width: 15;
 	stroke-linecap: round;
 	stroke-miterlimit: 10;
-	transition: stroke-dashoffset 1s linear;
 }

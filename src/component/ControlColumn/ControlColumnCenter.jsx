@@ -1,79 +1,153 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SpinnerTimer from './SpinnerTimer'
+import { wheelSlots } from '../WheelSlots'
+import { getCellRandom } from '../../reducers/CreateRandomCell'
+import gsap from 'gsap'
 
-export default function ControlColumnCenter() {
-	const progressRef = useRef(null)
+export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const wheelRef = useRef(null)
+	const progressRef = useRef(null)
+	const targetCellRef = useRef(null)
 
-	const startTimer = () => {
-		const path = progressRef.current
-		const duration = 15000
-		const length = path.getTotalLength()
 
-		path.style.transition = 'none'
-		path.style.strokeDasharray = length
-		path.style.strokeDashoffset = 0
 
-		let startTime = null
+	const [cellRandom, setCellRandom] = useState(initialCell)
+	const [currentCell, setCurrentCell] = useState(cellRandom.number)
+	const [currentColor, setCurrentColor] = useState(cellRandom.color)
 
-		const animate = time => {
-			if (!startTime) startTime = time
-			const progress = time - startTime
-			const percent = Math.min(progress / duration, 1)
+	const getCellByRotation = rotation => {
+		const normalized = ((rotation % 360) + 360) % 360
 
-			path.style.strokeDashoffset = length * percent
+		let closestKey = null
+		let minDiff = Infinity
 
-			if (percent < 1) {
-				requestAnimationFrame(animate)
-			} else {
-				startSpin()
+		Object.keys(wheelSlots).forEach(k => {
+			const slotAngle = wheelSlots[k].angle
+			let diff = Math.abs(normalized - slotAngle)
+			if (diff > 180) diff = 360 - diff
+
+			if (diff < minDiff) {
+				minDiff = diff
+				closestKey = k
 			}
-		}
-
-		requestAnimationFrame(animate)
-	}
-
-	const startSpin = () => {
-		const wheel = wheelRef.current
-
-		const spinDuration = 30000
-		const extraSpins = 20
-
-		const totalRotation = extraSpins * 360
-
-		wheel.style.transition = `transform ${spinDuration}ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`
-		wheel.style.transform = `rotate(${totalRotation}deg)`
-
-		wheel.addEventListener('transitionend', handleSpinEnd, {
-			once: true,
 		})
-	}
 
-	const handleSpinEnd = () => {
-		const wheel = wheelRef.current
+		if (closestKey === null) return null
 
-		const computedStyle = window.getComputedStyle(wheel)
-		const matrix = new DOMMatrix(computedStyle.transform)
-		const currentRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI)
-
-		wheel.style.transition = 'none'
-		wheel.style.transform = `rotate(${currentRotation}deg)`
-
-		setTimeout(() => {
-			startTimer()
-		}, 100)
+		return {
+			number: Number(closestKey),
+			...wheelSlots[closestKey],
+		}
 	}
 
 	useEffect(() => {
+		const wheel = wheelRef.current
+		const path = progressRef.current
+
+		gsap.set(wheel, { rotation: cellRandom.angle })
+
+		function startTimer() {
+			const length = path.getTotalLength()
+
+			gsap.killTweensOf(path)
+			gsap.set(path, {
+				strokeDasharray: length,
+				strokeDashoffset: 0,
+				opacity: 1, // показываем линию при старте
+			})
+
+			gsap.to(path, {
+				strokeDashoffset: length,
+				duration: 2,
+				ease: 'none',
+				delay: 2,
+				onComplete: () => {
+					gsap.set(path, { opacity: 0 }) // скрываем точку
+					SpinStart()
+				},
+			})
+		}
+
+		function SpinStart() {
+			const currentRotation = gsap.getProperty(wheel, 'rotation')
+
+			gsap.to(wheel, {
+				rotation: currentRotation + 360 * 2,
+				duration: 3,
+				ease: 'power1.in',
+				onUpdate: () => {
+					const rotation = gsap.getProperty(wheel, 'rotation') % 360
+					const currentSlot = getCellByRotation(rotation)
+					if (currentSlot) {
+						setCurrentCell(currentSlot.number)
+						setCurrentColor(currentSlot.color)
+					}
+				},
+				onComplete: SpinWait,
+			})
+		}
+
+		function SpinWait() {
+			const currentRotation = gsap.getProperty(wheel, 'rotation')
+			const newCell = getCellRandom()
+			targetCellRef.current = newCell
+			setCellRandom(newCell)
+
+			gsap.to(wheel, {
+				rotation: currentRotation + 360 * 3,
+				duration: 2,
+				ease: 'linear',
+				onUpdate: () => {
+					const rotation = gsap.getProperty(wheel, 'rotation') % 360
+					const currentSlot = getCellByRotation(rotation)
+					if (currentSlot) {
+						setCurrentCell(currentSlot.number)
+						setCurrentColor(currentSlot.color)
+					}
+				},
+				onComplete: SpinToCell,
+			})
+		}
+
+		function SpinToCell() {
+			const target = targetCellRef.current
+			const currentRotation = gsap.getProperty(wheel, 'rotation')
+
+			const currentNormalized = ((currentRotation % 360) + 360) % 360
+			let diff = target.angle - currentNormalized
+			if (diff < 0) diff += 360
+
+			gsap.to(wheel, {
+				rotation: currentRotation + diff + 360 * 6,
+				duration: 25,
+				ease: 'power4.out',
+				onUpdate: () => {
+					const rotation = gsap.getProperty(wheel, 'rotation') % 360
+					const currentSlot = getCellByRotation(rotation)
+					if (currentSlot) {
+						setCurrentCell(currentSlot.number)
+						setCurrentColor(currentSlot.color)
+					}
+				},
+				onComplete: () => {
+					setCurrentCell(target.number)
+					setCurrentColor(target.color)
+					startTimer()
+					onSpinComplete({ number: target.number, color: target.color })
+				},
+			})
+		}
+
 		startTimer()
-	})
+	}, [])
 
 	return (
 		<div className='roulette__control-center'>
 			<div className='roulette__spinner-bg'>
 				<div className='roulette__pointer'></div>
-				<div className='roulette__spinner-wheel' ref={wheelRef}>
-					<div className='roulette__spinner-num'></div>
+				<div className='roulette__spinner-wheel' ref={wheelRef}></div>
+				<div className={`roulette__spinner-num ${currentColor}`}>
+					<div>{currentCell}</div>
 				</div>
 				<SpinnerTimer progressRef={progressRef} />
 			</div>

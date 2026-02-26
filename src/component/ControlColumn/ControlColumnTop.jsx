@@ -11,7 +11,7 @@ export default function ControlColumnTop() {
 			<ButtonFullscreen />
 			<div className='roulette__balance'>
 				<img className='roulette__icon-coin' src='../img/coins.svg' />
-				<span>${state.balance}</span>
+				<span>${state.balance.toFixed(2).replace('.', ',')}</span>
 			</div>
 			<ButtonMute />
 		</div>
