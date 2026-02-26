@@ -8,7 +8,8 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const wheelRef = useRef(null)
 	const progressRef = useRef(null)
 	const targetCellRef = useRef(null)
-
+const pointerRef = useRef(null)
+const prevCellRef = useRef(null)
 
 
 	const [cellRandom, setCellRandom] = useState(initialCell)
@@ -79,6 +80,20 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 					const rotation = gsap.getProperty(wheel, 'rotation') % 360
 					const currentSlot = getCellByRotation(rotation)
 					if (currentSlot) {
+						 if (currentSlot.number !== prevCellRef.current) {
+								prevCellRef.current = currentSlot.number
+								gsap.fromTo(
+									pointerRef.current,
+									{ rotation: 0 },
+									{
+										rotation: -15,
+										duration: 0.1,
+										ease: 'power1.out',
+										yoyo: true,
+										repeat: 1,
+									},
+								)
+							}
 						setCurrentCell(currentSlot.number)
 						setCurrentColor(currentSlot.color)
 					}
@@ -101,6 +116,20 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 					const rotation = gsap.getProperty(wheel, 'rotation') % 360
 					const currentSlot = getCellByRotation(rotation)
 					if (currentSlot) {
+						 if (currentSlot.number !== prevCellRef.current) {
+								prevCellRef.current = currentSlot.number
+								gsap.fromTo(
+									pointerRef.current,
+									{ rotation: 0 },
+									{
+										rotation: -15,
+										duration: 0.1,
+										ease: 'power1.out',
+										yoyo: true,
+										repeat: 1,
+									},
+								)
+							}
 						setCurrentCell(currentSlot.number)
 						setCurrentColor(currentSlot.color)
 					}
@@ -125,6 +154,20 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 					const rotation = gsap.getProperty(wheel, 'rotation') % 360
 					const currentSlot = getCellByRotation(rotation)
 					if (currentSlot) {
+						 if (currentSlot.number !== prevCellRef.current) {
+								prevCellRef.current = currentSlot.number
+								gsap.fromTo(
+									pointerRef.current,
+									{ rotation: 0 },
+									{
+										rotation: -15,
+										duration: 0.1,
+										ease: 'power1.out',
+										yoyo: true,
+										repeat: 1,
+									},
+								)
+							}
 						setCurrentCell(currentSlot.number)
 						setCurrentColor(currentSlot.color)
 					}
@@ -144,7 +187,7 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	return (
 		<div className='roulette__control-center'>
 			<div className='roulette__spinner-bg'>
-				<div className='roulette__pointer'></div>
+				<div className='roulette__pointer' ref={pointerRef}></div>
 				<div className='roulette__spinner-wheel' ref={wheelRef}></div>
 				<div className={`roulette__spinner-num ${currentColor}`}>
 					<div>{currentCell}</div>
