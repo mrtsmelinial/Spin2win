@@ -4,7 +4,7 @@ import BetColumnControls from './BetColumnControls'
 import BetColumnTotalBet from './BetColumnTotalBet'
 import { useRoulette } from '../../context/RouletteContext'
 
-const sumBet = ['0,10', '1,00', '2,00', '5,00', '10,00']
+const sumBet = ['0,50', '1,00', '2,00', '3,00', '5,00', '10,00']
 
 const redNumbers = new Set([
 	1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
@@ -23,9 +23,8 @@ const rouletteData = Array.from({ length: 37 }, (_, i) => {
 		betAmount: 0,
 	}
 })
-export default function BetColumn() {
-
-	const {dispatch} = useRoulette()
+export default function BetColumn({ betting }) {
+	const { dispatch } = useRoulette()
 
 	const [selectedChip, setSelectedChip] = useState(
 		parseFloat(sumBet[0].replace(',', '.')),
@@ -40,12 +39,11 @@ export default function BetColumn() {
 
 	return (
 		<div className='roulette__bet'>
-			<BetColumnBettingGrid
-				selectedChip={selectedChip}
-			/>
+			<BetColumnBettingGrid selectedChip={selectedChip} betting={betting} />
 			<BetColumnControls
 				setSelectedChip={setSelectedChip}
 				sumBet={sumBet}
+				betting={betting}
 			/>
 			<BetColumnTotalBet />
 		</div>

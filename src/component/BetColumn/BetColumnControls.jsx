@@ -4,7 +4,7 @@ import { useRoulette } from '../../context/RouletteContext'
 
 
 export default function BetColumnControls({ setSelectedChip, sumBet }) {
-	const { dispatch } = useRoulette()
+	const {state, dispatch } = useRoulette()
 	const [currentBetIndex, setCurrentBetIndex] = useState(0)
 
 	const handleClick = () => {
@@ -92,7 +92,12 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 			<button
 				className='roulette__bet-button'
 				type='button'
-				onClick={() => dispatch({ type: 'RESTORE_LAST_ROUND' })}
+				onClick={() => {
+					console.log('savedRounds:', state.savedRounds)
+					const lastRound = state.savedRounds[state.savedRounds.length - 1]
+					console.log('lastRound:', lastRound)
+					if (lastRound) dispatch({ type: 'LOAD_ROUND', id: lastRound.id })
+				}}
 			>
 				<svg
 					className='roulette__bet-icon'

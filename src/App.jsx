@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import History from './component/History'
 import Statistic from './component/Statistic'
 import ControlColumn from './component/ControlColumn/ControlColumn'
@@ -6,9 +6,7 @@ import BetColumn from './component/BetColumn/BetColumn'
 import { RouletteProvider } from './context/RouletteContext'
 import { getCellRandom } from './reducers/CreateRandomCell'
 
-
 export default function App() {
-
 	const [initialCell] = useState(() => getCellRandom())
 
 	const generateInitialHistory = firstCell => {
@@ -31,12 +29,25 @@ export default function App() {
 			{ number: firstCell.number, color: colorMap[firstCell.color] },
 			...rest,
 		]
-
 	}
 
 	const [history, setHistory] = useState(() =>
 		generateInitialHistory(initialCell),
 	)
+
+	useEffect(() => {
+		const images = [
+			'/img/reward-coins.svg',
+			'/img/roulette-num-black-center.svg',
+			'/img/roulette-num-red-center.svg',
+			'/img/roulette-num-green-center.svg',
+		]
+
+		images.forEach(src => {
+			const img = new Image()
+			img.src = src
+		})
+	}, [])
 
 	return (
 		<RouletteProvider>
@@ -51,7 +62,7 @@ export default function App() {
 								setHistory(prev => [cell, ...prev])
 								setTimeout(() => {
 									setHistory(prev => prev.slice(0, -1))
-								}, 1000) 
+								}, 1000)
 							}}
 						/>
 						<BetColumn />

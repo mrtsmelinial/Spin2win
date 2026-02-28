@@ -3,18 +3,20 @@ import SpinnerTimer from './SpinnerTimer'
 import { wheelSlots } from '../WheelSlots'
 import { getCellRandom } from '../../reducers/CreateRandomCell'
 import gsap from 'gsap'
+import { useRoulette } from '../../context/RouletteContext'
 
 export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
+	const { state, dispatch } = useRoulette()
 	const wheelRef = useRef(null)
 	const progressRef = useRef(null)
 	const targetCellRef = useRef(null)
-const pointerRef = useRef(null)
-const prevCellRef = useRef(null)
-
-
+	const pointerRef = useRef(null)
+	const prevCellRef = useRef(null)
 	const [cellRandom, setCellRandom] = useState(initialCell)
 	const [currentCell, setCurrentCell] = useState(cellRandom.number)
 	const [currentColor, setCurrentColor] = useState(cellRandom.color)
+	const [winAmount, setWinAmount] = useState(0)
+	const winRef = useRef(null)
 
 	const getCellByRotation = rotation => {
 		const normalized = ((rotation % 360) + 360) % 360
@@ -41,10 +43,11 @@ const prevCellRef = useRef(null)
 		}
 	}
 
+	const betsRef = useRef([])
+
 	useEffect(() => {
 		const wheel = wheelRef.current
 		const path = progressRef.current
-
 		gsap.set(wheel, { rotation: cellRandom.angle })
 
 		function startTimer() {
@@ -63,7 +66,11 @@ const prevCellRef = useRef(null)
 				ease: 'none',
 				delay: 2,
 				onComplete: () => {
-					gsap.set(path, { opacity: 0 }) // скрываем точку
+					gsap.to(winRef.current, { opacity: 0, duration: 0.3 })
+					gsap.set(path, { opacity: 0 })
+					dispatch({ type: 'SAVE_ROUND' })
+					dispatch({ type: 'SET_RESULT', payload: null })
+					dispatch({ type: 'SET_ACTIVE', payload: false })
 					SpinStart()
 				},
 			})
@@ -71,7 +78,7 @@ const prevCellRef = useRef(null)
 
 		function SpinStart() {
 			const currentRotation = gsap.getProperty(wheel, 'rotation')
-
+			dispatch({ type: 'SET_ACTIVE', payload: false })
 			gsap.to(wheel, {
 				rotation: currentRotation + 360 * 2,
 				duration: 3,
@@ -80,20 +87,20 @@ const prevCellRef = useRef(null)
 					const rotation = gsap.getProperty(wheel, 'rotation') % 360
 					const currentSlot = getCellByRotation(rotation)
 					if (currentSlot) {
-						 if (currentSlot.number !== prevCellRef.current) {
-								prevCellRef.current = currentSlot.number
-								gsap.fromTo(
-									pointerRef.current,
-									{ rotation: 0 },
-									{
-										rotation: -15,
-										duration: 0.1,
-										ease: 'power1.out',
-										yoyo: true,
-										repeat: 1,
-									},
-								)
-							}
+						if (currentSlot.number !== prevCellRef.current) {
+							prevCellRef.current = currentSlot.number
+							gsap.fromTo(
+								pointerRef.current,
+								{ rotation: 0 },
+								{
+									rotation: -15,
+									duration: 0.1,
+									ease: 'power1.out',
+									yoyo: true,
+									repeat: 1,
+								},
+							)
+						}
 						setCurrentCell(currentSlot.number)
 						setCurrentColor(currentSlot.color)
 					}
@@ -116,20 +123,20 @@ const prevCellRef = useRef(null)
 					const rotation = gsap.getProperty(wheel, 'rotation') % 360
 					const currentSlot = getCellByRotation(rotation)
 					if (currentSlot) {
-						 if (currentSlot.number !== prevCellRef.current) {
-								prevCellRef.current = currentSlot.number
-								gsap.fromTo(
-									pointerRef.current,
-									{ rotation: 0 },
-									{
-										rotation: -15,
-										duration: 0.1,
-										ease: 'power1.out',
-										yoyo: true,
-										repeat: 1,
-									},
-								)
-							}
+						if (currentSlot.number !== prevCellRef.current) {
+							prevCellRef.current = currentSlot.number
+							gsap.fromTo(
+								pointerRef.current,
+								{ rotation: 0 },
+								{
+									rotation: -15,
+									duration: 0.1,
+									ease: 'power1.out',
+									yoyo: true,
+									repeat: 1,
+								},
+							)
+						}
 						setCurrentCell(currentSlot.number)
 						setCurrentColor(currentSlot.color)
 					}
@@ -154,20 +161,20 @@ const prevCellRef = useRef(null)
 					const rotation = gsap.getProperty(wheel, 'rotation') % 360
 					const currentSlot = getCellByRotation(rotation)
 					if (currentSlot) {
-						 if (currentSlot.number !== prevCellRef.current) {
-								prevCellRef.current = currentSlot.number
-								gsap.fromTo(
-									pointerRef.current,
-									{ rotation: 0 },
-									{
-										rotation: -15,
-										duration: 0.1,
-										ease: 'power1.out',
-										yoyo: true,
-										repeat: 1,
-									},
-								)
-							}
+						if (currentSlot.number !== prevCellRef.current) {
+							prevCellRef.current = currentSlot.number
+							gsap.fromTo(
+								pointerRef.current,
+								{ rotation: 0 },
+								{
+									rotation: -15,
+									duration: 0.1,
+									ease: 'power1.out',
+									yoyo: true,
+									repeat: 1,
+								},
+							)
+						}
 						setCurrentCell(currentSlot.number)
 						setCurrentColor(currentSlot.color)
 					}
@@ -175,14 +182,86 @@ const prevCellRef = useRef(null)
 				onComplete: () => {
 					setCurrentCell(target.number)
 					setCurrentColor(target.color)
-					startTimer()
 					onSpinComplete({ number: target.number, color: target.color })
+
+					// считаем выигрыш локально для анимации
+					const sector = wheelSlots[target.number].sector
+					let totalWin = 0
+					if (betsRef.current && betsRef.current.length > 0) {
+						betsRef.current.forEach(bet => {
+							if (bet.betAmount === 0) return
+							let multiplier = 0
+							switch (bet.type) {
+								case 'number':
+									if (bet.value === target.number) multiplier = 36
+									break
+								case 'color':
+									if (target.color === bet.value && target.number !== 0)
+										multiplier = 2
+									break
+								case 'parity':
+									if (target.number !== 0) {
+										if (bet.value === 'even' && target.number % 2 === 0)
+											multiplier = 2
+										if (bet.value === 'odd' && target.number % 2 !== 0)
+											multiplier = 2
+									}
+									break
+								case 'range':
+									if (
+										target.number !== 0 &&
+										target.number >= bet.value[0] &&
+										target.number <= bet.value[1]
+									)
+										multiplier = 2
+									break
+								case 'dozen':
+									if (
+										target.number !== 0 &&
+										target.number >= bet.value[0] &&
+										target.number <= bet.value[1]
+									)
+										multiplier = 3
+									break
+								case 'section':
+									if (bet.value === sector) multiplier = 6
+									break
+							}
+							totalWin += bet.betAmount * multiplier
+						})
+					}
+
+					if (totalWin > 0) {
+						setWinAmount(totalWin)
+						gsap.fromTo(
+							winRef.current,
+							{ opacity: 0, scale: 0.5 },
+							{ opacity: 1, scale: 1, duration: 0.5, ease: 'back.out' },
+						)
+					}
+
+					dispatch({ type: 'SET_ACTIVE', payload: true })
+					dispatch({
+						type: 'SET_RESULT',
+						payload: { number: target.number, color: target.color, sector },
+					})
+					dispatch({
+						type: 'CALCULATE_WIN',
+						payload: { number: target.number, color: target.color, sector },
+					})
+					dispatch({ type: 'SAVE_ROUND' })
+					dispatch({ type: 'RESET_BETS' })
+					startTimer()
 				},
 			})
 		}
 
 		startTimer()
 	}, [])
+
+	useEffect(() => {
+		betsRef.current = state.bets
+	}, [state.bets])
 
 	return (
 		<div className='roulette__control-center'>
@@ -191,6 +270,11 @@ const prevCellRef = useRef(null)
 				<div className='roulette__spinner-wheel' ref={wheelRef}></div>
 				<div className={`roulette__spinner-num ${currentColor}`}>
 					<div>{currentCell}</div>
+				</div>
+				<div className='roulette__winning' ref={winRef} style={{ opacity: 0 }}>
+					<span>
+						{winAmount > 0 && `${winAmount.toFixed(2).replace('.', ',')}`}
+					</span>
 				</div>
 				<SpinnerTimer progressRef={progressRef} />
 			</div>

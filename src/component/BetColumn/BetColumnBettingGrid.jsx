@@ -39,7 +39,6 @@ const addBetIdMap = {
 export default function BetColumnBettingGrid({ selectedChip }) {
 	const { state, dispatch } = useRoulette()
 	const [isAddBetsMode, setIsAddBetsMode] = useState(false)
-
 	const [isDragging, setIsDragging] = useState(false)
 
 	const handleMouseDown = number => {
@@ -63,75 +62,114 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 		dispatch({ type: 'ADD_BET', id: `number-${number}`, amount: selectedChip })
 	}
 
+	const { lastResult } = state
+
+	const isWinner = bet => {
+		if (!lastResult) return false
+		const { number, color, sector } = lastResult
+		switch (bet.type) {
+			case 'number':
+				return bet.value === number
+			case 'color':
+				return number !== 0 && bet.value === color
+			case 'parity':
+				if (number === 0) return false
+				return (
+					(bet.value === 'even' && number % 2 === 0) ||
+					(bet.value === 'odd' && number % 2 !== 0)
+				)
+			case 'range':
+				return number !== 0 && number >= bet.value[0] && number <= bet.value[1]
+			case 'dozen':
+				return number !== 0 && number >= bet.value[0] && number <= bet.value[1]
+			case 'section':
+				return bet.value === sector
+			default:
+				return false
+		}
+	}
+
 	const numberBets = state.bets.filter(bet => bet.type === 'number')
 	const zeroCell = numberBets.find(bet => bet.value === 0)
 
 	return (
 		<div className='roulette__cell' onMouseUp={handleMouseUp}>
-			{isAddBetsMode
-				? addBetsArray.map((item, index) => {
-						const betId = addBetIdMap[item.title]
+			<div className='roulette__cell-grid'>
+				{isAddBetsMode
+					? addBetsArray.map((item, index) => {
+							const betId = addBetIdMap[item.title]
 
-						const bet = state.bets.find(b => b.id === betId)
+							const bet = state.bets.find(b => b.id === betId)
 
-						let backgroundColor = 'transparent'
-						if (item.title === 'RED') backgroundColor = 'var(--cell-color-r)'
-						if (item.title === 'BLACK') backgroundColor = 'var(--cell-color-b)'
+							let backgroundColor = 'transparent'
+							if (item.title === 'RED') backgroundColor = 'var(--cell-color-r)'
+							if (item.title === 'BLACK')
+								backgroundColor = 'var(--cell-color-b)'
 
-						return (
-							<button
-								key={index}
-								className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size} ${bet?.betAmount > 0 ? 'active' : ''}`}
-								type='button'
-								style={{ backgroundColor }}
-								onMouseDown={() => {
-									if (!selectedChip) return
-									setIsDragging(true)
-									dispatch({
-										type: 'ADD_BET',
-										id: betId,
-										amount: selectedChip,
-									})
-								}}
-								onMouseEnter={() => {
-									if (!isDragging) return
-									dispatch({
-										type: 'ADD_BET',
-										id: betId,
-										amount: selectedChip,
-									})
-								}}
-							>
-								{item.title}
+							return (
+								<button
+									key={index}
+									className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size} ${bet?.betAmount > 0 ? 'active' : ''} ${state.betting ? '' : 'none-active'}`}
+									type='button'
+									style={{ backgroundColor }}
+									onMouseDown={() => {
+										if (!selectedChip) return
+										setIsDragging(true)
+										dispatch({
+											type: 'ADD_BET',
+											id: betId,
+											amount: selectedChip,
+										})
+									}}
+									onMouseEnter={() => {
+										if (!isDragging) return
+										dispatch({
+											type: 'ADD_BET',
+											id: betId,
+											amount: selectedChip,
+										})
+									}}
+								>
+									{item.title}
 
-								{bet?.betAmount > 0 && (
-									<div className='roulette__cell-bet'>
-										{bet.betAmount.toFixed(2).replace('.', ',')}
-									</div>
-								)}
-							</button>
-						)
-					})
-				: numberBets
-						.filter(bet => bet.value !== 0)
-						.map(bet => (
-							<button
-								key={bet.id}
-								onMouseDown={() => handleMouseDown(bet.value)}
-								onMouseEnter={() => handleCellEnter(bet.value)}
-								className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''}`}
-								type='button'
-								style={{ backgroundColor: `var(--cell-color-${bet.color})` }}
-							>
-								{bet.value}
+									{bet?.betAmount > 0 && (
+										<div className='roulette__cell-bet'>
+											{bet.betAmount.toFixed(2).replace('.', ',')}
+										</div>
+									)}
+									{isWinner(state.bets.find(b => b.id === betId)) && (
+										<img
+											className={`roulette__cell-item-winner-add${item.size}`}
+											src='/img/border-m.svg'
+										/>
+									)}
+								</button>
+							)
+						})
+					: numberBets
+							.filter(bet => bet.value !== 0)
+							.map(bet => (
+								<button
+									key={bet.id}
+									onMouseDown={() => handleMouseDown(bet.value)}
+									onMouseEnter={() => handleCellEnter(bet.value)}
+									className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''} ${state.betting ? '' : 'none-active'}`}
+									type='button'
+									style={{ backgroundColor: `var(--cell-color-${bet.color})` }}
+								>
+									{bet.value}
 
-								{bet.betAmount > 0 && (
-									<div className='roulette__cell-bet'>
-										{bet.betAmount.toFixed(2).replace('.', ',')}
-									</div>
-								)}
-							</button>
-						))}
+									{bet.betAmount > 0 && (
+										<div className='roulette__cell-bet'>
+											{bet.betAmount.toFixed(2).replace('.', ',')}
+										</div>
+									)}
+									{isWinner(bet) && (
+										<div className='roulette__cell-item-winner'></div>
+									)}
+								</button>
+							))}
+			</div>
 
 			<div className='roulette__cell-footer'>
 				{isAddBetsMode ? (
@@ -140,7 +178,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 					<button
 						className={`roulette__cell-item roulette__cell-item--zero ${
 							zeroCell && zeroCell.betAmount > 0 ? 'active' : ''
-						}`}
+						} ${state.betting ? '' : 'none-active'}`}
 						type='button'
 						onMouseDown={() => handleMouseDown(0)}
 						onMouseEnter={() => handleCellEnter(0)}
