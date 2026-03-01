@@ -1,21 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRoulette } from '../context/RouletteContext'
 
 function createArrayInfo() {
 	const arr = []
+	let total = 0
 
 	for (let i = 0; i < 37; i++) {
-		arr.push({
-			id: i,
-			level: i,
-		})
+		const level = Math.random()
+		arr.push({ id: i, level })
+		total += level
 	}
 
-	return arr
+	return arr.map(item => ({
+		...item,
+		level: Math.round((item.level / total) * 300),
+	}))
 }
 
 export default function Statistic() {
-	const arrInfo = createArrayInfo()
-  return (
+	const { state } = useRoulette()
+	const [arrInfo, setArrInfo] = useState(createArrayInfo)
+
+	useEffect(() => {
+		const num = state.lastResult
+		if (num !== null) {
+			setTimeout(() => {
+				setArrInfo(prev => {
+					const updated = prev.map(item => ({
+						...item,
+						level:
+							item.id === num.number
+								? item.level + 1
+								: Math.max(0, item.level - 1),
+					}))
+
+					const total = updated.reduce((sum, item) => sum + item.level, 0)
+
+					return updated.map(item => ({
+						...item,
+						level: total > 0 ? Math.round((item.level / total) * 300) : 0,
+					}))
+				})
+			}, 0)
+		}
+	}, [state.lastResult])
+
+	return (
 		<div className='roulette__statistic'>
 			<img
 				className='roulette__stat-img roulette__stat-img--wrapper'
@@ -26,7 +56,7 @@ export default function Statistic() {
 				src='../img/bg-statistic.png'
 			/>
 			<div className='roulette__stat-grid'>
-				<div className='roulette__stat-item '>
+				<div className='roulette__stat-item'>
 					{arrInfo.map(item => (
 						<div
 							className='roulette__stat-cell roulette__stat-cell--level'
