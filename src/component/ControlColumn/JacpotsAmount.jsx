@@ -50,7 +50,7 @@ export default function JacpotsAmount() {
 			<div
 				className='roulette__amount-list'
 				style={{
-					left: `-${currentIndex * 126}px`,
+					left: `-${currentIndex * 220}px`,
 					transition: transition ? 'left 0.5s' : 'none',
 				}}
 			>

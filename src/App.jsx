@@ -6,6 +6,7 @@ import BetColumn from './component/BetColumn/BetColumn'
 import { RouletteProvider } from './context/RouletteContext'
 import { getCellRandom } from './reducers/CreateRandomCell'
 import { AudioProvider } from './context/AudioProvider'
+import { AdaptiveFrame } from './adaptive-frame'
 
 export default function App() {
 	const [initialCell] = useState(() => getCellRandom())
@@ -54,22 +55,24 @@ export default function App() {
 		<RouletteProvider>
 			<AudioProvider>
 				<main className='roulette'>
-					<div className='roulette__game-container'>
-						<Statistic />
-						<History history={history} />
-						<div className='roulette__wrapper'>
-							<ControlColumn
-								initialCell={initialCell}
-								onSpinComplete={cell => {
-									setHistory(prev => [cell, ...prev])
-									setTimeout(() => {
-										setHistory(prev => prev.slice(0, -1))
-									}, 1000)
-								}}
-							/>
-							<BetColumn />
+					<AdaptiveFrame>
+						<div className='roulette__game-container'>
+							<Statistic />
+							<History history={history} />
+							<div className='roulette__wrapper'>
+								<ControlColumn
+									initialCell={initialCell}
+									onSpinComplete={cell => {
+										setHistory(prev => [cell, ...prev])
+										setTimeout(() => {
+											setHistory(prev => prev.slice(0, -1))
+										}, 1000)
+									}}
+								/>
+								<BetColumn />
+							</div>
 						</div>
-					</div>
+					</AdaptiveFrame>
 				</main>
 			</AudioProvider>
 		</RouletteProvider>
