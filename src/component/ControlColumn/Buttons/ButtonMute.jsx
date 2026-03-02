@@ -1,10 +1,13 @@
 import React from 'react'
+import { useClickSound } from '../../../context/AudioProvider'
 
 export default function ButtonMute() {
-  return (
+	const { isMuted, toggleSound } = useClickSound()
+	return (
 		<button
-			className='roulette__button roulette__button--mute'
+			className={`roulette__button ${isMuted ? 'roulette__button--muted' : 'roulette__button--audio'}`}
 			type='button'
+			onClick={() => toggleSound()}
 		></button>
 	)
 }

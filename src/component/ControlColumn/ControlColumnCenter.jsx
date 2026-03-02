@@ -4,6 +4,7 @@ import { wheelSlots } from '../WheelSlots'
 import { getCellRandom } from '../../reducers/CreateRandomCell'
 import gsap from 'gsap'
 import { useRoulette } from '../../context/RouletteContext'
+import { useClickSound } from '../../context/AudioProvider'
 
 export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const { state, dispatch } = useRoulette()
@@ -17,6 +18,8 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const [currentColor, setCurrentColor] = useState(cellRandom.color)
 	const [winAmount, setWinAmount] = useState(0)
 	const winRef = useRef(null)
+	const { playSound } = useClickSound()
+	const playSoundRef = useRef(playSound)
 
 	const getCellByRotation = rotation => {
 		const normalized = ((rotation % 360) + 360) % 360
@@ -57,20 +60,19 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 			gsap.set(path, {
 				strokeDasharray: length,
 				strokeDashoffset: 0,
-				opacity: 1, // показываем линию при старте
+				opacity: 1,
 			})
 
 			gsap.to(path, {
 				strokeDashoffset: length,
-				duration: 2,
+				duration: 10,
 				ease: 'none',
 				delay: 2,
 				onComplete: () => {
-					gsap.to(winRef.current, { opacity: 0, duration: 0.3 })
 					gsap.set(path, { opacity: 0 })
 					dispatch({ type: 'SAVE_ROUND' })
-					dispatch({ type: 'SET_RESULT', payload: null })
 					dispatch({ type: 'SET_ACTIVE', payload: false })
+
 					SpinStart()
 				},
 			})
@@ -89,11 +91,12 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 					if (currentSlot) {
 						if (currentSlot.number !== prevCellRef.current) {
 							prevCellRef.current = currentSlot.number
+							playSoundRef.current('click')
 							gsap.fromTo(
 								pointerRef.current,
 								{ rotation: 0 },
 								{
-									rotation: -15,
+									rotation: -40,
 									duration: 0.1,
 									ease: 'power1.out',
 									yoyo: true,
@@ -125,11 +128,12 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 					if (currentSlot) {
 						if (currentSlot.number !== prevCellRef.current) {
 							prevCellRef.current = currentSlot.number
+							playSoundRef.current('click')
 							gsap.fromTo(
 								pointerRef.current,
 								{ rotation: 0 },
 								{
-									rotation: -15,
+									rotation: -40,
 									duration: 0.1,
 									ease: 'power1.out',
 									yoyo: true,
@@ -157,17 +161,29 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 				rotation: currentRotation + diff + 360 * 6,
 				duration: 25,
 				ease: 'power4.out',
-				onUpdate: () => {
+				snap: { rotation: 0.1 },
+
+				onUpdate: function () {
+					const currentRot = gsap.getProperty(wheel, 'rotation')
+					const targetRot = currentRotation + diff + 360 * 6
+					if (
+						this.progress() > 0.85 &&
+						Math.abs(currentRot - targetRot) < 0.5
+					) {
+						this.progress(1)
+					}
+
 					const rotation = gsap.getProperty(wheel, 'rotation') % 360
 					const currentSlot = getCellByRotation(rotation)
 					if (currentSlot) {
 						if (currentSlot.number !== prevCellRef.current) {
 							prevCellRef.current = currentSlot.number
+							playSoundRef.current('click')
 							gsap.fromTo(
 								pointerRef.current,
 								{ rotation: 0 },
 								{
-									rotation: -15,
+									rotation: -40,
 									duration: 0.1,
 									ease: 'power1.out',
 									yoyo: true,
@@ -184,7 +200,6 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 					setCurrentColor(target.color)
 					onSpinComplete({ number: target.number, color: target.color })
 
-					// считаем выигрыш локально для анимации
 					const sector = wheelSlots[target.number].sector
 					let totalWin = 0
 					if (betsRef.current && betsRef.current.length > 0) {
@@ -238,20 +253,25 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 							{ opacity: 0, scale: 0.5 },
 							{ opacity: 1, scale: 1, duration: 0.5, ease: 'back.out' },
 						)
+						playSoundRef.current('win')
 					}
 
-					dispatch({ type: 'SET_ACTIVE', payload: true })
 					dispatch({
 						type: 'SET_RESULT',
 						payload: { number: target.number, color: target.color, sector },
 					})
+					dispatch({ type: 'SAVE_ROUND' })
 					dispatch({
 						type: 'CALCULATE_WIN',
 						payload: { number: target.number, color: target.color, sector },
 					})
-					dispatch({ type: 'SAVE_ROUND' })
 					dispatch({ type: 'RESET_BETS' })
-					startTimer()
+					gsap.delayedCall(5, () => {
+						dispatch({ type: 'SET_RESULT', payload: null })
+						gsap.to(winRef.current, { opacity: 0, duration: 0.3 })
+						dispatch({ type: 'SET_ACTIVE', payload: true })
+						startTimer()
+					})
 				},
 			})
 		}
@@ -263,6 +283,11 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 		betsRef.current = state.bets
 	}, [state.bets])
 
+	useEffect(() => {
+		playSoundRef.current = playSound
+	}, [playSound])
+
+	
 	return (
 		<div className='roulette__control-center'>
 			<div className='roulette__spinner-bg'>

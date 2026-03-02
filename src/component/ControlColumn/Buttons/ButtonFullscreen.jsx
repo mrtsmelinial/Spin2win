@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useClickSound } from '../../../context/AudioProvider'
 
 export default function ButtonFullscreen() {
 
   const [isFullScreen, setIsFullScreen] = useState(false)
+	const {playSound} = useClickSound()
 
 	const toggleFullScreen = () => {
 		if (!isFullScreen) {
@@ -28,6 +30,7 @@ export default function ButtonFullscreen() {
 				document.msExitFullscreen()
 			}
 		}
+		playSound('button')
 	}
 
 	useEffect(() => {

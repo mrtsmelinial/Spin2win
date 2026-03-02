@@ -1,26 +1,35 @@
 import React, { useState } from 'react'
 import { useRoulette } from '../../context/RouletteContext'
-
-
+import { useClickSound } from '../../context/AudioProvider'
 
 export default function BetColumnControls({ setSelectedChip, sumBet }) {
-	const {state, dispatch } = useRoulette()
+	const { state, dispatch } = useRoulette()
 	const [currentBetIndex, setCurrentBetIndex] = useState(0)
+	const {playSound} = useClickSound()
 
 	const handleClick = () => {
+		if (!state.betting) return
 		const nextIndex = (currentBetIndex + 1) % sumBet.length
 		setCurrentBetIndex(nextIndex)
 
 		const newChip = parseFloat(sumBet[nextIndex].replace(',', '.'))
 		setSelectedChip(newChip)
+		playSound('button')
 	}
 
 	return (
-		<div className='roulette__bet-controls'>
+		<div
+			className={`roulette__bet-controls ${state.betting ? '' : 'none-active'}`}
+		>
 			<button
 				className='roulette__bet-button'
 				type='button'
-				onClick={() => dispatch({ type: 'UNDO' })}
+				onClick={() => {
+					dispatch({ type: 'UNDO' })
+					if (state.betting) {
+						playSound('button')
+					} else return
+				}}
 			>
 				<svg
 					className='roulette__bet-icon'
@@ -40,7 +49,12 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 			<button
 				className='roulette__bet-button'
 				type='button'
-				onClick={() => dispatch({ type: 'CLEAR_BETS' })}
+				onClick={() => {
+					dispatch({ type: 'CLEAR_BETS' })
+					if (state.betting) {
+						playSound('button')
+					} else return
+				}}
 			>
 				<svg
 					className='roulette__bet-icon'
@@ -77,7 +91,12 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 			<button
 				className='roulette__bet-button'
 				type='button'
-				onClick={() => dispatch({ type: 'DOUBLE_BETS' })}
+				onClick={() => {
+					dispatch({ type: 'DOUBLE_BETS' })
+					if (state.betting) {
+						playSound('button')
+					} else return
+				}}
 			>
 				<span className='roulette__bet-text roulette__bet-text--big'>x2</span>
 			</button>
@@ -97,6 +116,9 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 					const lastRound = state.savedRounds[state.savedRounds.length - 1]
 					console.log('lastRound:', lastRound)
 					if (lastRound) dispatch({ type: 'LOAD_ROUND', id: lastRound.id })
+					if (state.betting) {
+						playSound('button')
+					} else return
 				}}
 			>
 				<svg

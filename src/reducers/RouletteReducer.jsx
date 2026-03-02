@@ -19,11 +19,9 @@ export function rouletteReducer(state, action) {
 			betting: action.payload,
 		}
 	}
-
-	if (!state.betting) return state
-
 	switch (action.type) {
 		case 'ADD_BET': {
+			if (!state.betting) return state
 			const betIndex = state.bets.findIndex(b => b.id === action.id)
 			if (betIndex === -1) return state
 
@@ -50,6 +48,8 @@ export function rouletteReducer(state, action) {
 		}
 
 		case 'UNDO': {
+			if (!state.betting) return state
+
 			const last = state.history[state.history.length - 1]
 			if (!last) return state
 
@@ -71,6 +71,8 @@ export function rouletteReducer(state, action) {
 		}
 
 		case 'CLEAR_BETS': {
+			if (!state.betting) return state
+
 			const totalBets = state.bets.reduce((acc, bet) => acc + bet.betAmount, 0)
 
 			const clearedBets = state.bets.map(bet => ({
@@ -87,6 +89,8 @@ export function rouletteReducer(state, action) {
 		}
 
 		case 'DOUBLE_BETS': {
+			if (!state.betting) return state
+
 			const totalCurrentBets = state.bets.reduce(
 				(acc, bet) => acc + bet.betAmount,
 				0,
@@ -132,6 +136,8 @@ export function rouletteReducer(state, action) {
 		}
 
 		case 'LOAD_ROUND': {
+			if (!state.betting) return state
+
 			const round = state.savedRounds.find(r => r.id === action.id)
 			if (!round) return state
 			if (state.rebetUsed) return state
