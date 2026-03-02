@@ -73,6 +73,12 @@ export default function App() {
 							</div>
 						</div>
 					</AdaptiveFrame>
+					<div className='roulette__phone'>
+						<span className='roulette__phone-text'>
+							Please switch to landscare mode.
+						</span>
+						<img alt='rotate-scren' src='/img/rotate-screen.gif' />
+					</div>
 				</main>
 			</AudioProvider>
 		</RouletteProvider>
