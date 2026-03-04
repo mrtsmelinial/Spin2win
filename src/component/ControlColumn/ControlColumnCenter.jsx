@@ -6,6 +6,14 @@ import gsap from 'gsap'
 import { useRoulette } from '../../context/RouletteContext'
 import { useClickSound } from '../../context/AudioProvider'
 
+const colorSrcMap = {
+	red: '/img/roulette-num-red-center.svg',
+	black: '/img/roulette-num-black-center.svg',
+	green: '/img/roulette-num-green-center.svg',
+}
+
+const getColorImgSrc = color => colorSrcMap[color] ?? null
+
 export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const { state, dispatch } = useRoulette()
 	const wheelRef = useRef(null)
@@ -15,7 +23,9 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const prevCellRef = useRef(null)
 	const [cellRandom, setCellRandom] = useState(initialCell)
 	const [currentCell, setCurrentCell] = useState(cellRandom.number)
-	const [currentColor, setCurrentColor] = useState(cellRandom.color)
+	const [currentColorSrc, setCurrentColorSrc] = useState(
+		getColorImgSrc(initialCell.color),
+	)
 	const [winAmount, setWinAmount] = useState(0)
 	const winRef = useRef(null)
 	const { playSound } = useClickSound()
@@ -105,7 +115,7 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 							)
 						}
 						setCurrentCell(currentSlot.number)
-						setCurrentColor(currentSlot.color)
+						setCurrentColorSrc(getColorImgSrc(currentSlot.color))
 					}
 				},
 				onComplete: SpinWait,
@@ -142,7 +152,7 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 							)
 						}
 						setCurrentCell(currentSlot.number)
-						setCurrentColor(currentSlot.color)
+						setCurrentColorSrc(getColorImgSrc(currentSlot.color))
 					}
 				},
 				onComplete: SpinToCell,
@@ -192,12 +202,13 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 							)
 						}
 						setCurrentCell(currentSlot.number)
-						setCurrentColor(currentSlot.color)
+						setCurrentColorSrc(getColorImgSrc(currentSlot.color))
 					}
 				},
 				onComplete: () => {
 					setCurrentCell(target.number)
-					setCurrentColor(target.color)
+					setCurrentColorSrc(getColorImgSrc(target.color))
+
 					onSpinComplete({ number: target.number, color: target.color })
 
 					const sector = wheelSlots[target.number].sector
@@ -275,7 +286,6 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 				},
 			})
 		}
-
 		startTimer()
 	}, [])
 
@@ -287,21 +297,28 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 		playSoundRef.current = playSound
 	}, [playSound])
 
-	
 	return (
 		<div className='roulette__control-center'>
-			<div className='roulette__spinner-bg'>
-				<div className='roulette__pointer' ref={pointerRef}></div>
-				<div className='roulette__spinner-wheel' ref={wheelRef}></div>
-				<div className={`roulette__spinner-num ${currentColor}`}>
-					<div>{currentCell}</div>
+			<SpinnerTimer progressRef={progressRef} />
+			<img className='roulette__spinner-bg' src='/img/roulette-bg.svg' />
+			<img
+				className='roulette__spinner-wheel'
+				src='/img/roulette-wheel.svg'
+				ref={wheelRef}
+			/>
+			<img
+				className='roulette__pointer'
+				src='/img/roulette-pointer.svg'
+				ref={pointerRef}
+			/>
+			<img className='roulette__spinner-cell' src={currentColorSrc} />
+
+			<div className='roulette__spinner-num'>{currentCell}</div>
+			<div className='roulette__winning' ref={winRef} style={{ opacity: 0 }}>
+				<img className='roulette__winning-img' src='/img/reward-coins.svg' />
+				<div className='roulette__winning-amount'>
+					{winAmount > 0 && `${winAmount.toFixed(2).replace('.', ',')}`}
 				</div>
-				<div className='roulette__winning' ref={winRef} style={{ opacity: 0 }}>
-					<span>
-						{winAmount > 0 && `${winAmount.toFixed(2).replace('.', ',')}`}
-					</span>
-				</div>
-				<SpinnerTimer progressRef={progressRef} />
 			</div>
 		</div>
 	)
