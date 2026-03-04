@@ -11,7 +11,7 @@
 	position: relative;
 	height: 100%;
 	width: 100%;
-	background-image: url(../../img/bg-green.png);
+	background-image: url(/img/bg-green.png);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -36,7 +36,7 @@
 	margin-block: 19px;
 	margin-inline-start: 29px;
 	margin-inline-end: 33px;
-	border: 1px solid;
+	border: var(--border);
 	border-radius: 16px;
 	overflow: hidden;
 	z-index: 100;
@@ -56,11 +56,11 @@
 	height: 100%;
 
 	&:not(&:first-child) {
-		border-left: 1px solid;
+		border-left: var(--border);
 	}
 
 	&:not(.roulette__stat-cell--level) {
-		border-top: 1px solid;
+		border-top: var(--border);
 	}
 
 	&.roulette__stat-cell--level::after {
@@ -96,7 +96,7 @@
 	font-size: 2.4rem;
 
 	&:not(:last-child) {
-		border-bottom: 2px solid;
+		border-bottom: var(--border-bold);
 	}
 }
 
@@ -152,15 +152,15 @@
 	z-index: 1000;
 
 	&.roulette__button--fullscreen {
-		background-image: url(../../img/fullscr-min-white.svg);
+		background-image: url(/img/fullscr-min-white.svg);
 	}
 
 	&.roulette__button--muted {
-		background-image: url(../../img/audio-muted.svg);
+		background-image: url(/img/audio-muted.svg);
 	}
 
 	&.roulette__button--audio {
-		background-image: url(../../img/audio.svg);
+		background-image: url(/img/audio.svg);
 	}
 
 	&.roulette__button--menu {
@@ -168,7 +168,7 @@
 		margin-right: auto;
 		width: 176px;
 		height: 120px;
-		background-image: url(../../img/menu.svg);
+		background-image: url(	/img/menu.svg);
 		background-size: contain;
 		background-position: right;
 		transform: translateY(-68px);
@@ -197,7 +197,7 @@
 	justify-content: center;
 	gap: 10px;
 	font-size: 2.6rem;
-	color: rgb(221 202 124);
+	color: var(--color-gold-second);
 }
 
 .roulette__icon-coin {
@@ -302,7 +302,7 @@
 }
 
 .roulette__jackpot-amount {
-	color: rgb(221 202 124);
+	color: var(--color-gold-second);
 }
 
 .roulette__jackpot,
@@ -345,14 +345,14 @@
 	display: grid;
 	place-items: center;
 	font-size: 2.4rem;
-	color: rgb(221 202 124);
+	color: var(--color-gold-second);
 }
 
 .roulette__cell {
 	width: 100%;
 	margin-top: 22px;
 	opacity: 1;
-	transition: opacity 0.2s;
+	transition: opacity var(--transition);
 }
 
 .roulette__cell-grid {
@@ -419,19 +419,19 @@
 	position: relative;
 	width: 120px;
 	aspect-ratio: 1/1;
-	border: 2px solid #fff;
-	border-radius: 10px;
+	border: var(--border-bold) #fff;
+	border-radius: var(--border-radius);
 	display: grid;
 	place-items: center;
 	font-size: 3rem;
 	color: currentColor;
-	transition: all 0.2s;
+	transition: all var(--transition);
 
 	&.roulette__cell-item--zero {
 		grid-column: span 2 / span 2;
 		width: 100%;
 		aspect-ratio: 2/1;
-		background-color: var(--cell-color-g);
+		background-color: var(--color-green);
 	}
 
 	&.roulette__cell-item--more-bets {
@@ -444,8 +444,8 @@
 	}
 
 	&.active {
-		background-color: rgb(253, 224, 71) !important;
-		color: rgb(185 28 28);
+		background-color: var(--color-gold) !important;
+		color: var(--color-red-second);
 	}
 }
 
@@ -474,18 +474,18 @@
 	width: 100%;
 	height: 100%;
 	position: relative;
-	border-radius: 10px;
-	border: 2px solid #fff;
+	border-radius: var(--border-radius);
+	border: var(--border-bold) #fff;
 	display: grid;
 	place-items: center;
 	font-size: 3rem;
 	color: currentColor;
 	background-color: transparent;
-	transition: all 0.2s;
+	transition: all var(--transition);
 
 	&.active {
-		background-color: rgb(253, 224, 71) !important;
-		color: rgb(185 28 28);
+		background-color: var(--color-gold) !important;
+		color: var(--color-red-second);
 	}
 }
 
@@ -503,8 +503,8 @@
 .roulette__bet-button {
 	width: 180px;
 	height: 120px;
-	border: 2px solid #fff;
-	border-radius: 10px;
+	border: var(--border-bold) #fff;
+	border-radius: var(--border-radius);
 	background-color: transparent;
 	display: flex;
 	flex-direction: column;

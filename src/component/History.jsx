@@ -30,8 +30,8 @@ export default function History({ history }) {
 		const redNumbers = new Set([
 			1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
 		])
-		if (number === 0) return 'g'
-		return redNumbers.has(number) ? 'r' : 'b'
+		if (number === 0) return 'green'
+		return redNumbers.has(number) ? 'red' : 'black'
 	}
 
 	return (
@@ -42,7 +42,7 @@ export default function History({ history }) {
 						className='roulette__history-item'
 						key={`${item.number}-${index}`}
 						style={{
-							backgroundColor: `var(--cell-color-${getColor(item.number)})`,
+							backgroundColor: `var(--color-${getColor(item.number)})`,
 						}}
 					>
 						<span className='roulette__history-number'>{item.number}</span>

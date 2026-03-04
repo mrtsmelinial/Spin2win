@@ -110,9 +110,9 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 							const bet = state.bets.find(b => b.id === betId)
 
 							let backgroundColor = 'transparent'
-							if (item.title === 'RED') backgroundColor = 'var(--cell-color-r)'
+							if (item.title === 'RED') backgroundColor = 'var(--color-red)'
 							if (item.title === 'BLACK')
-								backgroundColor = 'var(--cell-color-b)'
+								backgroundColor = 'var(--color-black)'
 
 							return (
 								<div
@@ -174,7 +174,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 										className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''} ${state.betting ? '' : 'none-active'}`}
 										type='button'
 										style={{
-											backgroundColor: `var(--cell-color-${bet.color})`,
+											backgroundColor: `var(--color-${bet.color})`,
 										}}
 									>
 										{bet.value}

@@ -1,5 +1,16 @@
 :root {
-	--cell-color-b: rgb(15 22 37);
-	--cell-color-r: rgb(194 35 35);
-	--cell-color-g: rgb(40 156 56);
+
+	--border: 1px solid;
+	--border-bold: 2px solid;
+
+	--border-radius: 10px;
+
+	--transition: 0.2s;
+
+	--color-black: rgb(15 22 37);
+	--color-red: rgb(194 35 35);
+	--color-red-second: rgb(185 28 28);
+	--color-green: rgb(40 156 56);
+	--color-gold: rgb(253, 224, 71);
+	--color-gold-second: rgb(221, 202, 124);
 }

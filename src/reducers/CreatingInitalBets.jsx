@@ -7,7 +7,7 @@ export function createInitialBets() {
 
 	for (let i = 0; i <= 36; i++) {
 		let color = 'green'
-		if (i !== 0) color = redNumbers.includes(i) ? 'r' : 'b' 
+		if (i !== 0) color = redNumbers.includes(i) ? 'red' : 'black' 
 
 		bets.push({
 			id: `number-${i}`,
