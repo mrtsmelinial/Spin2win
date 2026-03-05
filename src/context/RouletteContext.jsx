@@ -1,5 +1,7 @@
 import { createContext, useReducer, useContext } from 'react'
-import { rouletteReducer, initialState } from '../reducers/RouletteReducer'
+import { rouletteReducer } from '../reducers/RouletteReducer'
+import { initialState } from '../reducers/initialState'
+
 
 const RouletteContext = createContext(null)
 
