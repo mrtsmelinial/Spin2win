@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 const generateInitialHistory = firstCell => {
 	const redNumbers = new Set([
@@ -27,12 +27,12 @@ export function useRouletteHistory(initialCell) {
 		generateInitialHistory(initialCell),
 	)
 
-	const addSpin = cell => {
+	const addSpin = useCallback(cell => {
 		setHistory(prev => [cell, ...prev])
 		setTimeout(() => {
 			setHistory(prev => prev.slice(0, -1))
 		}, 1000)
-	}
+	}, [])
 
 	return { history, addSpin }
 }

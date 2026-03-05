@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
 	useRouletteSelector,
 	useRouletteDispatch,
@@ -9,6 +9,7 @@ import {
 	selectLastResult,
 } from '../../selectors/rouletteSelectors'
 import { useClickSound } from '../../context/AudioProvider'
+import { calculateMultiplier } from '../../reducers/reducerParts/calculateParts'
 
 const addBetsArray = [
 	{ title: 'A', size: 2 },
@@ -54,60 +55,53 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 	const [isDragging, setIsDragging] = useState(false)
 	const { playSound } = useClickSound()
 
-	const handleMouseDown = number => {
-		if (!selectedChip) return
-		setIsDragging(true)
+	const handleBetMouseDown = useCallback(
+		id => {
+			if (!selectedChip) return
+			setIsDragging(true)
+			dispatch({ type: 'ADD_BET', id, amount: selectedChip })
+			if (betting) playSound('bet')
+		},
+		[selectedChip, betting, dispatch, playSound],
+	)
 
-		dispatch({
-			type: 'ADD_BET',
-			id: `number-${number}`,
-			amount: selectedChip,
-		})
-		if (betting) {
-			playSound('bet')
-		} else return
-	}
+	const handleBetMouseEnter = useCallback(
+		id => {
+			if (!isDragging) return
+			dispatch({ type: 'ADD_BET', id, amount: selectedChip })
+			if (betting) playSound('bet')
+		},
+		[isDragging, selectedChip, betting, dispatch, playSound],
+	)
 
-	const handleMouseUp = () => {
-		setIsDragging(false)
-	}
+	const handleMouseUp = useCallback(() => setIsDragging(false), [])
 
-	const handleCellEnter = number => {
-		if (!isDragging) return
+	const isWinner = useCallback(
+		bet => {
+			if (!lastResult) return false
+			return calculateMultiplier(bet, lastResult) > 0
+		},
+		[lastResult],
+	)
 
-		dispatch({ type: 'ADD_BET', id: `number-${number}`, amount: selectedChip })
-		if (betting) {
-			playSound('bet')
-		} else return
-	}
-
-	const isWinner = bet => {
-		if (!lastResult) return false
-		const { number, color, sector } = lastResult
-		switch (bet.type) {
-			case 'number':
-				return bet.value === number
-			case 'color':
-				return number !== 0 && bet.value === color
-			case 'parity':
-				if (number === 0) return false
-				return (
-					(bet.value === 'even' && number % 2 === 0) ||
-					(bet.value === 'odd' && number % 2 !== 0)
-				)
-			case 'range':
-				return number !== 0 && number >= bet.value[0] && number <= bet.value[1]
-			case 'dozen':
-				return number !== 0 && number >= bet.value[0] && number <= bet.value[1]
-			case 'section':
-				return bet.value === sector
-			default:
-				return false
-		}
-	}
-
-	const numberBets = bets.filter(bet => bet.type === 'number')
-	const zeroCell = bets.find(bet => bet.id === 'number-0')
+	const numberBets = useMemo(
+		() => bets.filter(bet => bet.type === 'number'),
+		[bets],
+	)
+	const zeroCell = useMemo(
+		() => bets.find(bet => bet.id === 'number-0'),
+		[bets],
+	)
+	const addBetsMap = useMemo(
+		() =>
+			Object.fromEntries(
+				addBetsArray.map(item => [
+					item.title,
+					bets.find(b => b.id === addBetIdMap[item.title]),
+				]),
+			),
+		[bets],
+	)
 
 	return (
 		<div className='roulette__cell' onMouseUp={handleMouseUp}>
@@ -116,12 +110,11 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 					? addBetsArray.map((item, index) => {
 							const betId = addBetIdMap[item.title]
 
-							const bet = bets.find(b => b.id === betId)
+							const bet = addBetsMap[item.title]
 
 							let backgroundColor = 'transparent'
 							if (item.title === 'RED') backgroundColor = 'var(--color-red)'
-							if (item.title === 'BLACK')
-								backgroundColor = 'var(--color-black)'
+							if (item.title === 'BLACK') backgroundColor = 'var(--color-black)'
 
 							return (
 								<div
@@ -132,29 +125,8 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 										className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size} ${bet?.betAmount > 0 ? 'active' : ''} ${betting ? '' : 'none-active'}`}
 										type='button'
 										style={{ backgroundColor }}
-										onMouseDown={() => {
-											if (!selectedChip) return
-											setIsDragging(true)
-											dispatch({
-												type: 'ADD_BET',
-												id: betId,
-												amount: selectedChip,
-											})
-											if (betting) {
-												playSound('bet')
-											} else return
-										}}
-										onMouseEnter={() => {
-											if (!isDragging) return
-											dispatch({
-												type: 'ADD_BET',
-												id: betId,
-												amount: selectedChip,
-											})
-											if (betting) {
-												playSound('bet')
-											} else return
-										}}
+										onMouseDown={() => handleBetMouseDown(betId)}
+										onMouseEnter={() => handleBetMouseEnter(betId)}
 									>
 										{item.title}
 
@@ -164,7 +136,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 											</div>
 										)}
 									</button>
-									{isWinner(bets.find(b => b.id === betId)) && (
+									{isWinner(bet) && (
 										<img
 											className={`roulette__cell-item-winner-add${item.size}`}
 											src='/img/border-m.svg'
@@ -178,8 +150,12 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 							.map(bet => (
 								<div className='roulette__cell-wrapper' key={bet.id}>
 									<button
-										onMouseDown={() => handleMouseDown(bet.value)}
-										onMouseEnter={() => handleCellEnter(bet.value)}
+										onMouseDown={() =>
+											handleBetMouseDown(`number-${bet.value}`)
+										}
+										onMouseEnter={() =>
+											handleBetMouseEnter(`number-${bet.value}`)
+										}
 										className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''} ${betting ? '' : 'none-active'}`}
 										type='button'
 										style={{
@@ -211,8 +187,8 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 								zeroCell && zeroCell.betAmount > 0 ? 'active' : ''
 							} ${betting ? '' : 'none-active'}`}
 							type='button'
-							onMouseDown={() => handleMouseDown(0)}
-							onMouseEnter={() => handleCellEnter(0)}
+							onMouseDown={() => handleBetMouseDown('number-0')}
+							onMouseEnter={() => handleBetMouseEnter('number-0')}
 						>
 							0
 							{zeroCell && zeroCell.betAmount > 0 && (

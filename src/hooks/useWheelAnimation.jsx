@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import gsap from 'gsap'
 import { getCellByRotation } from '../utils/wheelUtils'
 import { getCellRandom } from '../reducers/CreateRandomCell'
+import { TIME_BETTING } from '../constants/rouletteConstants'
 
 export function useWheelAnimation({
 	wheelRef,
@@ -57,7 +58,7 @@ export function useWheelAnimation({
 
 		gsap.to(path, {
 			strokeDashoffset: length,
-			duration: 2,
+			duration: TIME_BETTING,
 			ease: 'none',
 			delay: 2,
 			onComplete: () => {
