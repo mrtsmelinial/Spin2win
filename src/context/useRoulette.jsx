@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import {
 	RouletteStateContext,
 	RouletteDispatchContext,
-} from './RouletteContext'
+} from './rouletteContexts'
 
 export const useRouletteState = () => {
 	const context = useContext(RouletteStateContext)

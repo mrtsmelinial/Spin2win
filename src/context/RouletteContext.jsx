@@ -1,9 +1,11 @@
-import { createContext, useReducer } from 'react'
+import { useReducer } from 'react'
 import { rouletteReducer } from '../reducers/RouletteReducer'
 import { initialState } from '../reducers/initialState'
+import {
+	RouletteStateContext,
+	RouletteDispatchContext,
+} from './rouletteContexts'
 
-const RouletteStateContext = createContext(null)
-const RouletteDispatchContext = createContext(null)
 
 export const RouletteProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(rouletteReducer, initialState)
