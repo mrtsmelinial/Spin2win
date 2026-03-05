@@ -1,14 +1,23 @@
 import React, { useState } from 'react'
-import { useRoulette } from '../../context/RouletteContext'
+import {
+	useRouletteSelector,
+	useRouletteDispatch,
+} from '../../context/useRoulette'
+import {
+	selectBetting,
+	selectSavedRounds,
+} from '../../selectors/rouletteSelectors'
 import { useClickSound } from '../../context/AudioProvider'
 
 export default function BetColumnControls({ setSelectedChip, sumBet }) {
-	const { state, dispatch } = useRoulette()
+	const dispatch = useRouletteDispatch()
+	const betting = useRouletteSelector(selectBetting)
+	const savedRounds = useRouletteSelector(selectSavedRounds)
 	const [currentBetIndex, setCurrentBetIndex] = useState(0)
 	const {playSound} = useClickSound()
 
 	const handleClick = () => {
-		if (!state.betting) return
+		if (!betting) return
 		const nextIndex = (currentBetIndex + 1) % sumBet.length
 		setCurrentBetIndex(nextIndex)
 
@@ -19,14 +28,14 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 
 	return (
 		<div
-			className={`roulette__bet-controls ${state.betting ? '' : 'none-active'}`}
+			className={`roulette__bet-controls ${betting ? '' : 'none-active'}`}
 		>
 			<button
 				className='roulette__bet-button'
 				type='button'
 				onClick={() => {
 					dispatch({ type: 'UNDO' })
-					if (state.betting) {
+					if (betting) {
 						playSound('button')
 					} else return
 				}}
@@ -51,7 +60,7 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 				type='button'
 				onClick={() => {
 					dispatch({ type: 'CLEAR_BETS' })
-					if (state.betting) {
+					if (betting) {
 						playSound('button')
 					} else return
 				}}
@@ -93,7 +102,7 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 				type='button'
 				onClick={() => {
 					dispatch({ type: 'DOUBLE_BETS' })
-					if (state.betting) {
+					if (betting) {
 						playSound('button')
 					} else return
 				}}
@@ -112,11 +121,11 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 				className='roulette__bet-button'
 				type='button'
 				onClick={() => {
-					console.log('savedRounds:', state.savedRounds)
-					const lastRound = state.savedRounds[state.savedRounds.length - 1]
+					console.log('savedRounds:', savedRounds)
+					const lastRound = savedRounds[savedRounds.length - 1]
 					console.log('lastRound:', lastRound)
 					if (lastRound) dispatch({ type: 'LOAD_ROUND', id: lastRound.id })
-					if (state.betting) {
+					if (betting) {
 						playSound('button')
 					} else return
 				}}

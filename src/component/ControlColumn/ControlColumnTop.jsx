@@ -1,12 +1,12 @@
 import React from 'react'
 import ButtonFullscreen from './Buttons/ButtonFullscreen'
 import ButtonMute from './Buttons/ButtonMute'
-import { useRoulette } from '../../context/RouletteContext'
 import NumberFlow from '@number-flow/react'
-
+import { useRouletteSelector } from '../../context/useRoulette'
+import { selectBalance } from '../../selectors/rouletteSelectors'
 
 export default function ControlColumnTop() {
-	const { state } = useRoulette()
+	const balance = useRouletteSelector(selectBalance)
 
 	return (
 		<div className='roulette__control-top'>
@@ -16,7 +16,7 @@ export default function ControlColumnTop() {
 				<span>
 					$
 					<NumberFlow
-						value={state.balance}
+						value={balance}
 						format={{
 							minimumFractionDigits: 2,
 							maximumFractionDigits: 2,

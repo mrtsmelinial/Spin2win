@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import BetColumnBettingGrid from './BetColumnBettingGrid'
 import BetColumnControls from './BetColumnControls'
 import BetColumnTotalBet from './BetColumnTotalBet'
-import { useRoulette } from '../../context/RouletteContext'
+import { useRouletteDispatch } from '../../context/useRoulette'
 
 const sumBet = ['0,50', '1,00', '2,00', '3,00', '5,00', '10,00']
 
@@ -24,7 +24,7 @@ const rouletteData = Array.from({ length: 37 }, (_, i) => {
 	}
 })
 export default function BetColumn({ betting }) {
-	const { dispatch } = useRoulette()
+	const dispatch = useRouletteDispatch()
 
 	const [selectedChip, setSelectedChip] = useState(
 		parseFloat(sumBet[0].replace(',', '.')),

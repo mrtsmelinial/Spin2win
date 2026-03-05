@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useRoulette } from '../context/RouletteContext'
+import { selectLastResult } from '../selectors/rouletteSelectors'
+import { useRouletteSelector } from '../context/useRoulette'
+
 
 function createArrayInfo() {
 	const arr = []
@@ -18,18 +20,17 @@ function createArrayInfo() {
 }
 
 export default function Statistic() {
-	const { state } = useRoulette()
 	const [arrInfo, setArrInfo] = useState(createArrayInfo)
+	const lastResult = useRouletteSelector(selectLastResult)
 
 	useEffect(() => {
-		const num = state.lastResult
-		if (num !== null) {
+		if (lastResult !== null) {
 			setTimeout(() => {
 				setArrInfo(prev => {
 					const updated = prev.map(item => ({
 						...item,
 						level:
-							item.id === num.number
+							item.id === lastResult.number
 								? item.level + 1
 								: Math.max(0, item.level - 1),
 					}))
@@ -43,7 +44,7 @@ export default function Statistic() {
 				})
 			}, 0)
 		}
-	}, [state.lastResult])
+	}, [lastResult])
 
 	return (
 		<div className='roulette__statistic'>

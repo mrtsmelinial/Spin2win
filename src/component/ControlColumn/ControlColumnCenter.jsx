@@ -2,14 +2,19 @@ import React, { useEffect, useRef, useState } from 'react'
 import SpinnerTimer from './SpinnerTimer'
 import { wheelSlots } from '../WheelSlots'
 import gsap from 'gsap'
-import { useRoulette } from '../../context/RouletteContext'
+import {
+	useRouletteSelector,
+	useRouletteDispatch,
+} from '../../context/useRoulette'
+import { selectBets } from '../../selectors/rouletteSelectors'
 import { useClickSound } from '../../context/AudioProvider'
 import { useWheelAnimation } from '../../hooks/useWheelAnimation'
 import { getColorImgSrc } from '../../utils/wheelUtils'
 import { calculateWin } from '../../utils/сalculateWin'
 
 export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
-	const { state, dispatch } = useRoulette()
+	const dispatch = useRouletteDispatch()
+	const bets = useRouletteSelector(selectBets)
 	const wheelRef = useRef(null)
 	const progressRef = useRef(null)
 	const targetCellRef = useRef(null)
@@ -96,8 +101,8 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	}, [])
 
 	useEffect(() => {
-		betsRef.current = state.bets
-	}, [state.bets])
+		betsRef.current = bets
+	}, [bets])
 
 	useEffect(() => {
 		playSoundRef.current = playSound

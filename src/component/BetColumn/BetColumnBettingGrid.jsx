@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { useRoulette } from '../../context/RouletteContext'
+import {
+	useRouletteSelector,
+	useRouletteDispatch,
+} from '../../context/useRoulette'
+import {
+	selectBets,
+	selectBetting,
+	selectLastResult,
+} from '../../selectors/rouletteSelectors'
 import { useClickSound } from '../../context/AudioProvider'
 
 const addBetsArray = [
@@ -38,7 +46,10 @@ const addBetIdMap = {
 	'25-36': 'dozen-3',
 }
 export default function BetColumnBettingGrid({ selectedChip }) {
-	const { state, dispatch } = useRoulette()
+	const dispatch = useRouletteDispatch()
+	const bets = useRouletteSelector(selectBets)
+	const betting = useRouletteSelector(selectBetting)
+	const lastResult = useRouletteSelector(selectLastResult)
 	const [isAddBetsMode, setIsAddBetsMode] = useState(false)
 	const [isDragging, setIsDragging] = useState(false)
 	const { playSound } = useClickSound()
@@ -52,7 +63,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 			id: `number-${number}`,
 			amount: selectedChip,
 		})
-		if (state.betting) {
+		if (betting) {
 			playSound('bet')
 		} else return
 	}
@@ -65,12 +76,10 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 		if (!isDragging) return
 
 		dispatch({ type: 'ADD_BET', id: `number-${number}`, amount: selectedChip })
-		if (state.betting) {
+		if (betting) {
 			playSound('bet')
 		} else return
 	}
-
-	const { lastResult } = state
 
 	const isWinner = bet => {
 		if (!lastResult) return false
@@ -97,8 +106,8 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 		}
 	}
 
-	const numberBets = state.bets.filter(bet => bet.type === 'number')
-	const zeroCell = state.bets.find(bet => bet.id === 'number-0')
+	const numberBets = bets.filter(bet => bet.type === 'number')
+	const zeroCell = bets.find(bet => bet.id === 'number-0')
 
 	return (
 		<div className='roulette__cell' onMouseUp={handleMouseUp}>
@@ -107,7 +116,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 					? addBetsArray.map((item, index) => {
 							const betId = addBetIdMap[item.title]
 
-							const bet = state.bets.find(b => b.id === betId)
+							const bet = bets.find(b => b.id === betId)
 
 							let backgroundColor = 'transparent'
 							if (item.title === 'RED') backgroundColor = 'var(--color-red)'
@@ -120,7 +129,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 									key={index}
 								>
 									<button
-										className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size} ${bet?.betAmount > 0 ? 'active' : ''} ${state.betting ? '' : 'none-active'}`}
+										className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size} ${bet?.betAmount > 0 ? 'active' : ''} ${betting ? '' : 'none-active'}`}
 										type='button'
 										style={{ backgroundColor }}
 										onMouseDown={() => {
@@ -131,7 +140,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 												id: betId,
 												amount: selectedChip,
 											})
-											if (state.betting) {
+											if (betting) {
 												playSound('bet')
 											} else return
 										}}
@@ -142,7 +151,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 												id: betId,
 												amount: selectedChip,
 											})
-											if (state.betting) {
+											if (betting) {
 												playSound('bet')
 											} else return
 										}}
@@ -155,7 +164,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 											</div>
 										)}
 									</button>
-									{isWinner(state.bets.find(b => b.id === betId)) && (
+									{isWinner(bets.find(b => b.id === betId)) && (
 										<img
 											className={`roulette__cell-item-winner-add${item.size}`}
 											src='/img/border-m.svg'
@@ -171,7 +180,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 									<button
 										onMouseDown={() => handleMouseDown(bet.value)}
 										onMouseEnter={() => handleCellEnter(bet.value)}
-										className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''} ${state.betting ? '' : 'none-active'}`}
+										className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''} ${betting ? '' : 'none-active'}`}
 										type='button'
 										style={{
 											backgroundColor: `var(--color-${bet.color})`,
@@ -200,7 +209,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 						<button
 							className={`roulette__cell-item roulette__cell-item--zero ${
 								zeroCell && zeroCell.betAmount > 0 ? 'active' : ''
-							} ${state.betting ? '' : 'none-active'}`}
+							} ${betting ? '' : 'none-active'}`}
 							type='button'
 							onMouseDown={() => handleMouseDown(0)}
 							onMouseEnter={() => handleCellEnter(0)}

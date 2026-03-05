@@ -1,24 +1,19 @@
-import { createContext, useReducer, useContext } from 'react'
+import { createContext, useReducer } from 'react'
 import { rouletteReducer } from '../reducers/RouletteReducer'
 import { initialState } from '../reducers/initialState'
 
-
-const RouletteContext = createContext(null)
-
-export const useRoulette = () => {
-	const context = useContext(RouletteContext)
-	if (!context) {
-		throw new Error('Err')
-	}
-	return context
-}
+const RouletteStateContext = createContext(null)
+const RouletteDispatchContext = createContext(null)
 
 export const RouletteProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(rouletteReducer, initialState)
 
 	return (
-		<RouletteContext.Provider value={{ state, dispatch }}>
-			{children}
-		</RouletteContext.Provider>
+		<RouletteDispatchContext.Provider value={dispatch}>
+			<RouletteStateContext.Provider value={state}>
+				{children}
+			</RouletteStateContext.Provider>
+		</RouletteDispatchContext.Provider>
 	)
 }
+
