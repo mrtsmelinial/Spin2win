@@ -1,13 +1,11 @@
+import { RED_NUMBERS } from "../constants/rouletteConstants"
+
 export function createInitialBets() {
 	const bets = []
 
-	const redNumbers = [
-		1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
-	]
-
 	for (let i = 0; i <= 36; i++) {
 		let color = 'green'
-		if (i !== 0) color = redNumbers.includes(i) ? 'red' : 'black' 
+		if (i !== 0) color = RED_NUMBERS.has(i) ? 'red' : 'black' 
 
 		bets.push({
 			id: `number-${i}`,

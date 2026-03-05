@@ -1,15 +1,13 @@
 import { useCallback, useState } from 'react'
+import { RED_NUMBERS } from '../constants/rouletteConstants'
 
 const generateInitialHistory = firstCell => {
-	const redNumbers = new Set([
-		1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
-	])
 
 	const rest = Array.from({ length: 9 }, () => {
 		const number = Math.floor(Math.random() * 37)
 		let color
 		if (number === 0) color = 'g'
-		else if (redNumbers.has(number)) color = 'r'
+		else if (RED_NUMBERS.has(number)) color = 'r'
 		else color = 'b'
 		return { number, color }
 	})

@@ -7,7 +7,7 @@ import {
 	selectBetting,
 	selectSavedRounds,
 } from '../../selectors/rouletteSelectors'
-import { useClickSound } from '../../context/AudioProvider'
+import { useClickSound } from '../../context/useClickSound'
 
 export default function BetColumnControls({ setSelectedChip, sumBet }) {
 	const dispatch = useRouletteDispatch()

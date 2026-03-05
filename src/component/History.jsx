@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { RED_NUMBERS } from '../constants/rouletteConstants'
+
+const getColor = number => {
+	if (number === 0) return 'green'
+	return RED_NUMBERS.has(number) ? 'red' : 'black'
+}
 
 export default function History({ history }) {
 	const containerRef = useRef(null)
@@ -25,14 +31,6 @@ export default function History({ history }) {
 			ease: 'power1.out',
 		})
 	}, [history])
-
-	const getColor = number => {
-		const redNumbers = new Set([
-			1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
-		])
-		if (number === 0) return 'green'
-		return redNumbers.has(number) ? 'red' : 'black'
-	}
 
 	return (
 		<div className='roulette__history-wrapper'>

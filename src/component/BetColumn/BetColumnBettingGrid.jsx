@@ -8,7 +8,7 @@ import {
 	selectBetting,
 	selectLastResult,
 } from '../../selectors/rouletteSelectors'
-import { useClickSound } from '../../context/AudioProvider'
+import { useClickSound } from '../../context/useClickSound'
 import { calculateMultiplier } from '../../reducers/reducerParts/calculateParts'
 
 const addBetsArray = [

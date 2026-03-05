@@ -7,7 +7,7 @@ import {
 	useRouletteDispatch,
 } from '../../context/useRoulette'
 import { selectBets } from '../../selectors/rouletteSelectors'
-import { useClickSound } from '../../context/AudioProvider'
+import { useClickSound } from '../../context/useClickSound'
 import { useWheelAnimation } from '../../hooks/useWheelAnimation'
 import { getColorImgSrc } from '../../utils/wheelUtils'
 import { calculateWin } from '../../utils/сalculateWin'
@@ -19,6 +19,8 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const progressRef = useRef(null)
 	const targetCellRef = useRef(null)
 	const pointerRef = useRef(null)
+	const cellNumRef = useRef(null)
+	const cellImgRef = useRef(null)
 	const [cellRandom, setCellRandom] = useState(initialCell)
 	const [currentCell, setCurrentCell] = useState(cellRandom.number)
 	const [currentColorSrc, setCurrentColorSrc] = useState(
@@ -36,8 +38,9 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 			pointerRef,
 			initialAngle: initialCell.angle,
 			onSlotChange: slot => {
-				setCurrentCell(slot.number)
-				setCurrentColorSrc(getColorImgSrc(slot.color))
+				if (cellNumRef.current) cellNumRef.current.textContent = slot.number
+				if (cellImgRef.current)
+					cellImgRef.current.src = getColorImgSrc(slot.color)
 			},
 			setCellRandom,
 			targetCellRef,
@@ -46,6 +49,11 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const betsRef = useRef([])
 
 	useEffect(() => {
+		const wheel = wheelRef.current
+		const progress = progressRef.current
+		const pointer = pointerRef.current
+		const win = winRef.current
+
 		init()
 
 		const onTimerEnd = () => {
@@ -61,11 +69,8 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 						setCurrentColorSrc(getColorImgSrc(target.color))
 						onSpinComplete({ number: target.number, color: target.color })
 
-						const { totalWin } = calculateWin(
-							betsRef.current,
-							target,
-							wheelSlots,
-						)
+						const { totalWin } = calculateWin(betsRef.current, target)
+
 						if (totalWin > 0) {
 							setWinAmount(totalWin)
 							gsap.fromTo(
@@ -98,6 +103,13 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 			})
 		}
 		startTimer(onTimerEnd)
+
+		return () => {
+			gsap.killTweensOf(wheel)
+			gsap.killTweensOf(progress)
+			gsap.killTweensOf(pointer)
+			gsap.killTweensOf(win)
+		}
 	}, [])
 
 	useEffect(() => {
@@ -122,9 +134,15 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 				src='/img/roulette-pointer.svg'
 				ref={pointerRef}
 			/>
-			<img className='roulette__spinner-cell' src={currentColorSrc} />
+			<img
+				className='roulette__spinner-cell'
+				ref={cellImgRef}
+				src={currentColorSrc}
+			/>
 
-			<div className='roulette__spinner-num'>{currentCell}</div>
+			<div className='roulette__spinner-num' ref={cellNumRef}>
+				{currentCell}
+			</div>
 			<div className='roulette__winning' ref={winRef} style={{ opacity: 0 }}>
 				<img className='roulette__winning-img' src='/img/reward-coins.svg' />
 				<div className='roulette__winning-amount'>

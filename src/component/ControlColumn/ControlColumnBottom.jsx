@@ -1,7 +1,7 @@
 import React from 'react'
 import Jackpots from './Jackpots'
 import JacpotsAmount from './JacpotsAmount'
-import { useClickSound } from '../../context/AudioProvider'
+import { useClickSound } from '../../context/useClickSound'
 
 export default function ControlColumnBottom() {
 	const { playSound } = useClickSound()

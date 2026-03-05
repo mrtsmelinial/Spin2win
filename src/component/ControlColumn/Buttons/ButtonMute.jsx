@@ -1,5 +1,5 @@
 import React from 'react'
-import { useClickSound } from '../../../context/AudioProvider'
+import { useClickSound } from '../../../context/useClickSound'
 
 export default function ButtonMute() {
 	const { isMuted, toggleSound } = useClickSound()

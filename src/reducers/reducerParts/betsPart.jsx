@@ -35,6 +35,20 @@ export function betsPart(state, action) {
 			const last = state.history[state.history.length - 1]
 			if (!last) return state
 
+			if (last.type === 'double') {
+				const newBets = state.bets.map(bet => {
+					const original = last.bets.find(b => b.id === bet.id)
+					return original ? { ...bet, betAmount: original.amount } : bet
+				})
+				const refund = last.bets.reduce((acc, b) => acc + b.amount, 0)
+				return {
+					...state,
+					bets: newBets,
+					balance: state.balance + refund,
+					history: state.history.slice(0, -1),
+				}
+			}
+
 			const betIndex = state.bets.findIndex(b => b.id === last.id)
 			if (betIndex === -1) return state
 
@@ -87,18 +101,18 @@ export function betsPart(state, action) {
 				betAmount: bet.betAmount * 2,
 			}))
 
-			const historyAdd = state.bets
-				.filter(bet => bet.betAmount > 0)
-				.map(bet => ({
-					id: bet.id,
-					amount: bet.betAmount,
-				}))
+			const doubleRecord = {
+				type: 'double',
+				bets: state.bets
+					.filter(bet => bet.betAmount > 0)
+					.map(bet => ({ id: bet.id, amount: bet.betAmount })),
+			}
 
 			return {
 				...state,
 				bets: doubledBets,
 				balance: state.balance - totalCurrentBets,
-				history: [...state.history, ...historyAdd],
+				history: [...state.history, doubleRecord],
 			}
 		}
 		case 'RESET_BETS': {
