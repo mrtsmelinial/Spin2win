@@ -6,7 +6,7 @@ import { useRouletteSelector, useRouletteDispatch } from '@/domain/hooks'
 import { useClickSound } from '@/domain/hooks'
 import { selectBets } from '@/domain/selectors'
 import { getColorImgSrc } from '@/domain/utils'
-import { calculateWin } from '@/domain/reducer'
+import { сalculateWin } from '@/domain/reducers'
 import { useDrawCycle } from './useDrawCycle'
 
 export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
@@ -65,7 +65,7 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 						setCurrentColorSrc(getColorImgSrc(target.color))
 						onSpinComplete({ number: target.number, color: target.color })
 
-						const { totalWin } = calculateWin(betsRef.current, target)
+						const { totalWin } = сalculateWin(betsRef.current, target)
 
 						if (totalWin > 0) {
 							setWinAmount(totalWin)

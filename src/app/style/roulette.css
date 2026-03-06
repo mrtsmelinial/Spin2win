@@ -217,7 +217,11 @@
 
 
 
-
+.roulette__jackpot-slider{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
 .roulette__jackpot-amount {
 	color: var(--color-gold-second);

@@ -1,7 +1,6 @@
 import React from 'react'
-import Jackpots from './Jackpots'
-import JacpotsAmount from './JacpotsAmount'
 import { useClickSound } from '@/domain/hooks'
+import JackpotSlider from './JackpotsSlider'
 
 export default function ControlColumnBottom() {
 	const { playSound } = useClickSound()
@@ -12,8 +11,7 @@ export default function ControlColumnBottom() {
 				onClick={() => playSound('button')}
 			></button>
 			<div className='roulette__session'># 650 825</div>
-			<Jackpots />
-			<JacpotsAmount />
+			<JackpotSlider/>
 		</div>
 	)
 }

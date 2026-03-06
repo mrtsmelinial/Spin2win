@@ -1,5 +1,5 @@
 import React from 'react'
-import { calculateMultiplier } from '@/damain/utils'
+import { calculateMultiplier } from '@/domain/utils'
 
 export default function calculatePart(state, action) {
 	switch (action.type) {
