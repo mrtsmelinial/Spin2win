@@ -1,0 +1,7 @@
+export const MAX_BET = 200
+
+export const TIME_BETTING = 5
+
+export const RED_NUMBERS = new Set([
+	1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
+])
