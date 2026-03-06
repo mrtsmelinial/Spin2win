@@ -18,19 +18,20 @@ export default function HistoryCell({ historyCell }) {
 		const items = container.querySelectorAll('.roulette__history-item')
 		if (!items.length) return
 
-		if (history[0]?.number === prevFirstRef.current) return
-		prevFirstRef.current = history[0]?.number
+		if (historyCell[0]?.number === prevFirstRef.current) return
+		prevFirstRef.current = historyCell[0]?.number
 
-		const itemHeight = 38.1
+		const itemHeight = 65.4
 
 		gsap.set(container, { y: -itemHeight })
 
 		gsap.to(container, {
 			y: 0,
 			duration: 1,
-			ease: 'power1.out',
+			delay: 0.4,
+			ease: 'power2.out',
 		})
-	}, [])
+	}, [historyCell])
 
 	return (
 		<div className='roulette__history-wrapper'>
