@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { RED_NUMBERS } from '@/shared/constants'
 
 const generateInitialHistory = firstCell => {
@@ -24,11 +24,19 @@ export default function useRouletteHistory(initialCell) {
 		generateInitialHistory(initialCell),
 	)
 
+	const timeoutRef = useRef(null)
+
 	const addSpin = useCallback(cell => {
 		setHistoryCell(prev => [cell, ...prev])
-		setTimeout(() => {
+		timeoutRef.current = setTimeout(() => {
 			setHistoryCell(prev => prev.slice(0, -1))
 		}, 1000)
+	}, [])
+
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) clearTimeout(timeoutRef.current)
+		}
 	}, [])
 
 	return { historyCell, addSpin }
