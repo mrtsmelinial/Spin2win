@@ -1,10 +1,9 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
-import { getCellByRotation } from '@/domain/utils'
 import { getCellRandom } from '@/domain/utils'
-import { TIME_BETTING } from '@/shared/constants'
+import { useWheelAnimation } from './useWheelAnimation'
 
-export function useWheelAnimation({
+export function useDrawCycle({
 	wheelRef,
 	progressRef,
 	playSoundRef,
@@ -12,60 +11,18 @@ export function useWheelAnimation({
 	initialAngle,
 	onSlotChange,
 	setCellRandom,
-	targetCellRef,
 }) {
-	const prevCellRef = useRef(null)
+	const targetCellRef = useRef(null)
 
-	function init() {
-		gsap.set(wheelRef.current, { rotation: initialAngle })
-	}
+	const { init, handleSlotUpdate, startTimer } = useWheelAnimation({
+		wheelRef,
+		progressRef,
+		playSoundRef,
+		pointerRef,
+		initialAngle,
+		onSlotChange,
+	})
 
-	const handleSlotUpdate = () => {
-		const rotation = gsap.getProperty(wheelRef.current, 'rotation') % 360
-		const currentSlot = getCellByRotation(rotation)
-		if (currentSlot) {
-			if (currentSlot.number !== prevCellRef.current) {
-				prevCellRef.current = currentSlot.number
-				playSoundRef.current('click')
-				gsap.fromTo(
-					pointerRef.current,
-					{ rotation: 0 },
-					{
-						rotation: -30,
-						duration: 0.1,
-						ease: 'power1.out',
-						yoyo: true,
-						repeat: 1,
-					},
-				)
-			}
-			onSlotChange(currentSlot)
-		}
-	}
-
-	function startTimer(onTimerEnd) {
-		const path = progressRef.current
-
-		const length = path.getTotalLength()
-
-		gsap.killTweensOf(path)
-		gsap.set(path, {
-			strokeDasharray: length,
-			strokeDashoffset: 0,
-			opacity: 1,
-		})
-
-		gsap.to(path, {
-			strokeDashoffset: length,
-			duration: TIME_BETTING,
-			ease: 'none',
-			delay: 2,
-			onComplete: () => {
-				gsap.set(path, { opacity: 0 })
-				onTimerEnd()
-			},
-		})
-	}
 	function SpinStart(onComplete) {
 		const currentRotation = gsap.getProperty(wheelRef.current, 'rotation')
 		gsap.to(wheelRef.current, {
@@ -76,6 +33,7 @@ export function useWheelAnimation({
 			onComplete,
 		})
 	}
+
 	function SpinWait(onComplete) {
 		const currentRotation = gsap.getProperty(wheelRef.current, 'rotation')
 		const newCell = getCellRandom()
@@ -90,6 +48,7 @@ export function useWheelAnimation({
 			onComplete,
 		})
 	}
+
 	function SpinToCell(onComplete) {
 		const target = targetCellRef.current
 		const currentRotation = gsap.getProperty(wheelRef.current, 'rotation')
@@ -103,7 +62,6 @@ export function useWheelAnimation({
 			duration: 25,
 			ease: 'power4.out',
 			snap: { rotation: 0.1 },
-
 			onUpdate: function () {
 				const currentRot = gsap.getProperty(wheelRef.current, 'rotation')
 				const targetRot = currentRotation + diff + 360 * 6
@@ -115,5 +73,6 @@ export function useWheelAnimation({
 			onComplete: () => onComplete(target),
 		})
 	}
+
 	return { init, startTimer, SpinStart, SpinWait, SpinToCell }
 }

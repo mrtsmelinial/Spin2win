@@ -5,9 +5,9 @@ import gsap from 'gsap'
 import { useRouletteSelector, useRouletteDispatch } from '@/domain/hooks'
 import { useClickSound } from '@/domain/hooks'
 import { selectBets } from '@/domain/selectors'
-import { useWheelAnimation } from '@/domain/widget/ControlColumn/useWheelAnimation'
 import { getColorImgSrc } from '@/domain/utils'
 import { calculateWin } from '@/domain/utils'
+import { useDrawCycle } from './useDrawCycle'
 
 export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const dispatch = useRouletteDispatch()
@@ -28,7 +28,7 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 	const { playSound } = useClickSound()
 	const playSoundRef = useRef(playSound)
 	const { init, startTimer, SpinStart, SpinWait, SpinToCell } =
-		useWheelAnimation({
+		useDrawCycle({
 			wheelRef,
 			progressRef,
 			playSoundRef,
