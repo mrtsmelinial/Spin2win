@@ -18,14 +18,14 @@ const IMG_PRELOAD = [
 export default function RoulettePage() {
 	const [initialCell] = useState(() => getCellRandom())
 	usePreloadImages(IMG_PRELOAD)
-	const { historyCell, addSpin } = useRouletteHistory(initialCell)
+	const { historyCell, addSpin, spinCount } = useRouletteHistory(initialCell)
 
 	return (
 		<main className='roulette'>
 			<AdaptiveFrame>
 				<div className='roulette__game-container'>
 					<Statistic />
-					<HistoryCell historyCell={historyCell} />
+					<HistoryCell historyCell={historyCell} spinCount={spinCount} />
 					<div className='roulette__wrapper'>
 						<ControlColumn initialCell={initialCell} onSpinComplete={addSpin} />
 						<BetColumn />

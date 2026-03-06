@@ -7,7 +7,7 @@ const getColor = number => {
 	return RED_NUMBERS.has(number) ? 'red' : 'black'
 }
 
-export default function HistoryCell({ historyCell }) {
+export default function HistoryCell({ historyCell, spinCount }) {
 	const containerRef = useRef(null)
 	const prevFirstRef = useRef(historyCell[0]?.number)
 
@@ -18,8 +18,8 @@ export default function HistoryCell({ historyCell }) {
 		const items = container.querySelectorAll('.roulette__history-item')
 		if (!items.length) return
 
-		if (historyCell[0]?.number === prevFirstRef.current) return
-		prevFirstRef.current = historyCell[0]?.number
+		if (spinCount === prevFirstRef.current) return
+		prevFirstRef.current = spinCount
 
 		const itemHeight = 65.4
 
@@ -31,7 +31,7 @@ export default function HistoryCell({ historyCell }) {
 			delay: 0.4,
 			ease: 'power2.out',
 		})
-	}, [historyCell])
+	}, [historyCell, spinCount])
 
 	return (
 		<div className='roulette__history-wrapper'>

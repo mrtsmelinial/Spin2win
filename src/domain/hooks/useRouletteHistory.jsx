@@ -24,9 +24,13 @@ export default function useRouletteHistory(initialCell) {
 		generateInitialHistory(initialCell),
 	)
 
+		const [spinCount, setSpinCount] = useState(0)
+	
+
 	const timeoutRef = useRef(null)
 
 	const addSpin = useCallback(cell => {
+		setSpinCount(prev => prev + 1)
 		setHistoryCell(prev => [cell, ...prev])
 		timeoutRef.current = setTimeout(() => {
 			setHistoryCell(prev => prev.slice(0, -1))
@@ -39,5 +43,5 @@ export default function useRouletteHistory(initialCell) {
 		}
 	}, [])
 
-	return { historyCell, addSpin }
+	return { historyCell, addSpin, spinCount }
 }
