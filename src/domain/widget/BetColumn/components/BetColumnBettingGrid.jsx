@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useRouletteSelector, useRouletteDispatch } from '@/domain/hooks'
 import { selectBets, selectBetting, selectLastResult } from '@/domain/selectors'
 import { useClickSound } from '@/domain/hooks'
-import { calculateMultiplier } from '@/domain/reducers/reducerParts'
+import { calculateMultiplier } from '@/domain/utils'
 
 const addBetsArray = [
 	{ title: 'A', size: 2 },

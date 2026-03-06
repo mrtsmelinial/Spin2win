@@ -1,0 +1,1 @@
+export { default as AdaptiveFrame } from './adaptive-frame'

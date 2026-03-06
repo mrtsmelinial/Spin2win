@@ -1,4 +1,4 @@
-import { calculateMultiplier } from '@/domain/reducers/reducerParts'
+import { calculateMultiplier } from '@/domain/utils'
 import { wheelSlots } from '@/shared/lib'
 
  const calculateWin = (bets, target) => {

@@ -19,7 +19,7 @@ const generateInitialHistory = firstCell => {
 	]
 }
 
-export function useRouletteHistory(initialCell) {
+export default function useRouletteHistory(initialCell) {
 	const [historyCell, setHistoryCell] = useState(() =>
 		generateInitialHistory(initialCell),
 	)

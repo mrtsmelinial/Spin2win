@@ -6,7 +6,7 @@ import { useRouletteSelector, useRouletteDispatch } from '@/domain/hooks'
 import { useClickSound } from '@/domain/hooks'
 import { selectBets } from '@/domain/selectors'
 import { getColorImgSrc } from '@/domain/utils'
-import { calculateWin } from '@/domain/utils'
+import { calculateWin } from '@/domain/reducer'
 import { useDrawCycle } from './useDrawCycle'
 
 export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
@@ -54,7 +54,6 @@ export default function ControlColumnCenter({ onSpinComplete, initialCell }) {
 		init()
 
 		const onTimerEnd = () => {
-			dispatch({ type: 'SAVE_ROUND' })
 			dispatch({ type: 'SET_ACTIVE', payload: false })
 
 			SpinStart(() => {

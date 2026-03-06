@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { useAdaptiveScale } from '../shared/hooks'
+import { useAdaptiveScale } from '../../shared/hooks'
 
 interface FrameProps extends React.ComponentPropsWithoutRef<'div'> {
 	children?: React.ReactNode
@@ -8,7 +8,7 @@ interface FrameProps extends React.ComponentPropsWithoutRef<'div'> {
 	height?: number
 }
 
-export function AdaptiveFrame(props: FrameProps) {
+export default function AdaptiveFrame(props: FrameProps) {
 	const {
 		children,
 		className,

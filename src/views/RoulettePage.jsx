@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { AdaptiveFrame } from './adaptive-frame'
+import { AdaptiveFrame } from '@/shared/ui'
 import { Statistic } from '@/domain/widget'
 import { ControlColumn } from '@/domain/widget'
 import { BetColumn } from '@/domain/widget'
 import { HistoryCell } from '@/domain/widget'
 import { usePreloadImages } from '@/shared/hooks'
 import { getCellRandom } from '@/domain/utils'
-import { useRouletteHistory } from './useRouletteHistory'
+import { useRouletteHistory } from '@/domain/hooks'
 
 const IMG_PRELOAD = [
 	'/img/reward-coins.svg',
