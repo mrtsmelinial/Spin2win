@@ -189,13 +189,13 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 									{zeroCell.betAmount.toFixed(2).replace('.', ',')}
 								</div>
 							)}
-							{isWinner(zeroCell) && (
-								<img
-									className='roulette__cell-item-winner-add1'
-									src='/img/border-m.svg'
-								/>
-							)}
 						</button>
+						{isWinner(zeroCell) && (
+							<img
+								className='roulette__cell-item-winner-add1'
+								src='/img/border-m.svg'
+							/>
+						)}
 					</div>
 				)}
 				<button
