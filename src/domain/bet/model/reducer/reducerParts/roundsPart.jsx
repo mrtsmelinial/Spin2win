@@ -18,8 +18,6 @@ export default function roundsPart(state, action) {
 		}
 
 		case 'LOAD_ROUND': {
-			if (!state.betting) return state
-
 			const round = state.savedRounds.find(r => r.id === action.id)
 			if (!round) return state
 			if (state.rebetUsed) return state

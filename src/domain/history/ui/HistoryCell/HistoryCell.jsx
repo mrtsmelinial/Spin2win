@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { RED_NUMBERS } from '@/shared/constants'
-import { useRouletteSelector } from '@/shared/model'
+import { useRouletteSelector, useRouletteDispatch } from '@/shared/model'
 import {
 	selectHistoryCell,
 	selectSpinCount,
@@ -15,15 +15,13 @@ const getColor = number => {
 export default function HistoryCell() {
 	const historyCell = useRouletteSelector(selectHistoryCell)
 	const spinCount = useRouletteSelector(selectSpinCount)
+	const dispatch = useRouletteDispatch()
 	const containerRef = useRef(null)
-	const prevFirstRef = useRef(historyCell[0]?.number)
+	const prevFirstRef = useRef(spinCount)
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const container = containerRef.current
 		if (!container) return
-
-		const items = container.querySelectorAll('.roulette__history-item')
-		if (!items.length) return
 
 		if (spinCount === prevFirstRef.current) return
 		prevFirstRef.current = spinCount
@@ -35,10 +33,12 @@ export default function HistoryCell() {
 		gsap.to(container, {
 			y: 0,
 			duration: 1,
-			delay: 0.4,
 			ease: 'power2.out',
+			onComplete: () => {
+				dispatch({ type: 'HISTORY_TRIM_LAST' })
+			},
 		})
-	}, [historyCell, spinCount])
+	}, [historyCell])
 
 	return (
 		<div className='roulette__history-wrapper'>

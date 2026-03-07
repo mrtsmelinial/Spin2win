@@ -71,6 +71,7 @@ export default function betsPart(state, action) {
 				bets: state.bets.map(bet => ({ ...bet, betAmount: 0 })),
 				history: [],
 				balance: state.balance + totalBets,
+				rebetUsed: false,
 			}
 		}
 

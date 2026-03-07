@@ -41,8 +41,8 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 	const handleRebet = useCallback(() => {
 		if (!betting) return
 		const lastRound = savedRounds[savedRounds.length - 1]
+		playSound('button')
 		if (lastRound) dispatch({ type: 'LOAD_ROUND', id: lastRound.id })
-			playSound('button')
 	}, [betting, dispatch, playSound, savedRounds])
 
 	return (
