@@ -1,11 +1,12 @@
 import React, { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { RED_NUMBERS } from '@/shared/constants'
-import { useRouletteSelector, useRouletteDispatch } from '@/shared/model'
 import {
 	selectHistoryCell,
 	selectSpinCount,
 } from '@/domain/history/model/selectors'
+import { useDispatch, useSelector } from 'react-redux'
+import { historyTrimLast } from '@/domain/history/model/reducer'
 
 const getColor = number => {
 	if (number === 0) return 'green'
@@ -13,9 +14,9 @@ const getColor = number => {
 }
 
 export default function HistoryCell() {
-	const historyCell = useRouletteSelector(selectHistoryCell)
-	const spinCount = useRouletteSelector(selectSpinCount)
-	const dispatch = useRouletteDispatch()
+	const historyCell = useSelector(selectHistoryCell)
+	const spinCount = useSelector(selectSpinCount)
+	const dispatch = useDispatch()
 	const containerRef = useRef(null)
 	const prevFirstRef = useRef(spinCount)
 
@@ -35,7 +36,7 @@ export default function HistoryCell() {
 			duration: 1,
 			ease: 'power2.out',
 			onComplete: () => {
-				dispatch({ type: 'HISTORY_TRIM_LAST' })
+				dispatch(historyTrimLast())
 			},
 		})
 	}, [historyCell])

@@ -1,6 +1,4 @@
 export {
-	useRouletteDispatch,
-	useRouletteSelector,
 	useClickSound,
 	usePreloadImages,
 	useLocalStorage,

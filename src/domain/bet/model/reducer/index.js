@@ -1,1 +1,8 @@
-export { default } from './betReducer'
+export {
+	default,
+	addBet,
+	undo,
+	clearBets,
+	doubleBets,
+	loadRound,
+} from './betSlice'

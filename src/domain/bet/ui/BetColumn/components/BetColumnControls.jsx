@@ -1,38 +1,40 @@
 import React, { useCallback, useState } from 'react'
-import { useRouletteSelector, useRouletteDispatch } from '@/shared/model'
-import { selectBetting, selectSavedRounds } from '@/domain/bet/model/selectors'
+import { selectBetting } from '@/domain/roulette/model/selectors'
+import { selectSavedRounds } from '@/domain/bet/model/selectors'
 import { useClickSound } from '@/shared/model'
+import { useDispatch, useSelector } from 'react-redux'
+import { clearBets, doubleBets, loadRound, undo } from '../../../model/reducer'
 
 export default function BetColumnControls({ setSelectedChip, sumBet }) {
-	const dispatch = useRouletteDispatch()
-	const betting = useRouletteSelector(selectBetting)
-	const savedRounds = useRouletteSelector(selectSavedRounds)
+	const dispatch = useDispatch()
+	const betting = useSelector(selectBetting)
+	const savedRounds = useSelector(selectSavedRounds)
 	const [currentBetIndex, setCurrentBetIndex] = useState(0)
 	const { playSound } = useClickSound()
 
 	const handleUndo = useCallback(() => {
 		if (!betting) return
-		dispatch({ type: 'UNDO' })
+		dispatch(undo())
 		playSound('button')
 	}, [betting, dispatch, playSound])
 
 	const handleClear = useCallback(() => {
 		if (!betting) return
-		dispatch({ type: 'CLEAR_BETS' })
+		dispatch(clearBets())
 		playSound('button')
 	}, [betting, dispatch, playSound])
 
 	const handleDoubleBets = useCallback(() => {
 		if (!betting) return
-		dispatch({ type: 'DOUBLE_BETS' })
-			playSound('button')
+		dispatch(doubleBets())
+		playSound('button')
 	}, [betting, dispatch, playSound])
 
 	const handleClick = useCallback(() => {
 		if (!betting) return
 		const nextIndex = (currentBetIndex + 1) % sumBet.length
 		setCurrentBetIndex(nextIndex)
-		
+
 		const newChip = parseFloat(sumBet[nextIndex].replace(',', '.'))
 		setSelectedChip(newChip)
 		playSound('button')
@@ -42,7 +44,7 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 		if (!betting) return
 		const lastRound = savedRounds[savedRounds.length - 1]
 		playSound('button')
-		if (lastRound) dispatch({ type: 'LOAD_ROUND', id: lastRound.id })
+		if (lastRound) dispatch(loadRound(lastRound.id))
 	}, [betting, dispatch, playSound, savedRounds])
 
 	return (

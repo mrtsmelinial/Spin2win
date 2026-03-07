@@ -1,1 +1,1 @@
-export { default, createHistoryInitialState } from './historyReducer'
+export { historySlice, historyTrimLast } from './historySlice'

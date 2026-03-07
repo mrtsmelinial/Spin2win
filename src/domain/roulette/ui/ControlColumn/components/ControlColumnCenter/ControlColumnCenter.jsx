@@ -2,13 +2,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import SpinnerTimer from './SpinnerTimer'
 import { wheelSlots } from '@/shared/constants'
 import gsap from 'gsap'
-import { useRouletteDispatch } from '@/shared/model'
 import { useClickSound } from '@/shared/model'
 import { getColorImgSrc } from '@/domain/roulette/lib'
 import { useDrawCycle } from '@/domain/roulette/model/useDrawCycle'
+import { useDispatch } from 'react-redux'
+import {
+	setActive,
+	spinComplete,
+	spinReset,
+} from '@/domain/roulette/model/reducer'
 
 export default function ControlColumnCenter({ initialCell }) {
-	const dispatch = useRouletteDispatch()
+	const dispatch = useDispatch()
 
 	const wheelRef = useRef(null)
 	const progressRef = useRef(null)
@@ -47,7 +52,7 @@ export default function ControlColumnCenter({ initialCell }) {
 		init()
 
 		const onTimerEnd = () => {
-			dispatch({ type: 'SET_ACTIVE', payload: false })
+			dispatch(setActive(false))
 
 			SpinStart(() => {
 				SpinWait(() => {
@@ -56,13 +61,16 @@ export default function ControlColumnCenter({ initialCell }) {
 
 						setCurrentCell(target.number)
 						setCurrentColorSrc(getColorImgSrc(target.color))
-						dispatch({
-							type: 'SPIN_COMPLETE',
-							payload: { number: target.number, color: target.color, sector },
-						})
+						dispatch(
+							spinComplete({
+								number: target.number,
+								color: target.color,
+								sector,
+							}),
+						)
 
 						gsap.delayedCall(5, () => {
-							dispatch({ type: 'SPIN_RESET' })
+							dispatch(spinReset())
 							startTimer(onTimerEnd)
 						})
 					})

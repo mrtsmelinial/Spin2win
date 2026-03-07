@@ -1,1 +1,1 @@
-export { default as reducerHistory } from './reducer'
+export { default as reducerSlice } from './reducer'

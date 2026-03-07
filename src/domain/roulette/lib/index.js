@@ -1,2 +1,2 @@
-export { default as getCellRandom } from './CreateRandomCell'
+export { default as createRandomCell } from './createRandomCell'
 export { getCellByRotation, getColorImgSrc } from './wheelUtils'

@@ -1,1 +1,1 @@
-export { default, createStatisticInitialState } from './statisticReducer'
+export { default } from './statisticSlice'

@@ -1,8 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { useRouletteSelector, useRouletteDispatch } from '@/shared/model'
-import { selectBets, selectBetting, selectLastResult } from '@/domain/bet/model/selectors'
+import { selectBets } from '@/domain/bet/model/selectors'
+import {
+	selectBetting,
+	selectLastResult,
+} from '@/domain/roulette/model/selectors'
 import { useClickSound } from '@/shared/model'
-import  calculateMultiplier  from '@/domain/bet/lib/calculateMultiplier'
+import calculateMultiplier from '@/domain/bet/lib/calculateMultiplier'
+import { useDispatch, useSelector } from 'react-redux'
+import { addBet } from '../../../model/reducer'
 
 const addBetsArray = [
 	{ title: 'A', size: 2 },
@@ -41,10 +46,10 @@ const addBetIdMap = {
 }
 
 export default function BetColumnBettingGrid({ selectedChip }) {
-	const dispatch = useRouletteDispatch()
-	const bets = useRouletteSelector(selectBets)
-	const betting = useRouletteSelector(selectBetting)
-	const lastResult = useRouletteSelector(selectLastResult)
+	const dispatch = useDispatch()
+	const bets = useSelector(selectBets)
+	const betting = useSelector(selectBetting)
+	const lastResult = useSelector(selectLastResult)
 	const [isAddBetsMode, setIsAddBetsMode] = useState(false)
 	const [isDragging, setIsDragging] = useState(false)
 	const { playSound } = useClickSound()
@@ -54,7 +59,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 			if (!betting) return
 			if (!selectedChip) return
 			setIsDragging(true)
-			dispatch({ type: 'ADD_BET', id, amount: selectedChip })
+			dispatch(addBet({ id, amount: selectedChip }))
 			playSound('bet')
 		},
 		[selectedChip, betting, dispatch, playSound],
@@ -64,7 +69,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 		id => {
 			if (!betting) return
 			if (!isDragging) return
-			dispatch({ type: 'ADD_BET', id, amount: selectedChip })
+			dispatch(addBet({ id, amount: selectedChip }))
 			playSound('bet')
 		},
 		[isDragging, selectedChip, betting, dispatch, playSound],

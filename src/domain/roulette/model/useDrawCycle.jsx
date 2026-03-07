@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
-import { getCellRandom } from '@/domain/roulette/lib'
+import { createRandomCell } from '@/domain/roulette/lib'
 import { useWheelAnimation } from './useWheelAnimation'
 
 export function useDrawCycle({
@@ -36,7 +36,7 @@ export function useDrawCycle({
 
 	function SpinWait(onComplete) {
 		const currentRotation = gsap.getProperty(wheelRef.current, 'rotation')
-		const newCell = getCellRandom()
+		const newCell = createRandomCell()
 		targetCellRef.current = newCell
 		setCellRandom(newCell)
 

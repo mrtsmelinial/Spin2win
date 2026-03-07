@@ -1,6 +1,6 @@
 import { wheelSlots } from '@/shared/constants'
 
-const getCellRandom = () => {
+const createRandomCell = () => {
 	const keys = Object.keys(wheelSlots)
 	const randomKey = keys[Math.floor(Math.random() * keys.length)]
 	return {
@@ -8,4 +8,4 @@ const getCellRandom = () => {
 		...wheelSlots[randomKey],
 	}
 }
-export default getCellRandom
+export default createRandomCell

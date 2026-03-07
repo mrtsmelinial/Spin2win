@@ -1,9 +1,9 @@
 import React from 'react'
-import { useRouletteSelector } from '@/shared/model'
 import { selectBets } from '@/domain/bet/model/selectors'
+import { useSelector } from 'react-redux'
 
 export default function BetColumnTotalBet() {
-	const bets = useRouletteSelector(selectBets)
+	const bets = useSelector(selectBets)
 
 	const total = bets.reduce((acc, cell) => acc + cell.betAmount, 0)
 	return (

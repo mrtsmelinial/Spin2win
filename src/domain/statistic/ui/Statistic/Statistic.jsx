@@ -1,9 +1,9 @@
 import React from 'react'
-import { useRouletteSelector } from '@/shared/model'
 import { selectArrInfo } from '@/domain/statistic/model/selectors/statisticSelectors'
+import { useSelector } from 'react-redux'
 
 export default function Statistic() {
-	const arrInfo = useRouletteSelector(selectArrInfo)
+	const arrInfo = useSelector(selectArrInfo)
 
 	return (
 		<div className='roulette__statistic'>
