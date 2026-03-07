@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { useAdaptiveScale } from '../../shared/hooks'
+import { useAdaptiveScale } from '../model/hooks'
 
 interface FrameProps extends React.ComponentPropsWithoutRef<'div'> {
 	children?: React.ReactNode

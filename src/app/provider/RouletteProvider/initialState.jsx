@@ -1,11 +1,23 @@
-import { createInitialBets } from '@/domain/utils'
+import { createInitialBets } from '@/shared/lib'
+import { getCellRandom } from '@/domain/roulette/lib'
+import { createHistoryInitialState } from '@/domain/history/model/reducer'
+import { createStatisticInitialState } from '@/domain/statistic/model/reducer'
+
+const initialCell = getCellRandom()
 
 export const initialState = {
-	bets: createInitialBets(),
-	history: [],
-	savedRounds: [],
-	balance: 10000,
-	betting: true,
-	rebetUsed: false,
-	lastResult: null,
+	bet: {
+		bets: createInitialBets(),
+		balance: 10000,
+		history: [],
+		savedRounds: [],
+		rebetUsed: false,
+	},
+	roulette: {
+		betting: true,
+		lastResult: null,
+		initialCell,
+	},
+	history: createHistoryInitialState(initialCell),
+	statistic: createStatisticInitialState(),
 }

@@ -1,0 +1,1 @@
+export const selectArrInfo = state => state.statistic.arrInfo

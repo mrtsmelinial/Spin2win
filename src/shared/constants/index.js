@@ -1,1 +1,2 @@
-export { MAX_BET, TIME_BETTING, RED_NUMBERS } from './rouletteConstants'
+export { default as RED_NUMBERS } from './rouletteConstants'
+export { default as wheelSlots } from './WheelSlots'

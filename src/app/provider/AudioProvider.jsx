@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { useAudio } from '@/shared/hooks'
+import { useAudio } from '@/shared/model'
 import { AudioContext } from '@/shared/context'
-import { useLocalStorage } from '@/shared/hooks'
+import { useLocalStorage } from '@/shared/model'
 
 export default function AudioProvider({ children }) {
 	const [isMuted, setIsMuted] = useLocalStorage('isMuted', false)

@@ -1,0 +1,1 @@
+export { default as HistoryCell } from './HistoryCell'

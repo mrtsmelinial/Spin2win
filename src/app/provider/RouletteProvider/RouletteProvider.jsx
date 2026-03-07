@@ -1,13 +1,10 @@
 import { useReducer } from 'react'
-import { rouletteReducer } from '@/domain/reducers'
+import combineReducers from './combineReducers'
 import { initialState } from './initialState'
-import {
-	RouletteStateContext,
-	RouletteDispatchContext,
-} from '@/shared/context'
+import { RouletteStateContext, RouletteDispatchContext } from '@/shared/context'
 
 const RouletteProvider = ({ children }) => {
-	const [state, dispatch] = useReducer(rouletteReducer, initialState)
+	const [state, dispatch] = useReducer(combineReducers, initialState)
 
 	return (
 		<RouletteDispatchContext.Provider value={dispatch}>

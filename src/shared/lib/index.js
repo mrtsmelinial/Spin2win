@@ -1,1 +1,1 @@
-export {default as wheelSlots} from './WheelSlots'
+export { default as createInitialBets } from './CreatingInitialBets'
