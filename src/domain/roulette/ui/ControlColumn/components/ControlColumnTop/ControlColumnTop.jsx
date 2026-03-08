@@ -2,11 +2,11 @@ import React from 'react'
 import ButtonFullscreen from './Buttons/ButtonFullscreen'
 import ButtonMute from './Buttons/ButtonMute'
 import NumberFlow from '@number-flow/react'
-import { selectBalance } from '@/domain/bet/model/selectors'
-import { useSelector } from 'react-redux'
+import { useBetStore } from '@/domain/bet/model/store'
+
 
 export default function ControlColumnTop() {
-	const balance = useSelector(selectBalance)
+	const balance = useBetStore(state => state.balance)
 
 	return (
 		<div className='roulette__control-top'>

@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useClickSound } from '@/shared/model'
-import { selectBalance } from '@/domain/bet/model/selectors'
-import { selectLastResult } from '@/domain/roulette/model/selectors/rouletteSelectors'
-import { useSelector } from 'react-redux'
+import { useBetStore } from '@/domain/bet/model/store'
+import { useRouletteStore } from '@/domain/roulette/model/store'
 
 export default function WinDisplay() {
-	const balance = useSelector(selectBalance)
-	const lastResult = useSelector(selectLastResult)
+	const balance = useBetStore(state => state.balance)
+	const lastResult = useRouletteStore(state => state.lastResult)
 	const { playSound } = useClickSound()
 	const [winAmount, setWinAmount] = useState(0)
 	const winRef = useRef(null)
@@ -22,7 +21,7 @@ export default function WinDisplay() {
 				gsap.fromTo(
 					winRef.current,
 					{ opacity: 0 },
-					{ opacity: 1,  duration: 0.5, ease: 'power1' },
+					{ opacity: 1, duration: 0.5, ease: 'power1' },
 				)
 				gsap.delayedCall(5, () => {
 					gsap.to(winRef.current, { opacity: 0, duration: 0.3 })

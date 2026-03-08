@@ -6,8 +6,6 @@ import { BetColumn } from '@/domain/bet/ui'
 import { HistoryCell } from '@/domain/history/ui'
 import { WinDisplay } from '@/domain/bet/ui'
 import { usePreloadImages } from '@/shared/model'
-import { selectInitialCell } from '@/domain/roulette/model/selectors'
-import { useSelector } from 'react-redux'
 
 const IMG_PRELOAD = [
 	'/img/reward-coins.svg',
@@ -18,7 +16,6 @@ const IMG_PRELOAD = [
 
 export default function RoulettePage() {
 	usePreloadImages(IMG_PRELOAD)
-	const initialCell = useSelector(selectInitialCell)
 
 	return (
 		<main className='roulette'>
@@ -27,7 +24,7 @@ export default function RoulettePage() {
 					<Statistic />
 					<HistoryCell />
 					<div className='roulette__wrapper'>
-						<ControlColumn initialCell={initialCell} />
+						<ControlColumn/>
 						<BetColumn />
 					</div>
 					<WinDisplay />

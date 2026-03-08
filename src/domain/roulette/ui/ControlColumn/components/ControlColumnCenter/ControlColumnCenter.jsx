@@ -5,22 +5,27 @@ import gsap from 'gsap'
 import { useClickSound } from '@/shared/model'
 import { getColorImgSrc } from '@/domain/roulette/lib'
 import { useDrawCycle } from '@/domain/roulette/model/useDrawCycle'
-import { useDispatch } from 'react-redux'
 import {
 	setActive,
-	spinComplete,
-	spinReset,
-} from '@/domain/roulette/model/reducer'
+	spinReset as spinRouletteReset,
+	spinComplete as rouletteSpinComplete,
+} from '@/domain/roulette/model/store'
+import {
+	spinComplete as betSpinComplete,
+	spinReset as spinBetReset,
+} from '@/domain/bet/model/store'
+import { spinComplete as historySpinComplete } from '@/domain/history/model/store'
+import { spinComplete as statisticSpinComplete } from '@/domain/statistic/model/store'
+import { useRouletteStore } from '@/domain/roulette/model/store'
 
-export default function ControlColumnCenter({ initialCell }) {
-	const dispatch = useDispatch()
-
+export default function ControlColumnCenter() {
 	const wheelRef = useRef(null)
 	const progressRef = useRef(null)
 	const targetCellRef = useRef(null)
 	const pointerRef = useRef(null)
 	const cellNumRef = useRef(null)
 	const cellImgRef = useRef(null)
+	const initialCell = useRouletteStore(state => state.initialCell)
 	const [cellRandom, setCellRandom] = useState(initialCell)
 	const [currentCell, setCurrentCell] = useState(cellRandom.number)
 	const [currentColorSrc, setCurrentColorSrc] = useState(
@@ -28,6 +33,13 @@ export default function ControlColumnCenter({ initialCell }) {
 	)
 	const { playSound } = useClickSound()
 	const playSoundRef = useRef(playSound)
+
+	const spinComplete = cell => {
+		rouletteSpinComplete(cell)
+		betSpinComplete(cell)
+		historySpinComplete(cell)
+		statisticSpinComplete(cell)
+	}
 
 	const { init, startTimer, SpinStart, SpinWait, SpinToCell } = useDrawCycle({
 		wheelRef,
@@ -52,7 +64,7 @@ export default function ControlColumnCenter({ initialCell }) {
 		init()
 
 		const onTimerEnd = () => {
-			dispatch(setActive(false))
+			setActive(false)
 
 			SpinStart(() => {
 				SpinWait(() => {
@@ -61,16 +73,15 @@ export default function ControlColumnCenter({ initialCell }) {
 
 						setCurrentCell(target.number)
 						setCurrentColorSrc(getColorImgSrc(target.color))
-						dispatch(
-							spinComplete({
-								number: target.number,
-								color: target.color,
-								sector,
-							}),
-						)
+						spinComplete({
+							number: target.number,
+							color: target.color,
+							sector,
+						})
 
 						gsap.delayedCall(5, () => {
-							dispatch(spinReset())
+							spinBetReset()
+							spinRouletteReset()
 							startTimer(onTimerEnd)
 						})
 					})

@@ -1,9 +1,8 @@
 import React from 'react'
-import { selectBets } from '@/domain/bet/model/selectors'
-import { useSelector } from 'react-redux'
+import { useBetStore } from '@/domain/bet/model/store'
 
 export default function BetColumnTotalBet() {
-	const bets = useSelector(selectBets)
+	const bets = useBetStore(state => state.bets)
 
 	const total = bets.reduce((acc, cell) => acc + cell.betAmount, 0)
 	return (

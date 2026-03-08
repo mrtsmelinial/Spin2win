@@ -1,13 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { selectBets } from '@/domain/bet/model/selectors'
-import {
-	selectBetting,
-	selectLastResult,
-} from '@/domain/roulette/model/selectors'
 import { useClickSound } from '@/shared/model'
 import calculateMultiplier from '@/domain/bet/lib/calculateMultiplier'
-import { useDispatch, useSelector } from 'react-redux'
-import { addBet } from '../../../model/reducer'
+import { useBetStore, addBet } from '@/domain/bet/model/store'
+import { useRouletteStore } from '@/domain/roulette/model/store'
 
 const addBetsArray = [
 	{ title: 'A', size: 2 },
@@ -46,10 +41,9 @@ const addBetIdMap = {
 }
 
 export default function BetColumnBettingGrid({ selectedChip }) {
-	const dispatch = useDispatch()
-	const bets = useSelector(selectBets)
-	const betting = useSelector(selectBetting)
-	const lastResult = useSelector(selectLastResult)
+	const bets = useBetStore(state => state.bets)
+	const betting = useRouletteStore(state => state.betting)
+	const lastResult = useRouletteStore(state => state.lastResult)
 	const [isAddBetsMode, setIsAddBetsMode] = useState(false)
 	const [isDragging, setIsDragging] = useState(false)
 	const { playSound } = useClickSound()
@@ -59,20 +53,20 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 			if (!betting) return
 			if (!selectedChip) return
 			setIsDragging(true)
-			dispatch(addBet({ id, amount: selectedChip }))
+			addBet({ id, amount: selectedChip })
 			playSound('bet')
 		},
-		[selectedChip, betting, dispatch, playSound],
+		[selectedChip, betting, playSound],
 	)
 
 	const handleBetMouseEnter = useCallback(
 		id => {
 			if (!betting) return
 			if (!isDragging) return
-			dispatch(addBet({ id, amount: selectedChip }))
+			addBet({ id, amount: selectedChip })
 			playSound('bet')
 		},
-		[isDragging, selectedChip, betting, dispatch, playSound],
+		[isDragging, selectedChip, betting, playSound],
 	)
 
 	const handleMouseUp = useCallback(() => setIsDragging(false), [])

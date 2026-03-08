@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
-import { createRandomCell } from '@/domain/roulette/lib'
+import { createRandomCell } from '@/shared/lib'
 import { useWheelAnimation } from './useWheelAnimation'
 
 export function useDrawCycle({

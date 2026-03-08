@@ -1,34 +1,37 @@
 import React, { useCallback, useState } from 'react'
-import { selectBetting } from '@/domain/roulette/model/selectors'
-import { selectSavedRounds } from '@/domain/bet/model/selectors'
 import { useClickSound } from '@/shared/model'
-import { useDispatch, useSelector } from 'react-redux'
-import { clearBets, doubleBets, loadRound, undo } from '../../../model/reducer'
+import { useRouletteStore } from '@/domain/roulette/model/store'
+import {
+	useBetStore,
+	clearBets,
+	doubleBets,
+	loadRound,
+	undo,
+} from '@/domain/bet/model/store'
 
 export default function BetColumnControls({ setSelectedChip, sumBet }) {
-	const dispatch = useDispatch()
-	const betting = useSelector(selectBetting)
-	const savedRounds = useSelector(selectSavedRounds)
+	const betting = useRouletteStore(state => state.betting)
+	const savedRounds = useBetStore(state => state.savedRounds)
 	const [currentBetIndex, setCurrentBetIndex] = useState(0)
 	const { playSound } = useClickSound()
 
 	const handleUndo = useCallback(() => {
 		if (!betting) return
-		dispatch(undo())
+		undo()
 		playSound('button')
-	}, [betting, dispatch, playSound])
+	}, [betting, playSound])
 
 	const handleClear = useCallback(() => {
 		if (!betting) return
-		dispatch(clearBets())
+		clearBets()
 		playSound('button')
-	}, [betting, dispatch, playSound])
+	}, [betting, playSound])
 
 	const handleDoubleBets = useCallback(() => {
 		if (!betting) return
-		dispatch(doubleBets())
+		doubleBets()
 		playSound('button')
-	}, [betting, dispatch, playSound])
+	}, [betting, playSound])
 
 	const handleClick = useCallback(() => {
 		if (!betting) return
@@ -44,8 +47,8 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 		if (!betting) return
 		const lastRound = savedRounds[savedRounds.length - 1]
 		playSound('button')
-		if (lastRound) dispatch(loadRound(lastRound.id))
-	}, [betting, dispatch, playSound, savedRounds])
+		if (lastRound) loadRound(lastRound.id)
+	}, [betting, playSound, savedRounds])
 
 	return (
 		<div className={`roulette__bet-controls ${betting ? '' : 'none-active'}`}>
