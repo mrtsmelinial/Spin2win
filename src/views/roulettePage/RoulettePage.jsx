@@ -1,10 +1,10 @@
 import React from 'react'
 import { AdaptiveFrame } from '@/shared/ui'
-import { Statistic } from '@/domain/statistic/ui'
-import { ControlColumn } from '@/domain/roulette/ui'
-import { BetColumn } from '@/domain/bet/ui'
-import { HistoryCell } from '@/domain/history/ui'
-import { WinDisplay } from '@/domain/bet/ui'
+import { Statistic } from '@/domain/statistic'
+import { ControlColumn } from '@/domain/roulette'
+import { BetColumn } from '@/domain/bet'
+import { HistoryCell } from '@/domain/history'
+import { WinDisplay } from '@/domain/bet'
 import { usePreloadImages } from '@/shared/model'
 
 const IMG_PRELOAD = [

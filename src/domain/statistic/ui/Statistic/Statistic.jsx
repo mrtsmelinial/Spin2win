@@ -1,5 +1,5 @@
 import React from 'react'
-import { useStatisticStore } from '@/domain/statistic/model/store'
+import { useStatisticStore } from '@/domain/statistic'
 
 export default function Statistic() {
 	const arrInfo = useStatisticStore(state => state.arrInfo)

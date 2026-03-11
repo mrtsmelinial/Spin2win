@@ -1,5 +1,5 @@
 import React from 'react'
-import { useBetStore } from '@/domain/bet/model/store'
+import { useBetStore } from '@/domain/bet'
 
 export default function BetColumnTotalBet() {
 	const bets = useBetStore(state => state.bets)

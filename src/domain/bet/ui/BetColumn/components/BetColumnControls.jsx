@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react'
 import { useClickSound } from '@/shared/model'
-import { useRouletteStore } from '@/domain/roulette/model/store'
+import { useRouletteStore } from '@/domain/roulette'
 import {
 	useBetStore,
 	clearBets,
 	doubleBets,
 	loadRound,
 	undo,
-} from '@/domain/bet/model/store'
+} from '@/domain/bet'
 
 export default function BetColumnControls({ setSelectedChip, sumBet }) {
 	const betting = useRouletteStore(state => state.betting)

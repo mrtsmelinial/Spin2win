@@ -2,7 +2,7 @@ import React from 'react'
 import ButtonFullscreen from './Buttons/ButtonFullscreen'
 import ButtonMute from './Buttons/ButtonMute'
 import NumberFlow from '@number-flow/react'
-import { useBetStore } from '@/domain/bet/model/store'
+import { useBetStore } from '@/domain/bet'
 
 
 export default function ControlColumnTop() {

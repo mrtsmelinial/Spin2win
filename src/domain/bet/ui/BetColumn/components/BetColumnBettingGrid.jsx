@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useClickSound } from '@/shared/model'
 import calculateMultiplier from '@/domain/bet/lib/calculateMultiplier'
-import { useBetStore, addBet } from '@/domain/bet/model/store'
-import { useRouletteStore } from '@/domain/roulette/model/store'
+import { useBetStore, addBet } from '@/domain/bet'
+import { useRouletteStore } from '@/domain/roulette'
 
 const addBetsArray = [
 	{ title: 'A', size: 2 },

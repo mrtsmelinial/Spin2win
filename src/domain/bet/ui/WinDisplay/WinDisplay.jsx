@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useClickSound } from '@/shared/model'
-import { useBetStore } from '@/domain/bet/model/store'
-import { useRouletteStore } from '@/domain/roulette/model/store'
+import { useBetStore } from '@/domain/bet'
+import { useRouletteStore } from '@/domain/roulette'
 
 export default function WinDisplay() {
 	const balance = useBetStore(state => state.balance)

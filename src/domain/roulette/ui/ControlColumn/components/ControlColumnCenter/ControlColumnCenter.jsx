@@ -9,14 +9,14 @@ import {
 	setActive,
 	spinReset as spinRouletteReset,
 	spinComplete as rouletteSpinComplete,
-} from '@/domain/roulette/model/store'
+} from '@/domain/roulette'
 import {
 	spinComplete as betSpinComplete,
 	spinReset as spinBetReset,
-} from '@/domain/bet/model/store'
-import { spinComplete as historySpinComplete } from '@/domain/history/model/store'
-import { spinComplete as statisticSpinComplete } from '@/domain/statistic/model/store'
-import { useRouletteStore } from '@/domain/roulette/model/store'
+} from '@/domain/bet'
+import { spinComplete as historySpinComplete } from '@/domain/history'
+import { spinComplete as statisticSpinComplete } from '@/domain/statistic'
+import { useRouletteStore } from '@/domain/roulette'
 
 export default function ControlColumnCenter() {
 	const wheelRef = useRef(null)
