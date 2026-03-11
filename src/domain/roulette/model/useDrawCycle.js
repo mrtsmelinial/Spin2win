@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import gsap from 'gsap'
 import { createRandomCell } from '@/shared/lib'
 import { useWheelAnimation } from './useWheelAnimation'
+import useDrawTimer from '@/domain/draw'
 
 export function useDrawCycle({
 	wheelRef,
@@ -14,14 +15,15 @@ export function useDrawCycle({
 }) {
 	const targetCellRef = useRef(null)
 
-	const { init, handleSlotUpdate, startTimer } = useWheelAnimation({
+	const { init, handleSlotUpdate } = useWheelAnimation({
 		wheelRef,
-		progressRef,
 		playSoundRef,
 		pointerRef,
 		initialAngle,
 		onSlotChange,
 	})
+
+	const { startTimer } = useDrawTimer({ progressRef })
 
 	function SpinStart(onComplete) {
 		const currentRotation = gsap.getProperty(wheelRef.current, 'rotation')
@@ -29,7 +31,7 @@ export function useDrawCycle({
 			rotation: currentRotation + 360 * 2,
 			duration: 3,
 			ease: 'power1.in',
-			onUpdate: handleSlotUpdate,
+			onUpdate: handleSlotUpdate,  
 			onComplete,
 		})
 	}

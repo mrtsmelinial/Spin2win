@@ -1,11 +1,9 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
 import { getCellByRotation } from '@/domain/roulette/lib'
-import { TIME_BETTING } from '@/domain/roulette/config/timeBetting'
 
 export function useWheelAnimation({
 	wheelRef,
-	progressRef,
 	playSoundRef,
 	pointerRef,
 	initialAngle,
@@ -40,28 +38,7 @@ export function useWheelAnimation({
 		}
 	}
 
-	function startTimer(onTimerEnd) {
-		const path = progressRef.current
-		const length = path.getTotalLength()
+	
 
-		gsap.killTweensOf(path)
-		gsap.set(path, {
-			strokeDasharray: length,
-			strokeDashoffset: 0,
-			opacity: 1,
-		})
-
-		gsap.to(path, {
-			strokeDashoffset: length,
-			duration: TIME_BETTING,
-			ease: 'none',
-			delay: 2,
-			onComplete: () => {
-				gsap.set(path, { opacity: 0 })
-				onTimerEnd()
-			},
-		})
-	}
-
-	return { init, handleSlotUpdate, startTimer }
+	return { init, handleSlotUpdate }
 }
