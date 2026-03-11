@@ -1,18 +1,28 @@
 import { create } from 'zustand'
 import { initialCell } from '@/shared/lib'
+import { PHASES } from '@/shared/constants'
 import { devtools } from 'zustand/middleware'
 
 export const useRouletteStore = create(
 	devtools(set => ({
-		betting: true,
+		phase: PHASES.PLACE_BETS,
 		lastResult: null,
 		initialCell,
 
-		setActive: value => set({ betting: value }, false, 'roulette/setActive'),
+		setActive: value =>
+			set(
+				{ phase: value ? PHASES.PLACE_BETS : PHASES.DRAW },
+				false,
+				'roulette/setActive',
+			),
 		spinComplete: cell =>
 			set({ lastResult: cell }, false, 'roulette/spinComplete'),
 		spinReset: () =>
-			set({ lastResult: null, betting: true }, false, 'roulette/spinReset'),
+			set(
+				{ lastResult: null, phase: PHASES.PLACE_BETS },
+				false,
+				'roulette/spinReset',
+			),
 	})),
 	{ name: 'RouletteStore' },
 )

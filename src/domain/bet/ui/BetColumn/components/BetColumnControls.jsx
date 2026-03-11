@@ -8,50 +8,52 @@ import {
 	loadRound,
 	undo,
 } from '@/domain/bet'
+import { PHASES } from '@/shared/constants'
 
 export default function BetColumnControls({ setSelectedChip, sumBet }) {
-	const betting = useRouletteStore(state => state.betting)
+	const phase = useRouletteStore(state => state.phase)
+	const isBetting = phase === PHASES.PLACE_BETS
 	const savedRounds = useBetStore(state => state.savedRounds)
 	const [currentBetIndex, setCurrentBetIndex] = useState(0)
 	const { playSound } = useClickSound()
 
 	const handleUndo = useCallback(() => {
-		if (!betting) return
+		if (!isBetting) return
 		undo()
 		playSound('button')
-	}, [betting, playSound])
+	}, [isBetting, playSound])
 
 	const handleClear = useCallback(() => {
-		if (!betting) return
+		if (!isBetting) return
 		clearBets()
 		playSound('button')
-	}, [betting, playSound])
+	}, [isBetting, playSound])
 
 	const handleDoubleBets = useCallback(() => {
-		if (!betting) return
+		if (!isBetting) return
 		doubleBets()
 		playSound('button')
-	}, [betting, playSound])
+	}, [isBetting, playSound])
 
 	const handleClick = useCallback(() => {
-		if (!betting) return
+		if (!isBetting) return
 		const nextIndex = (currentBetIndex + 1) % sumBet.length
 		setCurrentBetIndex(nextIndex)
 
 		const newChip = parseFloat(sumBet[nextIndex].replace(',', '.'))
 		setSelectedChip(newChip)
 		playSound('button')
-	}, [betting, currentBetIndex, sumBet, setSelectedChip, playSound])
+	}, [isBetting, currentBetIndex, sumBet, setSelectedChip, playSound])
 
 	const handleRebet = useCallback(() => {
-		if (!betting) return
+		if (!isBetting) return
 		const lastRound = savedRounds[savedRounds.length - 1]
 		playSound('button')
 		if (lastRound) loadRound(lastRound.id)
-	}, [betting, playSound, savedRounds])
+	}, [isBetting, playSound, savedRounds])
 
 	return (
-		<div className={`roulette__bet-controls ${betting ? '' : 'none-active'}`}>
+		<div className={`roulette__bet-controls ${isBetting ? '' : 'none-active'}`}>
 			<button
 				className='roulette__bet-button'
 				type='button'

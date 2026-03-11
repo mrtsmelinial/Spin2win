@@ -3,6 +3,7 @@ import { useClickSound } from '@/shared/model'
 import calculateMultiplier from '@/domain/bet/lib/calculateMultiplier'
 import { useBetStore, addBet } from '@/domain/bet'
 import { useRouletteStore } from '@/domain/roulette'
+import { PHASES } from '@/shared/constants'
 
 const addBetsArray = [
 	{ title: 'A', size: 2 },
@@ -42,7 +43,9 @@ const addBetIdMap = {
 
 export default function BetColumnBettingGrid({ selectedChip }) {
 	const bets = useBetStore(state => state.bets)
-	const betting = useRouletteStore(state => state.betting)
+	const phase = useRouletteStore(state => state.phase)
+	const isBetting = phase === PHASES.PLACE_BETS
+
 	const lastResult = useRouletteStore(state => state.lastResult)
 	const [isAddBetsMode, setIsAddBetsMode] = useState(false)
 	const [isDragging, setIsDragging] = useState(false)
@@ -50,23 +53,23 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 
 	const handleBetMouseDown = useCallback(
 		id => {
-			if (!betting) return
+			if (!isBetting) return
 			if (!selectedChip) return
 			setIsDragging(true)
 			addBet({ id, amount: selectedChip })
 			playSound('bet')
 		},
-		[selectedChip, betting, playSound],
+		[selectedChip, isBetting, playSound],
 	)
 
 	const handleBetMouseEnter = useCallback(
 		id => {
-			if (!betting) return
+			if (!isBetting) return
 			if (!isDragging) return
 			addBet({ id, amount: selectedChip })
 			playSound('bet')
 		},
-		[isDragging, selectedChip, betting, playSound],
+		[isDragging, selectedChip, isBetting, playSound],
 	)
 
 	const handleMouseUp = useCallback(() => setIsDragging(false), [])
@@ -117,7 +120,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 									key={index}
 								>
 									<button
-										className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size} ${bet?.betAmount > 0 ? 'active' : ''} ${betting ? '' : 'none-active'}`}
+										className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size} ${bet?.betAmount > 0 ? 'active' : ''} ${isBetting ? '' : 'none-active'}`}
 										type='button'
 										style={{ backgroundColor }}
 										onMouseDown={() => handleBetMouseDown(betId)}
@@ -151,7 +154,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 										onMouseEnter={() =>
 											handleBetMouseEnter(`number-${bet.value}`)
 										}
-										className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''} ${betting ? '' : 'none-active'}`}
+										className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''} ${isBetting ? '' : 'none-active'}`}
 										type='button'
 										style={{
 											backgroundColor: `var(--color-${bet.color})`,
@@ -180,7 +183,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 						<button
 							className={`roulette__cell-item roulette__cell-item--zero ${
 								zeroCell && zeroCell.betAmount > 0 ? 'active' : ''
-							} ${betting ? '' : 'none-active'}`}
+							} ${isBetting ? '' : 'none-active'}`}
 							type='button'
 							onMouseDown={() => handleBetMouseDown('number-0')}
 							onMouseEnter={() => handleBetMouseEnter('number-0')}
