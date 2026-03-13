@@ -1,2 +1,2 @@
-export { HistoryCell } from './ui'
+export { HistoryCell, HistorySection } from './ui'
 export { spinComplete } from './model/store'

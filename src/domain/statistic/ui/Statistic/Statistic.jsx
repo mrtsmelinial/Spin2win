@@ -2,8 +2,8 @@ import React from 'react'
 import { useStatisticStore } from '@/domain/statistic'
 
 export default function Statistic() {
+	
 	const arrInfo = useStatisticStore(state => state.arrInfo)
-
 	return (
 		<div className='roulette__statistic'>
 			<img

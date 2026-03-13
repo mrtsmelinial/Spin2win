@@ -1,2 +1,2 @@
-export { Statistic } from './ui'
+export { Statistic, StatisticMenu } from './ui'
 export { spinComplete, useStatisticStore } from './model/store'

@@ -11,6 +11,10 @@
 	--color-red: rgb(194 35 35);
 	--color-red-second: rgb(185 28 28);
 	--color-green: rgb(40 156 56);
+	--color-green-second: rgb(64 122 64 );
+	--color-green-light: rgb(119 172 135);
+	--color-green-dark: rgb(0 66 41);
+	--color-green-dark-second: rgb(25 65 43);
 	--color-gold: rgb(253, 224, 71);
-	--color-gold-second: rgb(221, 202, 124);
+	--color-gold-second: rgb(221, 202, 124);	
 }

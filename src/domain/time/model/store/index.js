@@ -1,1 +1,1 @@
-export { tick } from './store'
+export { tick, useTimeStore } from './store'

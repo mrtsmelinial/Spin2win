@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AdaptiveFrame } from '@/shared/ui'
-import { Statistic } from '@/domain/statistic'
+import { Statistic, useStatisticStore } from '@/domain/statistic'
 import { ControlColumn } from '@/domain/roulette'
 import { BetColumn } from '@/domain/bet'
 import { HistoryCell } from '@/domain/history'
 import { WinDisplay } from '@/domain/bet'
 import { usePreloadImages } from '@/shared/model'
+import { Menu } from '@/domain/menu'
+import { useHistoryStore } from '@/domain/history/model/store'
 
 const IMG_PRELOAD = [
 	'/img/reward-coins.svg',
@@ -16,6 +18,10 @@ const IMG_PRELOAD = [
 
 export default function RoulettePage() {
 	usePreloadImages(IMG_PRELOAD)
+	useEffect(() => {
+		const historyCell = useHistoryStore.getState().historyCell
+		useStatisticStore.getState().initFromHistory(historyCell)
+	}, [])
 
 	return (
 		<main className='roulette'>
@@ -24,11 +30,12 @@ export default function RoulettePage() {
 					<Statistic />
 					<HistoryCell />
 					<div className='roulette__wrapper'>
-						<ControlColumn/>
+						<ControlColumn />
 						<BetColumn />
 					</div>
 					<WinDisplay />
 				</div>
+				<Menu />
 			</AdaptiveFrame>
 			<div className='roulette__phone'>
 				<span className='roulette__phone-text'>

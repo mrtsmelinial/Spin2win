@@ -39,7 +39,7 @@
 	border: var(--border);
 	border-radius: 16px;
 	overflow: hidden;
-	z-index: 100;
+	z-index: 10;
 	display: grid;
 }
 
@@ -128,7 +128,7 @@
 	display: flex;
 	align-items: flex-start;
 	justify-content: end;
-	z-index: 100;
+	z-index: 10;
 }
 
 .roulette__control-top {
@@ -149,7 +149,7 @@
 	background-repeat: no-repeat;
 	background-size: contain;
 	cursor: pointer;
-	z-index: 1000;
+	z-index: 10;
 
 	&.roulette__button--fullscreen {
 		background-image: url(/img/fullscr-min-white.svg);
@@ -264,6 +264,7 @@
 
 .roulette__session {
 	height: 46px;
+	white-space: nowrap;
 	display: grid;
 	place-items: center;
 	font-size: 2.4rem;
@@ -433,7 +434,7 @@
 	align-items: center;
 	justify-content: center;
 	font-size: 2rem;
-	z-index: 100;
+	z-index: 10;
 	color: #fff;
 }
 

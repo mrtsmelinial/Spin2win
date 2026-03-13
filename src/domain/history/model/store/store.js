@@ -1,23 +1,37 @@
-import { RED_NUMBERS } from '@/shared/constants'
+import { RED_NUMBERS, wheelSlots } from '@/shared/constants'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { initialCell } from '@/shared/lib'
 import { devtools } from 'zustand/middleware'
+import { useRoundStore } from '@/domain/round/model'
+import { useTimeStore } from '@/domain/time/model'
 
 const generateInitialHistory = firstCell => {
 	const colorMap = { red: 'r', black: 'b', green: 'g' }
+	const round = useRoundStore.getState().round
+	const currentTime = useTimeStore.getState().currentTime
+	const formatted = new Date(currentTime).toLocaleTimeString('ru-RU')
 
-	const rest = Array.from({ length: 9 }, () => {
+	const rest = Array.from({ length: 9 }, (_, i) => {
 		const number = Math.floor(Math.random() * 37)
+		const sector = wheelSlots[number]?.sector ?? '-'
+		const formatted = new Date(currentTime).toLocaleTimeString('ru-RU')
+
 		let color
 		if (number === 0) color = 'g'
 		else if (RED_NUMBERS.has(number)) color = 'r'
 		else color = 'b'
-		return { number, color }
+		return { number, color, sector, round: round - (i + 2), formatted }
 	})
 
 	return [
-		{ number: firstCell.number, color: colorMap[firstCell.color] },
+		{
+			number: firstCell.number,
+			color: colorMap[firstCell.color],
+			sector: firstCell.sector,
+			round: useRoundStore.getState().round - 1,
+			formatted: formatted,
+		},
 		...rest,
 	]
 }
@@ -42,9 +56,15 @@ export const useHistoryStore = create(
 					state => {
 						const { number, color } = cell
 						const colorMap = { red: 'r', black: 'b', green: 'g' }
+						const round = useRoundStore.getState().round
+						const currentTime = useTimeStore.getState().currentTime
+						const formatted = new Date(currentTime).toLocaleTimeString('ru-RU')
 						state.historyCell.unshift({
 							number,
 							color: colorMap[color] ?? color,
+							sector: wheelSlots[number]?.sector ?? '-',
+							round,
+							formatted,
 						})
 						state.spinCount += 1
 					},

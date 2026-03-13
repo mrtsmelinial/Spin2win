@@ -1,1 +1,2 @@
-export {default} from './Menu'
+export { MenuButton } from './MenuButton'
+export { Menu } from './Menu'
