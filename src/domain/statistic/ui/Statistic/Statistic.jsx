@@ -1,9 +1,23 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { useStatisticStore } from '@/domain/statistic'
 
+const StatCellLevel = memo(
+	({ level }) => (
+		<div
+			className='roulette__stat-cell roulette__stat-cell--level'
+			style={{ '--level-cell': `${level}%` }}
+		></div>
+	),
+	(prev, next) => prev.level === next.level,
+)
+
+const StatCellNumber = memo(() => (
+	<div className='roulette__stat-cell roulette__stat-cell--number'></div>
+))
+
 export default function Statistic() {
-	
 	const arrInfo = useStatisticStore(state => state.arrInfo)
+
 	return (
 		<div className='roulette__statistic'>
 			<img
@@ -17,19 +31,12 @@ export default function Statistic() {
 			<div className='roulette__stat-grid'>
 				<div className='roulette__stat-item'>
 					{arrInfo.map(item => (
-						<div
-							className='roulette__stat-cell roulette__stat-cell--level'
-							key={`level-${item.id}`}
-							style={{ '--level-cell': `${item.level}%` }}
-						></div>
+						<StatCellLevel key={item.id} level={item.level} />
 					))}
 				</div>
 				<div className='roulette__stat-item'>
 					{arrInfo.map(item => (
-						<div
-							className='roulette__stat-cell roulette__stat-cell--number'
-							key={item.id}
-						></div>
+						<StatCellNumber key={item.id} />
 					))}
 				</div>
 			</div>

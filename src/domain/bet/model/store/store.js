@@ -10,6 +10,7 @@ export const useBetStore = create(
 		immer(set => ({
 			bets: createInitialBets(),
 			balance: 10000,
+			lastWin: 0,
 			history: [],
 			savedRounds: [],
 			rebetUsed: false,
@@ -137,9 +138,12 @@ export const useBetStore = create(
 							const multiplier = calculateMultiplier(bet, value)
 							return acc + bet.betAmount * multiplier
 						}, 0)
+
 						state.balance += totalWin
+						state.lastWin = totalWin
 
 						const activeBets = state.bets.filter(b => b.betAmount > 0)
+
 						if (activeBets.length > 0) {
 							state.savedRounds.push({
 								id: Date.now(),
@@ -159,6 +163,7 @@ export const useBetStore = create(
 						})
 						state.history = []
 						state.rebetUsed = false
+						state.lastWin = 0
 					},
 					false,
 					'bet/spinReset',

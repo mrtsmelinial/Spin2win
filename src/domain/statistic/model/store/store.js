@@ -22,8 +22,8 @@ const getExtraIds = number => {
 	if (RED_NUMBERS.has(number)) ids.push('color-red')
 	else ids.push('color-black')
 
-	if (number <= 18) ids.push('ragne-1-18')
-	else ids.push('ragne-19-36')
+	if (number <= 18) ids.push('range-1-18')
+	else ids.push('range-19-36')
 
 	if (number <= 12) ids.push('dozen-1')
 	else if (number <= 24) ids.push('dozen-2')
@@ -36,16 +36,6 @@ const getExtraIds = number => {
 	else ids.push('parity-odd')
 
 	return ids
-}
-
-export function initFromHistory(historyCell) {
-	const statistic = createInitialArrInfo()
-
-	historyCell.forEach(item => {
-		if (item.number === statistic.find(item.number)) {
-			statistic.level += 1
-		}
-	})
 }
 
 export const useStatisticStore = create(
