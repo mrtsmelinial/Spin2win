@@ -17,6 +17,7 @@ import {
 import { spinComplete as historySpinComplete } from '@/domain/history'
 import { spinComplete as statisticSpinComplete } from '@/domain/statistic'
 import { spinComplete as roundSpinComplete } from '@/domain/round'
+import { spinComplete as myBetsSpinComplete } from '@/domain/mybets'
 import { useRouletteStore } from '@/domain/roulette'
 
 export default function ControlColumnCenter() {
@@ -40,6 +41,7 @@ export default function ControlColumnCenter() {
 		rouletteSpinComplete(cell)
 		historySpinComplete(cell)
 		statisticSpinComplete(cell)
+		myBetsSpinComplete(cell)
 	}
 
 	const { init, startTimer, SpinStart, SpinWait, SpinToCell } = useDrawCycle({

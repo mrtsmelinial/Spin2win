@@ -1,1 +1,7 @@
-export { openDialog, closeDialog, addRound, useMyBetsStore } from './store'
+export {
+	openDialog,
+	closeDialog,
+	addRound,
+	spinComplete,
+	useMyBetsStore,
+} from './store'

@@ -1,2 +1,2 @@
 export { default } from './ui'
-export { openDialog, closeDialog, addRound } from './model'
+export { openDialog, closeDialog, addRound, spinComplete } from './model'
