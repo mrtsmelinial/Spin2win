@@ -1,6 +1,6 @@
 import { RED_NUMBERS } from '@/shared/constants'
 
- function createInitialBets() {
+ function createInitialBets() { 
 	const bets = []
 
 	for (let i = 0; i <= 36; i++) {

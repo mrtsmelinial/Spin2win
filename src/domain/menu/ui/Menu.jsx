@@ -3,6 +3,7 @@ import { close, setActiveIndex, useMenuStore } from '../model/store'
 import { useClickSound } from '@/shared/model'
 import { HistorySection } from '@/domain/history'
 import StatisticSection from '@/domain/statistic/ui/StatisticMenu'
+import MyBets, { openDialog } from '@/domain/mybets'
 
 function CoefficientsSection() {
 	const COEFFICIENT_TABLE = [
@@ -98,7 +99,10 @@ export function Menu() {
 				<button
 					className='roulette__menu-button'
 					type='button'
-					onClick={() => playSound('button')}
+					onClick={() => {
+						openDialog()
+						playSound('button')
+					}}
 				>
 					my bets
 				</button>
@@ -132,6 +136,7 @@ export function Menu() {
 				</header>
 				{renderSection()}
 			</div>
+			<MyBets />
 		</div>
 	)
 }

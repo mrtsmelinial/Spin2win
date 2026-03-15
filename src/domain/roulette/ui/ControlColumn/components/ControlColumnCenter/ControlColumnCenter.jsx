@@ -36,8 +36,8 @@ export default function ControlColumnCenter() {
 	const playSoundRef = useRef(playSound)
 
 	const spinComplete = cell => {
-		rouletteSpinComplete(cell)
 		betSpinComplete(cell)
+		rouletteSpinComplete(cell)
 		historySpinComplete(cell)
 		statisticSpinComplete(cell)
 	}
@@ -78,7 +78,7 @@ export default function ControlColumnCenter() {
 							number: target.number,
 							color: target.color,
 							sector,
-						})
+						}) 
 
 						gsap.delayedCall(5, () => {
 							spinBetReset()
