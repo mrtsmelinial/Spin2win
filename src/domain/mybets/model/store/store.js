@@ -51,6 +51,7 @@ export const useMyBetsStore = create(set => ({
 
 				if (quantityBets !== 0) {
 					myBetsState.addRound({
+						id: currentRound.round,
 						date: currentData,
 						round: `#${currentRound.round}`,
 						result: { number: cell.number, color: cell.color },

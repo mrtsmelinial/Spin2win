@@ -28,8 +28,8 @@ export default function MyBets() {
 				{
 					opacity: 1,
 					scale: 1,
-					duration: 0.2,
-					ease: 'power3.out',
+					duration: 0.3,
+					ease: 'power2.out',
 				},
 			)
 		} else {
@@ -37,8 +37,8 @@ export default function MyBets() {
 				display: 'none',
 				opacity: 0,
 				scale: 0.9,
-				duration: 0.2,
-				ease: 'power3.out',
+				duration: 0.3,
+				ease: 'power2.out',
 			})
 		}
 	}, [isOpen])
@@ -88,9 +88,9 @@ export default function MyBets() {
 								<BetRow
 									key={index}
 									bet={bet}
-									isExpanded={expandedId === index}
+									isExpanded={expandedId === bet.id}
 									onToggle={() =>
-										setExpandedId(expandedId === index ? null : index)
+										setExpandedId(expandedId === bet.id ? null : bet.id)
 									}
 								/>
 							))}
@@ -112,17 +112,21 @@ function BetRow({ bet, isExpanded, onToggle }) {
 		if (isExpanded) {
 			const scrollHeight = detailsRef.current.scrollHeight
 			gsap.to(detailsRef.current, {
-				height: scrollHeight,
 				opacity: 1,
 				duration: 0.2,
-				ease: 'power3.out',
+				ease: 'power2.out',
+			})
+			gsap.to(detailsRef.current, {
+				height: scrollHeight,
+				duration: 0.5,
+				ease: 'power1.out',
 			})
 		} else {
 			gsap.to(detailsRef.current, {
 				height: 0,
 				opacity: 0,
 				duration: 0.2,
-				ease: 'power3.out',
+				ease: 'power1.out',
 			})
 		}
 	}, [isExpanded])
