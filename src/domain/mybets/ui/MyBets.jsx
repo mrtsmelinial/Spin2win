@@ -108,7 +108,7 @@ function BetRow({ bet, isExpanded, onToggle }) {
 
 	useEffect(() => {
 		if (!detailsRef.current) return
-
+		
 		if (isExpanded) {
 			const scrollHeight = detailsRef.current.scrollHeight
 			gsap.to(detailsRef.current, {

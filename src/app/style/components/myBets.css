@@ -166,6 +166,7 @@
 
 .mybets__detalis {
 	width: 100%;
+	height: 0%;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
