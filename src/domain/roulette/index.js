@@ -4,5 +4,5 @@ export {
 	setActive,
 	spinReset,
 	useRouletteStore,
-} from './model/store'
-
+	useWheelAnimation,
+} from './model'

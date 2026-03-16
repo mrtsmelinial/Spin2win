@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useClickSound } from '@/shared/model'
 import { useRouletteStore } from '@/domain/roulette'
-import { useSpinComplete } from '../../model/useSpinComplete'
-import useSpinCycle from '../../model/useSpinCycle'
+import { useSpinComplete } from '@/domain/draw'
+import { useDrawCycle } from '@/domain/draw'
 import { getColorImgSrc } from '../../lib'
 
 export default function Roulette() {
@@ -29,7 +29,7 @@ export default function Roulette() {
 
 	const onSpinComplete = useSpinComplete()
 
-	useSpinCycle({
+	useDrawCycle({
 		refs,
 		initialCell,
 		onSpinComplete,

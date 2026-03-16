@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { useDrawCycle } from './useDrawCycle'
-import { setActive } from './store'
+import { useWheelAnimation } from '@/domain/roulette'
+import { setActive } from '../../roulette/model/store'
 import gsap from 'gsap'
 import { spinReset as spinRouletteReset } from '@/domain/roulette'
 import { spinReset as spinBetReset } from '@/domain/bet'
 import { spinComplete as roundSpinComplete } from '@/domain/round'
 
-export default function useSpinCycle({
+export default function useDrawCycle({
 	refs,
 	initialCell,
 	onSpinComplete,
@@ -19,14 +19,15 @@ export default function useSpinCycle({
 		playSoundRef: refs.playSoundRef,
 	}
 
-	const { init, startTimer, SpinStart, SpinWait, SpinToCell } = useDrawCycle({
-		wheelRef,
-		progressRef,
-		playSoundRef,
-		pointerRef,
-		initialAngle: initialCell.angle,
-		onSlotChange,
-	})
+	const { init, startTimer, SpinStart, SpinWait, SpinToCell } =
+		useWheelAnimation({
+			wheelRef,
+			progressRef,
+			playSoundRef,
+			pointerRef,
+			initialAngle: initialCell.angle,
+			onSlotChange,
+		})
 
 	useEffect(() => {
 		init()
