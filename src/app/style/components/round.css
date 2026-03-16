@@ -1,0 +1,8 @@
+.round {
+	height: 46px;
+	white-space: nowrap;
+	display: grid;
+	place-items: center;
+	font-size: 2.4rem;
+	color: var(--color-gold-second);
+}

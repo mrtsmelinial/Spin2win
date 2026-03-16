@@ -2,8 +2,8 @@ import React from 'react'
 import { close, setActiveIndex, useMenuStore } from '../model/store'
 import { useClickSound } from '@/shared/model'
 import { HistorySection } from '@/domain/history'
-import StatisticSection from '@/domain/statistic/ui/StatisticMenu'
 import MyBets, { openDialog } from '@/domain/mybets'
+import { StatisticSection } from '@/domain/statistic'
 
 function CoefficientsSection() {
 	const COEFFICIENT_TABLE = [
@@ -17,23 +17,21 @@ function CoefficientsSection() {
 	]
 
 	return (
-		<div className='roulette__menu-coefficients'>
-			<ul className='roulette__menu-list'>
-				{COEFFICIENT_TABLE.map((item, index) => (
-					<li className='roulette__menu-item' key={index}>
-						<div className='roulette__item-title'>{item.title}</div>
-						<div className='roulette__item-coef'>x{item.coef}</div>
-					</li>
-				))}
-			</ul>
-		</div>
+		<ul className='menu__list'>
+			{COEFFICIENT_TABLE.map((item, index) => (
+				<li className='menu__item' key={index}>
+					<div className='menu__item-title'>{item.title}</div>
+					<div className='menu__item-coef'>x{item.coef}</div>
+				</li>
+			))}
+		</ul>
 	)
 }
 
 function RulesSection() {
 	return (
-		<div className='roulette__menu-rules'>
-			<div className='roulette__rules-text'>
+		<div className='menu__rules'>
+			<div className='menu__rules-text'>
 				<p>
 					In the game «Spin to Win», the winning number is considered to be the
 					slot in which the ball has stopped
@@ -78,14 +76,11 @@ export function Menu() {
 	}
 
 	return (
-		<div
-			className='roulette__menu'
-			style={{ display: isOpen ? 'flex' : 'none' }}
-		>
-			<nav className='roulette__menu-nav'>
+		<div className='menu' style={{ display: isOpen ? 'flex' : 'none' }}>
+			<nav className='menu__nav'>
 				{NAV_SECTIONS.map((selection, index) => (
 					<button
-						className={`roulette__menu-button ${index === activeIndex ? 'active' : ''}`}
+						className={`menu__button ${index === activeIndex ? 'active' : ''}`}
 						type='button'
 						key={index}
 						onClick={() => {
@@ -97,7 +92,7 @@ export function Menu() {
 					</button>
 				))}
 				<button
-					className='roulette__menu-button'
+					className='menu__button'
 					type='button'
 					onClick={() => {
 						openDialog()
@@ -106,9 +101,9 @@ export function Menu() {
 				>
 					my bets
 				</button>
-				<div className='roulette__menu-button none-button'></div>
+				<div className='menu__button none-button'></div>
 				<button
-					className='roulette__menu-button'
+					className='menu__button'
 					type='button'
 					onClick={() => {
 						close()
@@ -118,13 +113,13 @@ export function Menu() {
 					exit menu
 				</button>
 			</nav>
-			<div className='roulette__menu-info'>
-				<header className='roulette__menu-header'>
-					<div className='roulette__menu-title'>
+			<div className='menu__container'>
+				<header className='menu__container-header'>
+					<div className='menu__title'>
 						{NAV_SECTIONS[activeIndex]?.description}
 					</div>
 					<button
-						className='roulette__menu-exit'
+						className='menu__exit'
 						type='button'
 						onClick={() => {
 							close()

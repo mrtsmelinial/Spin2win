@@ -1,0 +1,13 @@
+.balance {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	font-size: 2.6rem;
+	color: var(--color-gold-second);
+}
+
+.balance__icon-coin {
+	width: 3rem;
+	aspect-ratio: 1/1;
+}

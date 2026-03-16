@@ -35,17 +35,17 @@ export default function HistoryCell() {
 	}, [historyCell])
 
 	return (
-		<div className='roulette__history-wrapper'>
-			<div className='roulette__history' ref={containerRef}>
+		<div className='history-cell__wrapper'>
+			<div className='history-cell' ref={containerRef}>
 				{historyCell.map((item, index) => (
 					<div
-						className='roulette__history-item'
+						className='history-cell__item'
 						key={`${item.number}-${index}`}
 						style={{
 							backgroundColor: `var(--color-${getColor(item.number)})`,
 						}}
 					>
-						<span className='roulette__history-number'>{item.number}</span>
+						<span className='history-cell__number'>{item.number}</span>
 					</div>
 				))}
 			</div>

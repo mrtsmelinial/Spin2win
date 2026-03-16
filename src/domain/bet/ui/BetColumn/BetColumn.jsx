@@ -11,7 +11,7 @@ export default function BetColumn() {
 	)
 
 	return (
-		<div className='roulette__bet'>
+		<div className='bet'>
 			<BetColumnBettingGrid selectedChip={selectedChip} />
 			<BetColumnControls
 				setSelectedChip={setSelectedChip}

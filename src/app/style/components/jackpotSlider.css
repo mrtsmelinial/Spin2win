@@ -1,0 +1,39 @@
+.jackpot-slider{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  gap: 10px;
+}
+
+.jackpot-slider__container {
+	position: relative;
+	width: 214px;
+	height: 46px;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	overflow: hidden;
+}
+
+.jackpot-slider__list {
+	position: absolute;
+	left: 0px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.jackpot-slider__item {
+	width: 214px;
+	height: 46px;
+	display: flex;
+	justify-content: center;
+	font-size: 2.2rem;
+  color: var(--color-gold-second);
+
+	&.jackpot-slider__item--right {
+		justify-content: end;
+		padding-right: 14px;
+	}
+}

@@ -63,7 +63,7 @@ export default function ButtonFullscreen() {
 
 	return (
 		<button
-			className='roulette__button roulette__button--fullscreen'
+			className='game__button game__button--fullscreen'
 			type='button'
 			onClick={toggleFullScreen}
 		></button>

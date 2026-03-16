@@ -3,162 +3,135 @@ import { useMemo } from 'react'
 import { useStatisticStore } from '../../model/store'
 import NumberFlow from '@number-flow/react'
 
+const INITIAL_BETS = createInitialBets()
+
+const numberCell = INITIAL_BETS.filter(bet => bet.type === 'number')
+const parityCell = INITIAL_BETS.filter(bet => bet.type === 'parity')
+const colorCell = INITIAL_BETS.filter(bet => bet.type === 'color')
+const rangeCell = INITIAL_BETS.filter(bet => bet.type === 'range')
+const dozenCell = INITIAL_BETS.filter(bet => bet.type === 'dozen')
+const sectionCell = INITIAL_BETS.filter(bet => bet.type === 'section')
+
 export default function StatisticSection() {
-	const bets = createInitialBets()
 	const arrInfo = useStatisticStore(state => state.arrInfo)
 	const arrExtra = useStatisticStore(state => state.arrExtra)
 
-	const numberCell = useMemo(
-		() => bets.filter(bet => bet.type === 'number'),
-		[bets],
+	const infoMap = useMemo(
+		() => new Map(arrInfo.map(el => [el.id, el])),
+		[arrInfo],
 	)
 
-	const parityCell = useMemo(
-		() => bets.filter(bet => bet.type === 'parity'),
-		[bets],
-	)
-
-	const colorCell = useMemo(
-		() => bets.filter(bet => bet.type === 'color'),
-		[bets],
-	)
-
-	const rangeCell = useMemo(
-		() => bets.filter(bet => bet.type === 'range'),
-		[bets],
-	)
-
-	const dozenCell = useMemo(
-		() => bets.filter(bet => bet.type === 'dozen'),
-		[bets],
-	)
-
-	const sectionCell = useMemo(
-		() => bets.filter(bet => bet.type === 'section'),
-		[bets],
+	const extraMap = useMemo(
+		() => new Map(arrExtra.map(el => [el.id, el])),
+		[arrExtra],
 	)
 
 	return (
-		<div className='roulette__menu-statistic'>
-			<div className='roulette__menu-graph'>
+		<div>
+			<div className='graph'>
 				{numberCell.map((item, index) => (
-					<div className='roulette__graph-item' key={index}>
-						<div className='roulette__graph-scale'>
+					<div className='graph__item' key={index}>
+						<div className='graph__scale'>
 							<div
-								className={`roulette__scale-level roulette__scale-level--${item.color}`}
+								className={`graph__level graph__level--${item.color}`}
 								style={{
-									'--level-cell': `${arrInfo.find(el => el.id === item.value)?.level ?? 0}%`,
+									'--level-cell': `${infoMap.get(item.value)?.level ?? 0}%`,
 								}}
 							></div>
 						</div>
-						<div className='roulette__graph-number'>{item.value}</div>
+						<div className='graph__number'>{item.value}</div>
 					</div>
 				))}
 			</div>
-			<div className='roulette__menu-draw-container'>
-				<div className='roulette__menu-cell-grid'>
-					<div className='roulette__cell-main'>
+			<div className='statistic-expandet'>
+				<div>
+					<div className='statistic-expandet__cells'>
 						{numberCell
 							.filter(item => item.value !== 0)
 							.map((item, index) => (
-								<div className='roulette__menu-cell' key={index}>
+								<div className='statistic-expandet__cell' key={index}>
 									<div
-										className={`roulette__menu-cell-number roulette__menu-cell-number--${item.color}`}
+										className={`statistic-expandet__number statistic-expandet__number--${item.color}`}
 									>
 										{item.value}
 									</div>
-									<div className='roulette__menu-cell-level'>
-										<NumberFlow
-											value={
-												arrInfo.find(el => el.id === item.value)?.count ?? 0
-											}
-										/>
+									<div className='statistic-expandet__level'>
+										<NumberFlow value={infoMap.get(item.value)?.count ?? 0} />
 									</div>
 								</div>
 							))}
 					</div>
-					<div className='roulette__cell-zero'>
-						<div className='roulette__menu-cell'>
-							<div className='roulette__menu-cell-number roulette__menu-cell-number--green'>
+					<div className='statistic-expandet__zero'>
+						<div className='statistic-expandet__cell'>
+							<div className='statistic-expandet__number statistic-expandet__number--green'>
 								0
 							</div>
-							<div className='roulette__menu-cell-level'>
-								<NumberFlow
-									value={arrInfo.find(el => el.id === 0)?.count ?? 0}
-								/>
+							<div className='statistic-expandet__level'>
+								<NumberFlow value={infoMap.get(0)?.count ?? 0} />
 							</div>
 						</div>
 					</div>
 				</div>
-				<div className='roulette__menu-add-grid'>
-					<div className='roulette__menu-add-cells'>
+				<div className='statistic-expandet__add'>
+					<div className='statistic-expandet__cells-add'>
 						{parityCell.map((item, index) => (
-							<div className='roulette__menu-add-cell' key={index}>
-								<div className='roulette__menu-add-cell-title'>
+							<div className='statistic-expandet__cell-add' key={index}>
+								<div className='statistic-expandet__add-title'>
 									{item.value}
 								</div>
-								<div className='roulette__menu-cell-level'>
-									<NumberFlow
-										value={arrExtra.find(el => el.id === item.id)?.count ?? 0}
-									/>
+								<div className='statistic-expandet__level'>
+									<NumberFlow value={extraMap.get(item.id)?.count ?? 0} />
 								</div>
 							</div>
 						))}
 						{colorCell.map((item, index) => (
-							<div className='roulette__menu-add-cell' key={index}>
+							<div className='statistic-expandet__cell-add' key={index}>
 								<div
-									className={`roulette__menu-add-cell-title roulette__menu-add-cell-title--${item.value}`}
+									className={`statistic-expandet__add-title statistic-expandet__add-title--${item.value}`}
 								>
 									{item.value}
 								</div>
-								<div className='roulette__menu-cell-level'>
-									<NumberFlow
-										value={arrExtra.find(el => el.id === item.id)?.count ?? 0}
-									/>
+								<div className='statistic-expandet__level'>
+									<NumberFlow value={extraMap.get(item.id)?.count ?? 0} />
 								</div>
 							</div>
 						))}
 					</div>
-					<div className='roulette__menu-add-cells roulette__menu-add-cells--size3'>
+					<div className='statistic-expandet__cells-add statistic-expandet__cells-add--size3'>
 						{dozenCell.map((item, index) => (
-							<div className='roulette__menu-add-cell' key={index}>
-								<div className='roulette__menu-add-cell-title'>
+							<div className='statistic-expandet__cell-add' key={index}>
+								<div className='statistic-expandet__add-title'>
 									{item.value[0]}-{item.value[1]}
 								</div>
-								<div className='roulette__menu-cell-level'>
-									<NumberFlow
-										value={arrExtra.find(el => el.id === item.id)?.count ?? 0}
-									/>
+								<div className='statistic-expandet__level'>
+									<NumberFlow value={extraMap.get(item.id)?.count ?? 0} />
 								</div>
 							</div>
 						))}
 					</div>
-					<div className='roulette__menu-add-cells roulette__menu-add-cells--center '>
+					<div className='statistic-expandet__cells-add statistic-expandet__cells-add--center '>
 						{rangeCell.map((item, index) => (
-							<div className='roulette__menu-add-cell' key={index}>
-								<div className='roulette__menu-add-cell-title'>
+							<div className='statistic-expandet__cell-add' key={index}>
+								<div className='statistic-expandet__add-title'>
 									{item.value[0]}-{item.value[1]}
 								</div>
-								<div className='roulette__menu-cell-level'>
-									<NumberFlow
-										value={arrExtra.find(el => el.id === item.id)?.count ?? 0}
-									/>
+								<div className='statistic-expandet__level'>
+									<NumberFlow value={extraMap.get(item.id)?.count ?? 0} />
 								</div>
 							</div>
 						))}
 					</div>
-					<div className='roulette__menu-add-cells roulette__menu-add-cells--size6'>
+					<div className='statistic-expandet__cells-add statistic-expandet__cells-add--size6'>
 						{sectionCell.map((item, index) => (
-							<div className='roulette__menu-add-cell' key={index}>
-								<div className='roulette__menu-add-cell-title'>
+							<div className='statistic-expandet__cell-add' key={index}>
+								<div className='statistic-expandet__add-title'>
 									{item.value}
 								</div>
-								<div className='roulette__menu-cell-level'>
+								<div className='statistic-expandet__level'>
 									<NumberFlow
 										value={
-											arrExtra.find(
-												el => el.id === `section-${item.value.toLowerCase()}`,
-											)?.count ?? 0
+											extraMap.get(`section-${item.value.toLowerCase()}`)
+												?.count ?? 0
 										}
 									/>
 								</div>

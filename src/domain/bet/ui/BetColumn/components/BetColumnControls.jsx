@@ -53,14 +53,14 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 	}, [isBetting, playSound, savedRounds])
 
 	return (
-		<div className={`roulette__bet-controls ${isBetting ? '' : 'none-active'}`}>
+		<div className={`bet-control ${isBetting ? '' : 'none-active'}`}>
 			<button
-				className='roulette__bet-button'
+				className='bet-control__button'
 				type='button'
 				onClick={handleUndo}
 			>
 				<svg
-					className='roulette__bet-icon'
+					className='bet-control__icon'
 					xmlns='http://www.w3.org/2000/svg'
 					viewBox='58 15 60 60'
 					fill='#ffffff'
@@ -76,19 +76,18 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 			</button>
 
 			<button
-				className='roulette__bet-button'
+				className='bet-control__button'
 				type='button'
 				onClick={handleClear}
 			>
 				<svg
-					className='roulette__bet-icon'
+					className='bet-control__icon'
 					viewBox='80 160 20 70'
 					xmlns='http://www.w3.org/2000/svg'
 					fill='#ffffff'
 				>
 					<g>
 						<path
-							className='st3_b'
 							d='M74.9,187.4c-0.3,0-0.6-0.1-0.8-0.1c-0.8-0.2-1.3-0.7-1.3-1.6c0-1,0-2,0-3.1c0.1-2.3,1.8-4.1,3.8-4.1
             c1.5,0,3.1,0,4.6,0c0.2,0,0.5,0,0.8,0c0-1,0-1.9,0-2.8c0-1.4,0.6-2,1.8-2c3.3,0,6.6,0,9.9,0c1.3,0,1.8,0.6,1.8,2
             c0,0.9,0,1.8,0,2.8c1.7,0,3.3,0,4.9,0c2.7,0,4.3,1.8,4.3,4.8c0,0.7,0,1.3,0,2c0,1.5-0.4,2-1.7,2.1c-0.1,0-0.2,0-0.4,0.1
@@ -99,12 +98,10 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
             C84.5,184,93.1,184,101.8,184z M92.6,178.5c0-0.5,0-1,0-1.4c-2.5,0-5,0-7.5,0c0,0.5,0,0.9,0,1.4C87.6,178.5,90,178.5,92.6,178.5z'
 						></path>
 						<path
-							className='st3_b'
 							d='M86.3,201.4c0,3,0,6,0,8.9c0,1.3-0.9,2.1-1.9,1.7c-0.7-0.2-1.1-0.9-1.1-1.9c0-3.5,0-6.9,0-10.4
             c0-2.5,0-5.1,0-7.6c0-0.8,0.3-1.4,1-1.7c0.6-0.2,1.2-0.1,1.5,0.4c0.2,0.4,0.4,1,0.4,1.4C86.3,195.3,86.3,198.3,86.3,201.4z'
 						></path>
 						<path
-							className='st3_b'
 							d='M91.3,201.2c0-2.9,0-5.9,0-8.8c0-1.3,0.5-2,1.5-2c0.9,0,1.5,0.7,1.5,2c0,5.9,0,11.9,0,17.8c0,1.2-0.6,2-1.5,2
             s-1.5-0.7-1.5-1.9C91.3,207.2,91.3,204.2,91.3,201.2z'
 						></path>
@@ -114,29 +111,29 @@ export default function BetColumnControls({ setSelectedChip, sumBet }) {
 			</button>
 
 			<button
-				className='roulette__bet-button'
+				className='bet-control__button'
 				type='button'
 				onClick={handleDoubleBets}
 			>
-				<span className='roulette__bet-text roulette__bet-text--big'>x2</span>
+				<span className='bet-control__text bet-control__text--big'>x2</span>
 			</button>
 
 			<button
-				className='roulette__bet-button'
+				className='bet-control__button'
 				type='button'
 				onClick={handleClick}
 			>
-				<span className='roulette__bet-text'>{sumBet[currentBetIndex]}</span>
+				<span className='bet-control__text'>{sumBet[currentBetIndex]}</span>
 				<span>BET</span>
 			</button>
 
 			<button
-				className='roulette__bet-button'
+				className='bet-control__button'
 				type='button'
 				onClick={handleRebet}
 			>
 				<svg
-					className='roulette__bet-icon'
+					className='bet-control__icon'
 					viewBox='55 650 70 20'
 					xmlns='http://www.w3.org/2000/svg'
 				>

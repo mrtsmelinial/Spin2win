@@ -102,8 +102,8 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 	)
 
 	return (
-		<div className='roulette__cell' onMouseUp={handleMouseUp}>
-			<div className='roulette__cell-grid'>
+		<div className='betting-grid' onMouseUp={handleMouseUp}>
+			<div className='betting-grid__main'>
 				{isAddBetsMode
 					? addBetsArray.map((item, index) => {
 							const betId = addBetIdMap[item.title]
@@ -116,11 +116,11 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 
 							return (
 								<div
-									className={`roullette__wrapper-add${item.size}`}
+									className={`betting-grid__cell-wrapper-add betting-grid__cell-wrapper-add--size-${item.size}`}
 									key={index}
 								>
 									<button
-										className={`roulette__cell-item-add roulette__cell-item-add--size-${item.size} ${bet?.betAmount > 0 ? 'active' : ''} ${isBetting ? '' : 'none-active'}`}
+										className={`betting-grid__cell-add ${bet?.betAmount > 0 ? 'active' : ''} ${isBetting ? '' : 'none-active'}`}
 										type='button'
 										style={{ backgroundColor }}
 										onMouseDown={() => handleBetMouseDown(betId)}
@@ -129,14 +129,14 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 										{item.title}
 
 										{bet?.betAmount > 0 && (
-											<div className='roulette__cell-bet'>
+											<div className='betting-grid__amount'>
 												{bet.betAmount.toFixed(2).replace('.', ',')}
 											</div>
 										)}
 									</button>
 									{isWinner(bet) && (
 										<img
-											className={`roulette__cell-item-winner-add${item.size}`}
+											className={`betting-grid__border-add betting-grid__border-add--size-${item.size}`}
 											src='/img/border-m.svg'
 										/>
 									)}
@@ -146,7 +146,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 					: numberBets
 							.filter(bet => bet.value !== 0)
 							.map(bet => (
-								<div className='roulette__cell-wrapper' key={bet.id}>
+								<div className='betting-grid__cell-wrapper' key={bet.id}>
 									<button
 										onMouseDown={() =>
 											handleBetMouseDown(`number-${bet.value}`)
@@ -154,7 +154,7 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 										onMouseEnter={() =>
 											handleBetMouseEnter(`number-${bet.value}`)
 										}
-										className={`roulette__cell-item ${bet.betAmount > 0 ? 'active' : ''} ${isBetting ? '' : 'none-active'}`}
+										className={`betting-grid__cell ${bet.betAmount > 0 ? 'active' : ''} ${isBetting ? '' : 'none-active'}`}
 										type='button'
 										style={{
 											backgroundColor: `var(--color-${bet.color})`,
@@ -163,25 +163,27 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 										{bet.value}
 
 										{bet.betAmount > 0 && (
-											<div className='roulette__cell-bet'>
+											<div className='betting-grid__amount'>
 												{bet.betAmount.toFixed(2).replace('.', ',')}
 											</div>
 										)}
 									</button>
 									{isWinner(bet) && (
-										<div className='roulette__cell-item-winner'></div>
+										<div
+											className='betting-grid__border'
+											src='/img/border-m.svg'
+										></div>
 									)}
 								</div>
 							))}
 			</div>
-
-			<div className='roulette__cell-footer'>
+			<div className='betting-grid__footer'>
 				{isAddBetsMode ? (
 					''
 				) : (
-					<div className='roulette__cell-wrapper roulette__cell-wrapper--big'>
+					<div className='betting-grid__cell-wrapper betting-grid__cell-wrapper--big'>
 						<button
-							className={`roulette__cell-item roulette__cell-item--zero ${
+							className={`betting-grid__cell betting-grid__cell--zero ${
 								zeroCell && zeroCell.betAmount > 0 ? 'active' : ''
 							} ${isBetting ? '' : 'none-active'}`}
 							type='button'
@@ -190,21 +192,21 @@ export default function BetColumnBettingGrid({ selectedChip }) {
 						>
 							0
 							{zeroCell && zeroCell.betAmount > 0 && (
-								<div className='roulette__cell-bet'>
+								<div className='betting-grid__amount'>
 									{zeroCell.betAmount.toFixed(2).replace('.', ',')}
 								</div>
 							)}
 						</button>
 						{isWinner(zeroCell) && (
 							<img
-								className='roulette__cell-item-winner-add1'
+								className='betting-grid__border betting-grid__border--zero'
 								src='/img/border-m.svg'
 							/>
 						)}
 					</div>
 				)}
 				<button
-					className='roulette__cell-item roulette__cell-item--more-bets'
+					className='betting-grid__cell betting-grid__cell--more-bets'
 					type='button'
 					onClick={() => {
 						setIsAddBetsMode(prev => !prev)

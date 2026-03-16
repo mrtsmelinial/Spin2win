@@ -1,1 +1,1 @@
-export { default as ControlColumn } from './ControlColumn'
+export { default as Roulette } from './roulette'

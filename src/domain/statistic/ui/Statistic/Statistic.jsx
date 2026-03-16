@@ -4,7 +4,7 @@ import { useStatisticStore } from '@/domain/statistic'
 const StatCellLevel = memo(
 	({ level }) => (
 		<div
-			className='roulette__stat-cell roulette__stat-cell--level'
+			className='statistic__cell statistic__cell--level'
 			style={{ '--level-cell': `${level}%` }}
 		></div>
 	),
@@ -12,29 +12,26 @@ const StatCellLevel = memo(
 )
 
 const StatCellNumber = memo(() => (
-	<div className='roulette__stat-cell roulette__stat-cell--number'></div>
+	<div className='statistic__cell'></div>
 ))
 
 export default function Statistic() {
 	const arrInfo = useStatisticStore(state => state.arrInfo)
 
 	return (
-		<div className='roulette__statistic'>
+		<div className='statistic'>
 			<img
-				className='roulette__stat-img roulette__stat-img--wrapper'
-				src='../img/bg-statistic-and-last-events.png'
+				className='statistic__img'
+				src='/img/bg-statistic-and-last-events.png'
 			/>
-			<img
-				className='roulette__stat-img roulette__stat-img--level'
-				src='../img/bg-statistic.png'
-			/>
-			<div className='roulette__stat-grid'>
-				<div className='roulette__stat-item'>
+			<img className='statistic__img' src='/img/bg-statistic.png' />
+			<div className='statistic__grid'>
+				<div className='statistic__item'>
 					{arrInfo.map(item => (
 						<StatCellLevel key={item.id} level={item.level} />
 					))}
 				</div>
-				<div className='roulette__stat-item'>
+				<div className='statistic__item'>
 					{arrInfo.map(item => (
 						<StatCellNumber key={item.id} />
 					))}

@@ -5,7 +5,7 @@ export default function ButtonMute() {
 	const { isMuted, toggleSound } = useClickSound()
 	return (
 		<button
-			className={`roulette__button ${isMuted ? 'roulette__button--muted' : 'roulette__button--audio'}`}
+			className={`game__button ${isMuted ? 'game__button--muted' : 'game__button--audio'}`}
 			type='button'
 			onClick={() => toggleSound()}
 		></button>

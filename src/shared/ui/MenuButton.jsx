@@ -1,12 +1,12 @@
 import React from 'react'
 import { useClickSound } from '@/shared/model'
-import { open } from '../model/store'
+import { open } from '../../domain/menu/model/store'
 
 export function MenuButton() {
 	const { playSound } = useClickSound()
 	return (
 		<button
-			className='roulette__button roulette__button--menu'
+			className='game__button game__button--menu'
 			onClick={() => {
 				playSound('button')
 				open()

@@ -1,0 +1,13 @@
+@import './components/bettingGrid.css';
+@import './components/betControl.css';
+@import './components/totalBet.css';
+
+.bet {
+	position: relative;
+	width: 53%;
+	height: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: end;
+	z-index: 10;
+}

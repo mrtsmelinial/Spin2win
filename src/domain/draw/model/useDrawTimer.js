@@ -1,9 +1,7 @@
 import gsap from 'gsap'
-import React from 'react'
 import { TIME_BETTING } from '../config/timeBetting'
 
 export default function useBettingTImer({ progressRef }) {
-
 	function startTimer(onTimerEnd) {
 		const path = progressRef.current
 		const length = path.getTotalLength()
@@ -25,6 +23,7 @@ export default function useBettingTImer({ progressRef }) {
 				onTimerEnd()
 			},
 		})
+		
 	}
 
 	return {startTimer}

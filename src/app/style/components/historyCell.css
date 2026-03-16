@@ -1,0 +1,30 @@
+.history-cell__wrapper {
+	position: absolute;
+	top: 170px;
+	left: 54px;
+	width: 74px;
+	height: 654px;
+	overflow: hidden;
+	border-radius: 10px;
+}
+
+.history-cell {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.history-cell__item {
+	height: 65.4px;
+	display: grid;
+	place-items: center;
+	font-size: 2.4rem;
+
+	&:not(:last-child) {
+		border-bottom: var(--border-bold);
+	}
+}
+
+.history-cell__number {
+	padding-top: 4px;
+}

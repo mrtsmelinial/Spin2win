@@ -8,31 +8,24 @@ export default function HistorySection() {
 	)
 
 	return (
-		<div className='roulette__menu-history'>
-			<ul className='roulette__menu-list roulette__menu-list--history'>
-				<li className='roulette__menu-item roulette__menu-item--history'>
-					<div className='roulette__item-time'>time</div>
-					<div className='roulette__item-round'>draw</div>
-					<div className='roulette__item-result'></div>
+		<div>
+			<ul className='menu__list menu__list--history'>
+				<li className='menu__item menu__item--history'>
+					<div className='menu__time'>time</div>
+					<div className='menu__round'>draw</div>
+					<div className='menu__result'></div>
 				</li>
 				{historyCell.map((item, index) => (
-					<li
-						className='roulette__menu-item roulette__menu-item--history'
-						key={index}
-					>
-						<div className='roulette__item-time'>
-							{item.formatted}
-						</div>
-						<div className='roulette__item-round'>
+					<li className='menu__item menu__item--history' key={index}>
+						<div className='menu__time'>{item.formatted}</div>
+						<div className='menu__round'>
 							{item.round?.toLocaleString('ru-RU')}
 						</div>
-						<div className='roulette__item-result'>
-							<div
-								className={`roulette__item-cell roulette__item-cell--${item.color}`}
-							>
+						<div className='menu__result'>
+							<div className={`menu__cell menu__cell--${item.color}`}>
 								{item.number}
 							</div>
-							<div className='roulette__item-sector'>{item.sector}</div>
+							<div className='menu__sector'>{item.sector}</div>
 						</div>
 					</li>
 				))}

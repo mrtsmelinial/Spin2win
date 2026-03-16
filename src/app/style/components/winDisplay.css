@@ -1,0 +1,21 @@
+.win-display {
+	position: absolute;
+	top: 160px;
+	left: 60px;
+	width: 900px;
+	height: 900px;
+	display: grid;
+	place-items: center;
+	font-size: 120px;
+	will-change: opacity, transform;
+	pointer-events: none;
+
+	& span {
+		text-shadow: 0 0 2px rgb(0, 0, 0);
+	}
+}
+
+.win-display__img,
+.win-display__amount {
+	grid-area: 1 / 1;
+}

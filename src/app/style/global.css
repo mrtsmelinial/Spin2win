@@ -19,6 +19,13 @@ body {
 	justify-content: center;
 }
 
+.none-active {
+	opacity: 0.5;
+	cursor: default;
+}
+
+
+
 @font-face {
 	font-family: 'Aveni-Cons';
 	src: url('/fonts/aveni-cons.ttf') format('truetype');

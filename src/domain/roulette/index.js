@@ -1,4 +1,4 @@
-export { ControlColumn } from './ui'
+export { Roulette } from './ui'
 export {
 	spinComplete,
 	setActive,

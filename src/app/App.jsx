@@ -1,7 +1,7 @@
 import React from 'react'
 import './style'
 import { AudioProvider } from './provider'
-import { RoulettePage } from '@/views'
+import { GamePage } from '@/views'
 import useTimeInterval from '@/domain/time/model'
 
 export default function App() {
@@ -10,7 +10,7 @@ export default function App() {
 
 	return (
 		<AudioProvider>
-			<RoulettePage></RoulettePage>
+			<GamePage></GamePage>
 		</AudioProvider>
 	)
 }

@@ -5,6 +5,6 @@ export default function Round() {
 	const round = useRoundStore(state => state.round)
 
 	return (
-		<div className='roulette__session'># {(round).toLocaleString('ru-RU')}</div>
+		<div className='round'># {(round).toLocaleString('ru-RU')}</div>
 	)
 }

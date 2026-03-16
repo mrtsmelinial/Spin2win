@@ -7,7 +7,7 @@ const slides = [
 	{ title: 'mega', src: '/img/jackpot-mega.png', amount: 108600 },
 ]
 
-const SLIDE_WIDTH = 220
+const SLIDE_WIDTH = 214
 const INTERVAL_SLIDE = 5000
 const TRANSITION = 500
 
@@ -45,30 +45,26 @@ export default function JackpotSlider() {
 	}
 
 	return (
-		<div className='roulette__jackpot-slider'>
-			<div className='roulette__jackpot'>
-				<div className='roulette__jackpot-list' style={slideStyle}>
+		<div className='jackpot-slider'>
+			<div className='jackpot-slider__container'>
+				<div className='jackpot-slider__list' style={slideStyle}>
 					{extendedSlides.map((item, index) => (
 						<div
 							key={index}
-							className={`roulette__jackpot-item ${
-								item.title === 'big' ? 'roulette__jackpot-item--right' : ''
+							className={`jackpot-slider__item ${
+								item.title === 'big' ? 'jackpot-slider__item--right' : ''
 							}`}
 						>
-							<img
-								className='roulette__jackpot-img'
-								src={item.src}
-								alt={item.title}
-							/>
+							<img src={item.src} alt={item.title} />
 						</div>
 					))}
 				</div>
 			</div>
 
-			<div className='roulette__jackpot-amount'>
-				<div className='roulette__amount-list' style={slideStyle}>
+			<div className='jackpot-slider__container'>
+				<div className='jackpot-slider__list' style={slideStyle}>
 					{extendedSlides.map((item, index) => (
-						<span key={index} className='roulette__amount-item'>
+						<span key={index} className='jackpot-slider__item'>
 							$
 							<NumberFlow
 								value={item.amount}

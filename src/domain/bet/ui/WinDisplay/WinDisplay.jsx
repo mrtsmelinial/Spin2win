@@ -24,9 +24,9 @@ export default function WinDisplay() {
 	}, [lastWin])
 
 	return (
-		<div className='roulette__winning' ref={winRef} style={{ opacity: 0 }}>
-			<img className='roulette__winning-img' src='/img/reward-coins.svg' />
-			<div className='roulette__winning-amount'>
+		<div className='win-display' ref={winRef} style={{ opacity: 0 }}>
+			<img className='win-display__img' src='/img/reward-coins.svg' />
+			<div className='win-display__amount'>
 				{lastWin > 0 && `${lastWin.toFixed(2).replace('.', ',')}`}
 			</div>
 		</div>

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import SpinnerTimer from './SpinnerTimer'
 import { wheelSlots } from '@/shared/constants'
 import gsap from 'gsap'
 import { useClickSound } from '@/shared/model'
@@ -20,7 +19,7 @@ import { spinComplete as roundSpinComplete } from '@/domain/round'
 import { spinComplete as myBetsSpinComplete } from '@/domain/mybets'
 import { useRouletteStore } from '@/domain/roulette'
 
-export default function ControlColumnCenter() {
+export default function Roulette() {
 	const wheelRef = useRef(null)
 	const progressRef = useRef(null)
 	const targetCellRef = useRef(null)
@@ -106,11 +105,29 @@ export default function ControlColumnCenter() {
 	}, [playSound])
 
 	return (
-		<div className='roulette__control-center'>
-			<SpinnerTimer progressRef={progressRef} />
-			<img className='roulette__spinner-bg' src='/img/roulette-bg.svg' />
+		<div className='roulette'>
+			<svg
+				progressRef={progressRef}
+				version='1.1'
+				xmlns='http://www.w3.org/2000/svg'
+				viewBox='0 0 712.7 712.7'
+				className='roulette__timer'
+			>
+				<path
+					className='load0-st1'
+					d='M296.4,19.6C136.5,47.8,15,187.4,15,355.4c0,188.3,152.7,341,341,341s341-152.7,341-341
+              c0-168-121.5-307.6-281.4-335.8'
+				></path>
+				<path
+					className='load1-st0'
+					ref={progressRef}
+					d='M296.4,19.6C136.5,47.8,15,187.4,15,355.4c0,188.3,152.7,341,341,341s341-152.7,341-341
+              c0-168-121.5-307.6-281.4-335.8'
+				></path>
+			</svg>
+			<img className='roulette__bg' src='/img/roulette-bg.svg' />
 			<img
-				className='roulette__spinner-wheel'
+				className='roulette__wheel'
 				src='/img/roulette-wheel.svg'
 				ref={wheelRef}
 			/>
@@ -120,12 +137,8 @@ export default function ControlColumnCenter() {
 					src='/img/roulette-pointer.svg'
 				/>
 			</div>
-			<img
-				className='roulette__spinner-cell'
-				ref={cellImgRef}
-				src={currentColorSrc}
-			/>
-			<div className='roulette__spinner-num' ref={cellNumRef}>
+			<img className='roulette__cells' ref={cellImgRef} src={currentColorSrc} />
+			<div className='roulette__num' ref={cellNumRef}>
 				{currentCell}
 			</div>
 		</div>

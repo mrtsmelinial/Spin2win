@@ -1,0 +1,55 @@
+.statistic {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.statistic__img {
+	position: absolute;
+	top: 0;
+	z-index: 10;
+}
+
+.statistic__grid {
+	width: 100%;
+	height: 102px;
+	margin-block: 19px;
+	margin-inline-start: 29px;
+	margin-inline-end: 33px;
+	border: var(--border);
+	border-radius: 16px;
+	overflow: hidden;
+	z-index: 10;
+	display: grid;
+}
+
+.statistic__item {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(37, auto);
+}
+
+.statistic__cell {
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	&:not(&:first-child) {
+		border-left: var(--border);
+	}
+
+	&:not(.statistic__cell--level) {
+		border-top: var(--border);
+	}
+
+	&.statistic__cell--level::after {
+		position: absolute;
+		content: '';
+		width: 100%;
+		height: 100%;
+		bottom: var(--level-cell);
+		background-color: rgb(11 37 29);
+	}
+}

@@ -6,8 +6,8 @@ export default function Balance() {
 	const balance = useBetStore(state => state.balance)
 
   return (
-		<div className='roulette__balance'>
-			<img className='roulette__icon-coin' src='../img/coins.svg' />
+		<div className='balance'>
+			<img className='balance__icon-coin' src='../img/coins.svg' />
 			<span>
 				$
 				<NumberFlow
