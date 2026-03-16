@@ -1,104 +1,44 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { wheelSlots } from '@/shared/constants'
-import gsap from 'gsap'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useClickSound } from '@/shared/model'
-import { getColorImgSrc } from '@/domain/roulette/lib'
-import { useDrawCycle } from '@/domain/roulette/model/useDrawCycle'
-import {
-	setActive,
-	spinReset as spinRouletteReset,
-	spinComplete as rouletteSpinComplete,
-} from '@/domain/roulette'
-import {
-	spinComplete as betSpinComplete,
-	spinReset as spinBetReset,
-} from '@/domain/bet'
-import { spinComplete as historySpinComplete } from '@/domain/history'
-import { spinComplete as statisticSpinComplete } from '@/domain/statistic'
-import { spinComplete as roundSpinComplete } from '@/domain/round'
-import { spinComplete as myBetsSpinComplete } from '@/domain/mybets'
 import { useRouletteStore } from '@/domain/roulette'
+import { useSpinComplete } from '../../model/useSpinComplete'
+import useSpinCycle from '../../model/useSpinCycle'
+import { getColorImgSrc } from '../../lib'
 
 export default function Roulette() {
+	const initialCell = useRouletteStore(state => state.initialCell)
+	const { playSound } = useClickSound()
 	const wheelRef = useRef(null)
 	const progressRef = useRef(null)
-	const targetCellRef = useRef(null)
 	const pointerRef = useRef(null)
-	const cellNumRef = useRef(null)
-	const cellImgRef = useRef(null)
-	const initialCell = useRouletteStore(state => state.initialCell)
-	const [cellRandom, setCellRandom] = useState(initialCell)
-	const [currentCell, setCurrentCell] = useState(cellRandom.number)
-	const [currentColorSrc, setCurrentColorSrc] = useState(
-		getColorImgSrc(initialCell.color),
-	)
-	const { playSound } = useClickSound()
 	const playSoundRef = useRef(playSound)
-
-	const spinComplete = cell => {
-		betSpinComplete(cell)
-		rouletteSpinComplete(cell)
-		historySpinComplete(cell)
-		statisticSpinComplete(cell)
-		myBetsSpinComplete(cell)
-	}
-
-	const { init, startTimer, SpinStart, SpinWait, SpinToCell } = useDrawCycle({
-		wheelRef,
-		progressRef,
-		playSoundRef,
-		pointerRef,
-		initialAngle: initialCell.angle,
-		onSlotChange: slot => {
-			if (cellNumRef.current) cellNumRef.current.textContent = slot.number
-			if (cellImgRef.current)
-				cellImgRef.current.src = getColorImgSrc(slot.color)
-		},
-		setCellRandom,
-		targetCellRef,
+	const [display, setDisplay] = useState({
+		number: initialCell.number,
+		colorSrc: getColorImgSrc(initialCell.color),
 	})
 
-	useEffect(() => {
-		const wheel = wheelRef.current
-		const progress = progressRef.current
-		const pointer = pointerRef.current
+	const refs = useMemo(
+		() => ({
+			wheel: wheelRef,
+			progress: progressRef,
+			pointer: pointerRef,
+			playSoundRef,
+		}),
+		[],
+	)
 
-		init()
+	const onSpinComplete = useSpinComplete()
 
-		const onTimerEnd = () => {
-			setActive(false)
-
-			SpinStart(() => {
-				SpinWait(() => {
-					SpinToCell(target => {
-						const sector = wheelSlots[target.number].sector
-
-						setCurrentCell(target.number)
-						setCurrentColorSrc(getColorImgSrc(target.color))
-						spinComplete({
-							number: target.number,
-							color: target.color,
-							sector,
-						}) 
-
-						gsap.delayedCall(5, () => {
-							spinBetReset()
-							spinRouletteReset()
-							roundSpinComplete()
-							startTimer(onTimerEnd)
-						})
-					})
-				})
-			})
-		}
-		startTimer(onTimerEnd)
-
-		return () => {
-			gsap.killTweensOf(wheel)
-			gsap.killTweensOf(progress)
-			gsap.killTweensOf(pointer)
-		}
-	}, [])
+	useSpinCycle({
+		refs,
+		initialCell,
+		onSpinComplete,
+		onSlotChange: slot =>
+			setDisplay({
+				number: slot.number,
+				colorSrc: getColorImgSrc(slot.color),
+			}),
+	})
 
 	useEffect(() => {
 		playSoundRef.current = playSound
@@ -107,7 +47,6 @@ export default function Roulette() {
 	return (
 		<div className='roulette'>
 			<svg
-				progressRef={progressRef}
 				version='1.1'
 				xmlns='http://www.w3.org/2000/svg'
 				viewBox='0 0 712.7 712.7'
@@ -137,10 +76,8 @@ export default function Roulette() {
 					src='/img/roulette-pointer.svg'
 				/>
 			</div>
-			<img className='roulette__cells' ref={cellImgRef} src={currentColorSrc} />
-			<div className='roulette__num' ref={cellNumRef}>
-				{currentCell}
-			</div>
+			<img className='roulette__cells' src={display.colorSrc} />
+			<div className='roulette__num'>{display.number}</div>
 		</div>
 	)
 }

@@ -10,7 +10,7 @@ import {
 } from '@/domain/bet'
 import { PHASES } from '@/shared/constants'
 
-export default function BetColumnControls({ setSelectedChip, sumBet }) {
+export default function BetControl({ setSelectedChip, sumBet }) {
 	const phase = useRouletteStore(state => state.phase)
 	const isBetting = phase === PHASES.PLACE_BETS
 	const savedRounds = useBetStore(state => state.savedRounds)

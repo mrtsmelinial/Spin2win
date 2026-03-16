@@ -1,7 +1,7 @@
 import React from 'react'
 import { useBetStore } from '@/domain/bet'
 
-export default function BetColumnTotalBet() {
+export default function TotalBet() {
 	const bets = useBetStore(state => state.bets)
 
 	const total = bets.reduce((acc, cell) => acc + cell.betAmount, 0)

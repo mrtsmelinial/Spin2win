@@ -11,7 +11,6 @@ export function useDrawCycle({
 	pointerRef,
 	initialAngle,
 	onSlotChange,
-	setCellRandom,
 }) {
 	const targetCellRef = useRef(null)
 
@@ -40,7 +39,6 @@ export function useDrawCycle({
 		const currentRotation = gsap.getProperty(wheelRef.current, 'rotation')
 		const newCell = createRandomCell()
 		targetCellRef.current = newCell
-		setCellRandom(newCell)
 
 		gsap.to(wheelRef.current, {
 			rotation: currentRotation + 360 * 3,
