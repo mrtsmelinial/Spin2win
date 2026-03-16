@@ -7,4 +7,11 @@ export {
 	spinComplete,
 	spinReset,
 	useBetStore,
-} from './store.js'
+} from './betStore.js'
+
+export {
+	closeDialog,
+	useMyBetsStore,
+	openDialog,
+
+} from './myBetsStore'

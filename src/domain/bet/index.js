@@ -8,4 +8,5 @@ export {
 	spinReset,
 	useBetStore,
 } from './model/store'
-export { BetColumn, WinDisplay } from './ui'
+export { openDialog } from './model'
+export { BetColumn, WinDisplay, MyBets } from './ui'

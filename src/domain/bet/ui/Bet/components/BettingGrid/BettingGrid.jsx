@@ -13,41 +13,11 @@ const NUMBER_BETS = createInitialBets().filter(
 	bet => bet.type === 'number' && bet.value !== 0,
 )
 
-const addBetsArray = [
-	{ title: 'A', size: 2 },
-	{ title: 'B', size: 2 },
-	{ title: 'C', size: 2 },
-	{ title: 'D', size: 2 },
-	{ title: 'E', size: 2 },
-	{ title: 'F', size: 2 },
-	{ title: 'RED', size: 3 },
-	{ title: 'BLACK', size: 3 },
-	{ title: 'EVEN', size: 3 },
-	{ title: 'ODD', size: 3 },
-	{ title: '1-18', size: 3 },
-	{ title: '19-36', size: 3 },
-	{ title: '1-12', size: 2 },
-	{ title: '13-24', size: 2 },
-	{ title: '25-36', size: 2 },
-]
+const ADD_BETS = createInitialBets().filter(bet => bet.type !== 'number')
 
-const addBetIdMap = {
-	A: 'section-a',
-	B: 'section-b',
-	C: 'section-c',
-	D: 'section-d',
-	E: 'section-e',
-	F: 'section-f',
-	RED: 'color-red',
-	BLACK: 'color-black',
-	EVEN: 'parity-even',
-	ODD: 'parity-odd',
-	'1-18': 'range-1-18',
-	'19-36': 'range-19-36',
-	'1-12': 'dozen-1',
-	'13-24': 'dozen-2',
-	'25-36': 'dozen-3',
-}
+const ZERO_BET = createInitialBets().find(
+	bet => bet.type === 'number' && bet.value === 0,
+)
 
 export default function BettingGrid({ selectedChip }) {
 	const bets = useBetStore(state => state.bets)
@@ -66,19 +36,27 @@ export default function BettingGrid({ selectedChip }) {
 	}, [selectedChip])
 
 	const handleBetMouseDown = useCallback(
-		id => {
+		item => {
 			if (!isBetting || !selectedChipRef.current) return
 			isDragging.current = true
-			addBet({ id, amount: selectedChipRef.current })
+			addBet({
+				id: item.id,
+				value: item.value,
+				amount: selectedChipRef.current,
+			})
 			playSound('bet')
 		},
 		[isBetting, playSound],
 	)
 
 	const handleBetMouseEnter = useCallback(
-		id => {
+		item => {
 			if (!isBetting || !isDragging.current) return
-			addBet({ id, amount: selectedChipRef.current })
+			addBet({
+				id: item.id,
+				value: item.value,
+				amount: selectedChipRef.current,
+			})
 			playSound('bet')
 		},
 		[isBetting, playSound],
@@ -96,29 +74,24 @@ export default function BettingGrid({ selectedChip }) {
 		)
 	}, [lastResult, bets])
 
-	
-
 	return (
 		<div className='betting-grid' onMouseUp={handleMouseUp}>
 			<div className='betting-grid__main'>
 				{isAddBetsMode
-					? addBetsArray.map(item => (
+					? ADD_BETS.map(bet => (
 							<AddBetCell
-								key={item.title}
-								betId={addBetIdMap[item.title]}
-								item={item}
+								key={bet.id}
+								item={bet}
 								onMouseDown={handleBetMouseDown}
 								onMouseEnter={handleBetMouseEnter}
 								isBetting={isBetting}
-								isWinner={winnerIds.has(addBetIdMap[item.title])}
+								isWinner={winnerIds.has(bet.id)}
 							/>
 						))
 					: NUMBER_BETS.map(bet => (
 							<BetCell
 								key={bet.id}
-								betId={bet.id}
-								betValue={bet.value}
-								betColor={bet.color}
+								item={bet}
 								onMouseDown={handleBetMouseDown}
 								onMouseEnter={handleBetMouseEnter}
 								isBetting={isBetting}
@@ -131,7 +104,7 @@ export default function BettingGrid({ selectedChip }) {
 					''
 				) : (
 					<ZeroCell
-						betId='number-0'
+						item={ZERO_BET}
 						onMouseDown={handleBetMouseDown}
 						onMouseEnter={handleBetMouseEnter}
 						isBetting={isBetting}

@@ -4,6 +4,8 @@ import calculateMultiplier from '@/domain/bet/lib/calculateMultiplier'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { devtools } from 'zustand/middleware'
+import { useRoundStore } from '@/domain/round/model'
+import { addRound } from './myBetsStore'
 
 export const useBetStore = create(
 	devtools(
@@ -15,10 +17,10 @@ export const useBetStore = create(
 			savedRounds: [],
 			rebetUsed: false,
 
-			addBet: value =>
+			addBet: item =>
 				set(
 					state => {
-						const { id, amount } = value
+						const { id, value, amount } = item
 						const betIndex = state.bets.findIndex(b => b.id === id)
 						if (betIndex === -1) return
 
@@ -31,7 +33,7 @@ export const useBetStore = create(
 
 						state.bets[betIndex].betAmount += amount
 						state.balance -= amount
-						state.history.push({ id, amount })
+						state.history.push({ id, value, amount })
 					},
 					false,
 					'bet/addBet',
@@ -130,12 +132,12 @@ export const useBetStore = create(
 					'bet/loadRound',
 				),
 
-			spinComplete: value =>
+			spinComplete: cell =>
 				set(
 					state => {
 						const totalWin = state.bets.reduce((acc, bet) => {
 							if (bet.betAmount === 0) return acc
-							const multiplier = calculateMultiplier(bet, value)
+							const multiplier = calculateMultiplier(bet, cell)
 							return acc + bet.betAmount * multiplier
 						}, 0)
 
@@ -148,6 +150,46 @@ export const useBetStore = create(
 							state.savedRounds.push({
 								id: Date.now(),
 								bets: activeBets.map(b => ({ id: b.id, amount: b.betAmount })),
+							})
+
+							const currentRound = useRoundStore.getState().round
+							const currentData = new Date().toLocaleString('ru-RU')
+							const quantityBets = activeBets.length
+
+							const total = state.bets.reduce(
+								(acc, cells) => acc + cells.betAmount,
+								0,
+							)
+
+							const details = activeBets.map(item => {
+								const multiplier = calculateMultiplier(item, cell)
+								const winningAmount = item.betAmount * multiplier
+
+								let combination
+
+								if (item.type === 'range' || item.type === 'dozen') {
+									combination = `${item.value[0]}-${item.value[1]}`
+								} else combination = item.value
+
+								return {
+									id: '000000000',
+									status: winningAmount > 0 ? 'Win' : 'Lost',
+									combination: combination,
+									amount: item.betAmount,
+									odds: `x${multiplier}`,
+									win: winningAmount,
+								}
+							})
+
+							addRound({
+								id: currentRound,
+								date: currentData,
+								round: `#${currentRound}`,
+								result: { number: cell.number, color: cell.color },
+								bets: quantityBets,
+								amount: total,
+								win: totalWin,
+								details,
 							})
 						}
 					},

@@ -49,6 +49,7 @@
 	color: currentColor;
 	background-color: transparent;
 	transition: all var(--transition);
+	text-transform: uppercase;
 
 	&.active {
 		background-color: var(--color-gold) !important;

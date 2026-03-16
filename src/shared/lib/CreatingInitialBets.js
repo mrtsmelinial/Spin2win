@@ -1,6 +1,6 @@
 import { RED_NUMBERS } from '@/shared/constants'
 
- function createInitialBets() { 
+function createInitialBets() {
 	const bets = []
 
 	for (let i = 0; i <= 36; i++) {
@@ -17,21 +17,27 @@ import { RED_NUMBERS } from '@/shared/constants'
 	}
 
 	bets.push(
-		{ id: 'color-red', type: 'color', value: 'red', betAmount: 0 },
-		{ id: 'color-black', type: 'color', value: 'black', betAmount: 0 },
-		{ id: 'parity-even', type: 'parity', value: 'even', betAmount: 0 },
-		{ id: 'parity-odd', type: 'parity', value: 'odd', betAmount: 0 },
-		{ id: 'range-1-18', type: 'range', value: [1, 18], betAmount: 0 },
-		{ id: 'range-19-36', type: 'range', value: [19, 36], betAmount: 0 },
-		{ id: 'dozen-1', type: 'dozen', value: [1, 12], betAmount: 0 },
-		{ id: 'dozen-2', type: 'dozen', value: [13, 24], betAmount: 0 },
-		{ id: 'dozen-3', type: 'dozen', value: [25, 36], betAmount: 0 },
-		{ id: 'section-a', type: 'section', value: 'A', betAmount: 0 },
-		{ id: 'section-b', type: 'section', value: 'B', betAmount: 0 },
-		{ id: 'section-c', type: 'section', value: 'C', betAmount: 0 },
-		{ id: 'section-d', type: 'section', value: 'D', betAmount: 0 },
-		{ id: 'section-e', type: 'section', value: 'E', betAmount: 0 },
-		{ id: 'section-f', type: 'section', value: 'F', betAmount: 0 },
+		{ id: 'section-a', type: 'section', value: 'A', betAmount: 0, size: 2 },
+		{ id: 'section-b', type: 'section', value: 'B', betAmount: 0, size: 2 },
+		{ id: 'section-c', type: 'section', value: 'C', betAmount: 0, size: 2 },
+		{ id: 'section-d', type: 'section', value: 'D', betAmount: 0, size: 2 },
+		{ id: 'section-e', type: 'section', value: 'E', betAmount: 0, size: 2 },
+		{ id: 'section-f', type: 'section', value: 'F', betAmount: 0, size: 2 },
+		{ id: 'color-red', type: 'color', value: 'red', betAmount: 0, size: 3 },
+		{ id: 'color-black', type: 'color', value: 'black', betAmount: 0, size: 3 },
+		{ id: 'parity-even', type: 'parity', value: 'even', betAmount: 0, size: 3 },
+		{ id: 'parity-odd', type: 'parity', value: 'odd', betAmount: 0, size: 3 },
+		{ id: 'range-1-18', type: 'range', value: [1, 18], betAmount: 0, size: 3 },
+		{
+			id: 'range-19-36',
+			type: 'range',
+			value: [19, 36],
+			betAmount: 0,
+			size: 3,
+		},
+		{ id: 'dozen-1', type: 'dozen', value: [1, 12], betAmount: 0, size: 2 },
+		{ id: 'dozen-2', type: 'dozen', value: [13, 24], betAmount: 0, size: 2 },
+		{ id: 'dozen-3', type: 'dozen', value: [25, 36], betAmount: 0, size: 2 },
 	)
 
 	return bets
