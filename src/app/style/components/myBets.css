@@ -1,4 +1,4 @@
-.mybets__overlay {
+.mybets__wrapper {
 	position: fixed;
 	inset: 0;
 	width: 100%;
@@ -6,7 +6,17 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	&.hidden {
+		pointer-events: none;
+	}
+}
+
+.mybets__overlay {
+	position: absolute;
 	background-color: #00000077;
+	width: 100%;
+	height: 100%;
 }
 
 .mybets {
@@ -227,11 +237,3 @@
 	font-size: 0.8rem;
 	opacity: 0.6;
 }
-
-/* rgb(170 187 204) текст шапки */
-/* rgb(25 30 33) беграунд шапки */
-/* rgb(237 238 242) беграунд контейнера */
-/* rgb(255 255 255) беграунд кнопки листа */
-/* rgb(25 30 33) беграунд шапки листа */
-/* rgb(169 186 202) текст шапки листа */
-/* #0000000d беграунд айтема листа */

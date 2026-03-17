@@ -1,1 +1,1 @@
-export { openDialog } from './store'
+export { toggleDialog } from './store'

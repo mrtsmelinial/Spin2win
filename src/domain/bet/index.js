@@ -8,5 +8,5 @@ export {
 	spinReset,
 	useBetStore,
 } from './model/store'
-export { openDialog } from './model'
+export { toggleDialog } from './model'
 export { BetColumn, WinDisplay, MyBets } from './ui'

@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useClickSound } from '@/shared/model'
 import gsap from 'gsap'
-import { closeDialog, useMyBetsStore } from '../../model/store'
+import { toggleDialog, useMyBetsStore } from '../../model/store'
 
 const HEADERS = ['date', 'round', 'result', 'bets', 'amount', 'win']
 const BET_COLUMNS = ['bets', 'status', 'combination', 'amount', 'odds', 'win']
 
 export default function MyBets() {
+	const myBetsOverlayRef = useRef(null)
 	const myBetsRef = useRef(null)
 	const [expandedId, setExpandedId] = useState(null)
 	const bets = useMyBetsStore(state => state.bets)
@@ -33,37 +34,45 @@ export default function MyBets() {
 	}, [bets, expandedId, handleToggle])
 
 	useEffect(() => {
-		if (!myBetsRef) return
+		if (!myBetsOverlayRef.current || !myBetsRef.current) return
 
 		if (isOpen) {
 			gsap.fromTo(
+				myBetsOverlayRef.current,
+				{ autoAlpha: 0 },
+				{ autoAlpha: 1, duration: 0.3, ease: 'power2.out' },
+			)
+			gsap.fromTo(
 				myBetsRef.current,
-				{
-					display: 'flex',
-					opacity: 0,
-					scale: 0.9,
-				},
-				{
-					opacity: 1,
-					scale: 1,
-					duration: 0.3,
-					ease: 'power2.out',
-				},
+				{ autoAlpha: 0, scale: 0.8 },
+				{ autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power2.out' },
 			)
 		} else {
+			gsap.to(myBetsOverlayRef.current, {
+				autoAlpha: 0,
+				duration: 0.3,
+				ease: 'power2.out',
+			})
 			gsap.to(myBetsRef.current, {
-				display: 'none',
-				opacity: 0,
-				scale: 0.9,
+				autoAlpha: 0,
+				scale: 0.8,
 				duration: 0.3,
 				ease: 'power2.out',
 			})
 		}
 	}, [isOpen])
-
 	return (
-		<div className='mybets__overlay' ref={myBetsRef} onClick={closeDialog}>
-			<div className='mybets' onClick={el => el.stopPropagation()}>
+		<div className={`mybets__wrapper ${!isOpen && 'hidden'}`}>
+			<div
+				className='mybets__overlay'
+				ref={myBetsOverlayRef}
+				onClick={toggleDialog}
+			></div>
+			<div
+				className='mybets'
+				ref={myBetsRef}
+				onClick={el => el.stopPropagation()}
+			>
 				<header className='mybets__header'>
 					<ul className='mybets__header-list'>
 						{HEADERS.map(item => (
@@ -76,7 +85,7 @@ export default function MyBets() {
 						className='mybets__button-close'
 						type='button'
 						onClick={() => {
-							closeDialog()
+							toggleDialog()
 							playSound('button')
 						}}
 					>

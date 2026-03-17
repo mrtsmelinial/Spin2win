@@ -48,6 +48,10 @@
 		}
 	}
 
+	.diasable{
+		pointer-events: none;
+	}
+
 	&:has(+ .menu__button.active) {
 		border-bottom-right-radius: 24px;
 		border-bottom: var(--border-bold);

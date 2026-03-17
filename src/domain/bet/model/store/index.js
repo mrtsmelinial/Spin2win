@@ -10,8 +10,8 @@ export {
 } from './betStore.js'
 
 export {
-	closeDialog,
+	toggleDialog,
 	useMyBetsStore,
-	openDialog,
+
 
 } from './myBetsStore'

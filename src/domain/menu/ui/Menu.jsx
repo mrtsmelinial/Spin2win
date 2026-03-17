@@ -2,7 +2,7 @@ import React from 'react'
 import { close, setActiveIndex, useMenuStore } from '../model/store'
 import { useClickSound } from '@/shared/model'
 import { HistorySection } from '@/domain/history'
-import { MyBets, openDialog } from '@/domain/bet'
+import { MyBets, toggleDialog } from '@/domain/bet'
 import { StatisticSection } from '@/domain/statistic'
 
 function CoefficientsSection() {
@@ -95,7 +95,7 @@ export function Menu() {
 					className='menu__button'
 					type='button'
 					onClick={() => {
-						openDialog()
+						toggleDialog()
 						playSound('button')
 					}}
 				>
