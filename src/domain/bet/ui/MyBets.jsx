@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useClickSound } from '@/shared/model'
 import gsap from 'gsap'
-import { toggleDialog, useMyBetsStore } from '../../model/store'
+import { toggleDialog, useMyBetsStore } from '../model/store'
 
 const HEADERS = ['date', 'round', 'result', 'bets', 'amount', 'win']
 const BET_COLUMNS = ['bets', 'status', 'combination', 'amount', 'odds', 'win']

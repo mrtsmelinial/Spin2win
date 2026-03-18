@@ -12,6 +12,4 @@ export {
 export {
 	toggleDialog,
 	useMyBetsStore,
-
-
 } from './myBetsStore'

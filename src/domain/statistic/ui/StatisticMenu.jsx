@@ -1,6 +1,6 @@
 import { createInitialBets } from '@/shared/lib'
 import { useMemo } from 'react'
-import { useStatisticStore } from '../../model/store'
+import { useStatisticStore } from '../model/store'
 import NumberFlow from '@number-flow/react'
 
 const INITIAL_BETS = createInitialBets()

@@ -3,7 +3,7 @@ import { useClickSound } from '@/shared/model'
 import { useRouletteStore } from '@/domain/roulette'
 import { useSpinComplete } from '@/domain/draw'
 import { useDrawCycle } from '@/domain/draw'
-import { getColorImgSrc } from '../../lib'
+import { getColorImgSrc } from '../lib'
 
 export default function Roulette() {
 	const initialCell = useRouletteStore(state => state.initialCell)

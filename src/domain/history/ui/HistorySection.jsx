@@ -1,4 +1,4 @@
-import { useHistoryStore } from '../../model/store'
+import { useHistoryStore } from '../model/store'
 import { useShallow } from 'zustand/react/shallow'
 
 
