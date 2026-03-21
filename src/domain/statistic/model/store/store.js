@@ -3,6 +3,7 @@ import { createInitialBets } from '@/shared/lib'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
+import { mapStatistic } from '../../lib/mapStatistic'
 
 const createInitialArrInfo = () => {
 	return Array.from({ length: 37 }, (_, i) => ({ id: i, count: 0, level: 0 }))
@@ -60,17 +61,24 @@ export const useStatisticStore = create(
 							})
 						})
 
-						const total = state.arrInfo.reduce(
-							(sum, item) => sum + item.count,
-							0,
-						)
 						state.arrInfo.forEach(item => {
-							item.level =
-								total > 0 ? Math.round((item.count / total) * 120) : 0
+							item.level = Math.round((item.count / 15) * 100)
 						})
 					},
 					false,
 					'statistic/initFromHistory',
+				),
+
+			setStatistic: data =>
+				set(
+					state => {
+						if (data.statistic === undefined) return
+						const { arrInfo, arrExtra } = mapStatistic(data.statistic)
+						state.arrInfo = arrInfo
+						state.arrExtra = arrExtra
+					},
+					false,
+					'statistic/setStatistic',
 				),
 
 			spinComplete: value =>
@@ -99,13 +107,8 @@ export const useStatisticStore = create(
 							if (extra) extra.count += 1
 						})
 
-						const total = state.arrInfo.reduce(
-							(sum, item) => sum + item.count,
-							0,
-						)
 						state.arrInfo.forEach(item => {
-							item.level =
-								total > 0 ? Math.round((item.count / total) * 120) : 0
+							item.level = Math.round((item.count / 15) * 100)
 						})
 					},
 					false,
@@ -116,4 +119,4 @@ export const useStatisticStore = create(
 	),
 )
 
-export const { spinComplete } = useStatisticStore.getState()
+export const { spinComplete, setStatistic } = useStatisticStore.getState()

@@ -1,1 +1,1 @@
-export { spinComplete, useStatisticStore } from './store'
+export { spinComplete, useStatisticStore, setStatistic } from './store'

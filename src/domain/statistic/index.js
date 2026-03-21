@@ -1,2 +1,2 @@
 export { Statistic, StatisticSection } from './ui'
-export { spinComplete, useStatisticStore } from './model/store'
+export { spinComplete, useStatisticStore, setStatistic } from './model/store'
