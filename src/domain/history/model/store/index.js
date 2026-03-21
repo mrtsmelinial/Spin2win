@@ -1,1 +1,6 @@
-export { historyTrimLast, spinComplete, useHistoryStore } from './store'
+export {
+	historyTrimLast,
+	spinComplete,
+	useHistoryStore,
+	setLastEvents,
+} from './store'

@@ -1,45 +1,15 @@
 import { RED_NUMBERS, wheelSlots } from '@/shared/constants'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import { initialCell } from '@/shared/lib'
 import { devtools } from 'zustand/middleware'
 import { useRoundStore } from '@/domain/round/model'
 import { useTimeStore } from '@/domain/time/model'
-
-const generateInitialHistory = firstCell => {
-	const colorMap = { red: 'r', black: 'b', green: 'g' }
-	const round = useRoundStore.getState().round
-	const currentTime = useTimeStore.getState().currentTime
-	const formatted = new Date(currentTime).toLocaleTimeString('ru-RU')
-
-	const rest = Array.from({ length: 9 }, (_, i) => {
-		const number = Math.floor(Math.random() * 37)
-		const sector = wheelSlots[number]?.sector ?? '-'
-		const formatted = new Date(currentTime).toLocaleTimeString('ru-RU')
-
-		let color
-		if (number === 0) color = 'g'
-		else if (RED_NUMBERS.has(number)) color = 'r'
-		else color = 'b'
-		return { number, color, sector, round: round - (i + 2), formatted }
-	})
-
-	return [
-		{
-			number: firstCell.number,
-			color: colorMap[firstCell.color],
-			sector: firstCell.sector,
-			round: useRoundStore.getState().round - 1,
-			formatted: formatted,
-		},
-		...rest,
-	]
-}
+import { mapLastEvents } from '../../lib/mapLastEvents'
 
 export const useHistoryStore = create(
 	devtools(
 		immer(set => ({
-			historyCell: generateInitialHistory(initialCell),
+			historyCell: [],
 			spinCount: 0,
 
 			historyTrimLast: () =>
@@ -49,6 +19,16 @@ export const useHistoryStore = create(
 					}),
 					false,
 					'history/historyTrimLast',
+				),
+
+			setLastEvents: data =>
+				set(
+					state => {
+						if (data.last_events === undefined) return
+						state.historyCell = mapLastEvents(data.last_events)
+					},
+					false,
+					'history/setLastEvents',
 				),
 
 			spinComplete: cell =>
@@ -76,4 +56,5 @@ export const useHistoryStore = create(
 	),
 )
 
-export const { historyTrimLast, spinComplete } = useHistoryStore.getState()
+export const { historyTrimLast, spinComplete, setLastEvents } =
+	useHistoryStore.getState()
