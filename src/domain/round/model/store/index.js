@@ -1,1 +1,1 @@
-export { spinComplete, useRoundStore } from './store'
+export { setRoundData, spinComplete, useRoundStore } from './store'
