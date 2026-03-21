@@ -7,6 +7,7 @@ export {
 	spinComplete,
 	spinReset,
 	useBetStore,
+	setBillInfo,
 } from './betStore.js'
 
 export {

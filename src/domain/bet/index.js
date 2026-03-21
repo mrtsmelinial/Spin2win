@@ -1,4 +1,5 @@
 export {
+	toggleDialog,
 	addBet,
 	undo,
 	clearBets,
@@ -7,6 +8,6 @@ export {
 	spinComplete,
 	spinReset,
 	useBetStore,
-} from './model/store'
-export { toggleDialog } from './model'
+	setBillInfo,
+} from './model'
 export { BetColumn, WinDisplay, MyBets } from './ui'

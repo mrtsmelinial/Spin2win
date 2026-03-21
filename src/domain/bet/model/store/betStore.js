@@ -16,6 +16,7 @@ export const useBetStore = create(
 			history: [],
 			savedRounds: [],
 			rebetUsed: false,
+			billInfo: null,
 
 			addBet: item =>
 				set(
@@ -132,6 +133,16 @@ export const useBetStore = create(
 					'bet/loadRound',
 				),
 
+			setBillInfo: data =>
+				set(
+					state => {
+						if (data.bill_info === undefined) return
+						state.billInfo = data.bill_info
+					},
+					false,
+					'bet/setBillInfo',
+				),
+
 			spinComplete: cell =>
 				set(
 					state => {
@@ -223,4 +234,5 @@ export const {
 	loadRound,
 	spinComplete,
 	spinReset,
+	setBillInfo
 } = useBetStore.getState()
