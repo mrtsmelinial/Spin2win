@@ -23,11 +23,13 @@ export function mapStatistic(statistic) {
 	for (const key in statistic) {
 		const count = parseInt(statistic[key])
 		const level = Math.round((count / 15) * 100)
-		const numKey = parseInt(key)
-
-		if (!isNaN(numKey) && numKey >= 0 && numKey <= 36) {
-			arrInfo.push({ id: numKey, count, level })
-			continue
+		
+		if (/^\d+$/.test(key)) {
+			const numKey = parseInt(key)
+			if (numKey >= 0 && numKey <= 36) {
+				arrInfo.push({ id: numKey, count, level })
+				continue
+			}
 		}
 
 		const id = SERVER_KEY_TO_ID[key]
