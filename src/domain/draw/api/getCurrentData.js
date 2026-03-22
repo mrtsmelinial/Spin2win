@@ -16,6 +16,7 @@ export async function getCurrentData({gameId, uid}) {
 				button_list: {},
 				precision: 0,
 			},
+			statistic: {}
 		},
 		ver_front: '0.0.0',
 	}

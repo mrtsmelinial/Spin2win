@@ -1,8 +1,9 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
-import { createRandomCell } from '@/shared/lib'
 import { usePointerAnimation } from './usePointerAnimation'
 import { useDrawTimer } from '@/domain/draw'
+
+const MAX_WAIT_LOOPS = 15
 
 export function useWheelAnimation({
 	wheelRef,
@@ -11,6 +12,7 @@ export function useWheelAnimation({
 	pointerRef,
 	initialAngle,
 	onSlotChange,
+	onWaitTimeout,
 }) {
 	const targetCellRef = useRef(null)
 
@@ -35,18 +37,39 @@ export function useWheelAnimation({
 		})
 	}
 
-	function SpinWait(onComplete) {
-		const currentRotation = gsap.getProperty(wheelRef.current, 'rotation')
-		const newCell = createRandomCell()
-		targetCellRef.current = newCell
+	function SpinWait(setTarget, onComplete) {
+		let loopCount = 0
+		let stopped = false
 
-		gsap.to(wheelRef.current, {
-			rotation: currentRotation + 360 * 3,
-			duration: 2,
-			ease: 'linear',
-			onUpdate: handleSlotUpdate,
-			onComplete,
-		})
+		setTarget.resolve = cell => {
+			targetCellRef.current = cell
+			stopped = true
+		}
+
+		function loop() {
+			if (stopped) {
+				onComplete()
+				return
+			}
+
+			if (loopCount >= MAX_WAIT_LOOPS) {
+				onWaitTimeout?.()
+				return
+			}
+
+			loopCount++
+			const currentRotation = gsap.getProperty(wheelRef.current, 'rotation')
+
+			gsap.to(wheelRef.current, {
+				rotation: currentRotation + 360,
+				duration: 1,
+				ease: 'linear',
+				onUpdate: handleSlotUpdate,
+				onComplete: loop,
+			})
+		}
+
+		loop()
 	}
 
 	function SpinToCell(onComplete) {

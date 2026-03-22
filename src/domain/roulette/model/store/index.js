@@ -1,1 +1,7 @@
-export { spinComplete, setActive, spinReset, useRouletteStore } from './store'
+export {
+	spinComplete,
+	setActive,
+	spinReset,
+	useRouletteStore,
+	setInitialCell, setResultCell,
+} from './store'

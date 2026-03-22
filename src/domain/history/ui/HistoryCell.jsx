@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { RED_NUMBERS } from '@/shared/constants'
-import { useHistoryStore, historyTrimLast } from '@/domain/history/model/store'
+import { useHistoryStore } from '@/domain/history/model/store'
 const getColor = number => {
 	if (number === 0) return 'green'
 	return RED_NUMBERS.has(number) ? 'red' : 'black'
@@ -28,9 +28,6 @@ export default function HistoryCell() {
 			y: 0,
 			duration: 1,
 			ease: 'power2.out',
-			onComplete: () => {
-				historyTrimLast()
-			},
 		})
 	}, [historyCell])
 

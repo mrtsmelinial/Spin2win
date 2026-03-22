@@ -1,8 +1,7 @@
 import gsap from 'gsap'
-import { TIME_BETTING } from '../config/timeBetting'
 
-export default function useBettingTImer({ progressRef }) {
-	function startTimer(onTimerEnd) {
+export default function useBettingTImer({ progressRef}) {
+	function startTimer(onTimerEnd, duration) {
 		const path = progressRef.current
 		const length = path.getTotalLength()
 
@@ -15,16 +14,14 @@ export default function useBettingTImer({ progressRef }) {
 
 		gsap.to(path, {
 			strokeDashoffset: length,
-			duration: TIME_BETTING,
+			duration,
 			ease: 'none',
-			delay: 2,
 			onComplete: () => {
 				gsap.set(path, { opacity: 0 })
 				onTimerEnd()
 			},
 		})
-		
 	}
 
-	return {startTimer}
+	return { startTimer }
 }

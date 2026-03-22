@@ -16,6 +16,7 @@ export function mapLastEvents(lastEvents) {
 		else color = 'b'
 
 		return {
+			public_id: event.public_id,
 			number,
 			color,
 			sector: wheelSlots[number]?.sector ?? '-',

@@ -1,12 +1,14 @@
-import { devtools } from "globals"
-import { create } from "zustand"
-import { immer } from "zustand/middleware/immer"
+import { create } from 'zustand'
+import { devtools } from 'zustand/middleware'
+import { immer } from 'zustand/middleware/immer'
 
 export const useDrawStore = create(
 	devtools(
 		immer(set => ({
 			time: null,
 			interval: null,
+			isReady: false,
+			hasError: false,
 
 			setTime: data =>
 				set(
@@ -17,9 +19,27 @@ export const useDrawStore = create(
 					false,
 					'draw/setTime',
 				),
+
+			setReady: value =>
+				set(
+					state => {
+						state.isReady = value
+					},
+					false,
+					'draw/setReady',
+				),
+
+			setError: () =>
+				set(
+					state => {
+						state.hasError = true
+					},
+					false,
+					'draw/setError',
+				),
 		})),
 		{ name: 'DrawStore' },
 	),
 )
 
-export const { setTime } = useDrawStore.getState()
+export const { setTime, setReady, setResult, setError } = useDrawStore.getState()

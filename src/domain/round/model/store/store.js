@@ -5,7 +5,7 @@ import { devtools } from 'zustand/middleware'
 export const useRoundStore = create(
 	devtools(
 		immer(set => ({
-			round: null,
+			round: 0,
 			nextRound: null,
 			privateRound: null,
 			nextPrivateRound: null,

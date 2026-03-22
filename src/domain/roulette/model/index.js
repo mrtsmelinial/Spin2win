@@ -4,4 +4,6 @@ export {
 	setActive,
 	spinReset,
 	useRouletteStore,
+	setInitialCell,
+	setResultCell,
 } from './store'

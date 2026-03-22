@@ -1,2 +1,2 @@
 export { HistoryCell, HistorySection } from './ui'
-export { spinComplete, setLastEvents } from './model/store'
+export {  setLastEvents } from './model/store'

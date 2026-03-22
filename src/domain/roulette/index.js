@@ -5,4 +5,6 @@ export {
 	spinReset,
 	useRouletteStore,
 	useWheelAnimation,
+	setInitialCell,
+	setResultCell,
 } from './model'
