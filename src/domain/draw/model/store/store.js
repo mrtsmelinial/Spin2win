@@ -8,7 +8,6 @@ export const useDrawStore = create(
 		devtools(
 			immer(set => ({
 				time: null,
-				interval: null,
 				isReady: false,
 				hasError: false,
 				result: null,
@@ -45,7 +44,6 @@ export const useDrawStore = create(
 					set(
 						state => {
 							if (data.time !== undefined) state.time = data.time
-							if (data.interval !== undefined) state.interval = data.interval
 						},
 						false,
 						'draw/setTime',

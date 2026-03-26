@@ -1,6 +1,6 @@
 import gsap from 'gsap'
 
-export default function useBettingTImer({ progressRef}) {
+export default function useBettingTimer({ progressRef}) {
 	function startTimer(onTimerEnd, duration) {
 		const path = progressRef.current
 		const length = path.getTotalLength()

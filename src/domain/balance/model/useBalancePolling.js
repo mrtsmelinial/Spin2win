@@ -24,7 +24,6 @@ export function useBalancePolling() {
 			if (data.status === 'OK') {
 				setBalance(parseFloat(data.balance))
 			}
-
 		} catch (err) {
 			if (err.name === 'AbortError') return
 			setError()
@@ -32,6 +31,7 @@ export function useBalancePolling() {
 	}
 
 	function startPolling() {
+		if (timerRef.current) return
 		fetchBalance()
 		timerRef.current = setInterval(fetchBalance, POLLING_INTERVAL)
 	}
@@ -44,20 +44,13 @@ export function useBalancePolling() {
 	}
 
 	useEffect(() => {
-		const initialPhase = useDrawStore.getState().phase
-		if (initialPhase === 'PLACE_BETS') {
-			startPolling()
-		}
-
 		const unsubscribe = useDrawStore.subscribe(
 			state => state.phase,
 			phase => {
-				if (phase === 'PLACE_BETS') {
-					startPolling()
-				} else {
-					stopPolling()
-				}
+				if (phase === 'PLACE_BETS') startPolling()
+				else stopPolling()
 			},
+			{ fireImmediately: true },
 		)
 
 		return () => {

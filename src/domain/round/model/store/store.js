@@ -23,18 +23,9 @@ export const useRoundStore = create(
 					false,
 					'round/setRoundData',
 				),
-
-			spinComplete: () =>
-				set(
-					state => {
-						state.round = state.nextRound
-					},
-					false,
-					'round/spinComplete',
-				),
 		})),
 		{ name: 'RoundStore' },
 	),
 )
 
-export const { setRoundData, spinComplete } = useRoundStore.getState()
+export const { setRoundData } = useRoundStore.getState()

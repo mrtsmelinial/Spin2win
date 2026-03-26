@@ -1,2 +1,2 @@
 export { default } from './ui'
-export { spinComplete, setRoundData } from './model'
+export { setRoundData } from './model'

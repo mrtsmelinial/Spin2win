@@ -10,11 +10,6 @@ const colorResult = number => {
 	return 'black'
 }
 
-const getBetsQuantity = bets => {
-	if (!bets) return 0
-	return bets.length
-}
-
 const getBetStatus = amount => {
 	if (amount > 0) return 'Win'
 	else return 'Lost'
@@ -32,7 +27,7 @@ export function useUserBetsHistory() {
 				number: Number(event.result),
 				color: colorResult(Number(event.result)),
 			},
-			bets: getBetsQuantity(event.receipts[0].bet),
+			bets: event.receipts[0].bet?.length ?? 0,
 			amount: parseFloat(event.receipt_sum),
 			win: parseFloat(event.receipt_sum_win),
 			details: event.receipts[0].receipt_bets_obj.map(betObj => ({

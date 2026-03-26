@@ -14,13 +14,14 @@ const NUMBER_BETS = BETS.filter(bet => bet.type === 'number' && bet.value !== 0)
 const ADD_BETS = BETS.filter(bet => bet.type !== 'number')
 const ZERO_BET = BETS.find(bet => bet.type === 'number' && bet.value === 0)
 
+const isWinner = (bet, result) => calculateMultiplier(bet, result) > 0
+
 export default function BettingGrid({ selectedChip, precision }) {
 	const bets = useBetStore(state => state.bets)
 	const phase = useDrawStore(state => state.phase)
 	const isBetting = phase === PHASES.PLACE_BETS
 	const showWinners = phase === PHASES.WINNERS
 	const result = useDrawStore(state => state.result)
-	const isWinner = (bet, result) => calculateMultiplier(bet, result) > 0
 
 	const [isAddBetsMode, setIsAddBetsMode] = useState(false)
 	const isDragging = useRef(null)
