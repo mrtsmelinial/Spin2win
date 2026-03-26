@@ -2,7 +2,7 @@ import { useBetStore } from "@/domain/bet/model/store"
 import React, { useCallback } from "react"
 
 export const ZeroCell = React.memo(
-	function ZeroCell({ item, onMouseDown, onMouseEnter, isBetting, isWinner }) {
+	function ZeroCell({ item, onMouseDown, onMouseEnter, isBetting, isWinner, precision}) {
 
     const betAmount = useBetStore(
 			useCallback(
@@ -24,7 +24,7 @@ export const ZeroCell = React.memo(
 					0
 					{betAmount > 0 && (
 						<div className='betting-grid__amount'>
-							{betAmount.toFixed(2).replace('.', ',')}
+							{betAmount.toFixed(precision).replace('.', ',')}
 						</div>
 					)}
 				</button>

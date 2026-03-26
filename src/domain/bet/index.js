@@ -5,9 +5,10 @@ export {
 	clearBets,
 	doubleBets,
 	loadRound,
-	spinComplete,
-	spinReset,
+	betReset,
 	useBetStore,
 	setBillInfo,
+	setLastWins,
+	handleReady,
 } from './model'
 export { BetColumn, WinDisplay, MyBets } from './ui'

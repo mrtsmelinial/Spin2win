@@ -1,20 +1,18 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useClickSound } from '@/shared/model'
-import { useRouletteStore } from '@/domain/roulette'
-import { useSpinComplete } from '@/domain/draw'
-import { useDrawCycle } from '@/domain/draw'
+import { useDrawCycle, useDrawStore } from '@/domain/draw'
 import { getColorImgSrc } from '../lib'
 
 export default function Roulette() {
-	const initialCell = useRouletteStore(state => state.initialCell)
+	const result = useDrawStore(state => state.result)
 	const { playSound } = useClickSound()
 	const wheelRef = useRef(null)
 	const progressRef = useRef(null)
 	const pointerRef = useRef(null)
 	const playSoundRef = useRef(playSound)
 	const [display, setDisplay] = useState({
-		number: initialCell.number,
-		colorSrc: getColorImgSrc(initialCell.color),
+		number: result.number,
+		colorSrc: getColorImgSrc(result.color),
 	})
 
 	const refs = useMemo(
@@ -27,12 +25,10 @@ export default function Roulette() {
 		[],
 	)
 
-	const onSpinComplete = useSpinComplete()
 
 	useDrawCycle({
 		refs,
-		initialCell,
-		onSpinComplete,
+		result,
 		onSlotChange: slot =>
 			setDisplay({
 				number: slot.number,

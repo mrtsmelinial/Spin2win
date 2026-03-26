@@ -2,28 +2,28 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useClickSound } from '@/shared/model'
 import calculateMultiplier from '@/domain/bet/lib/calculateMultiplier'
 import { useBetStore, addBet } from '@/domain/bet'
-import { useRouletteStore } from '@/domain/roulette'
 import { PHASES } from '@/shared/constants'
 import { createInitialBets } from '@/shared/lib'
 import { AddBetCell } from './components/AddBetCell'
 import { BetCell } from './components/BetCell'
 import { ZeroCell } from './components/ZeroCell'
+import { useDrawStore } from '@/domain/draw'
 
 const NUMBER_BETS = createInitialBets().filter(
 	bet => bet.type === 'number' && bet.value !== 0,
 )
-
 const ADD_BETS = createInitialBets().filter(bet => bet.type !== 'number')
-
 const ZERO_BET = createInitialBets().find(
 	bet => bet.type === 'number' && bet.value === 0,
 )
 
-export default function BettingGrid({ selectedChip }) {
+export default function BettingGrid({ selectedChip, precision }) {
 	const bets = useBetStore(state => state.bets)
-	const phase = useRouletteStore(state => state.phase)
+	const phase = useDrawStore(state => state.phase)
 	const isBetting = phase === PHASES.PLACE_BETS
-	const lastResult = useRouletteStore(state => state.lastResult)
+	const showWinners = phase === PHASES.WINNERS
+	const result = useDrawStore(state => state.result)
+	const isWinner = (bet, result) => calculateMultiplier(bet, result) > 0
 
 	const [isAddBetsMode, setIsAddBetsMode] = useState(false)
 	const isDragging = useRef(null)
@@ -65,14 +65,14 @@ export default function BettingGrid({ selectedChip }) {
 	const handleMouseUp = useCallback(() => (isDragging.current = false), [])
 
 	const winnerIds = useMemo(() => {
-		if (!lastResult) return new Set()
+		if (!showWinners) return new Set()
 
 		return new Set(
 			bets
-				.filter(bet => calculateMultiplier(bet, lastResult) > 0)
+				.filter(bet => isWinner(bet, result))
 				.map(bet => bet.id),
 		)
-	}, [lastResult, bets])
+	}, [showWinners, result, bets])
 
 	return (
 		<div className='betting-grid' onMouseUp={handleMouseUp}>
@@ -84,6 +84,7 @@ export default function BettingGrid({ selectedChip }) {
 								item={bet}
 								onMouseDown={handleBetMouseDown}
 								onMouseEnter={handleBetMouseEnter}
+								precision={precision}
 								isBetting={isBetting}
 								isWinner={winnerIds.has(bet.id)}
 							/>
@@ -95,6 +96,7 @@ export default function BettingGrid({ selectedChip }) {
 								onMouseDown={handleBetMouseDown}
 								onMouseEnter={handleBetMouseEnter}
 								isBetting={isBetting}
+								precision={precision}
 								isWinner={winnerIds.has(bet.id)}
 							/>
 						))}
@@ -108,6 +110,7 @@ export default function BettingGrid({ selectedChip }) {
 						onMouseDown={handleBetMouseDown}
 						onMouseEnter={handleBetMouseEnter}
 						isBetting={isBetting}
+						precision={precision}
 						isWinner={winnerIds.has('number-0')}
 					/>
 				)}

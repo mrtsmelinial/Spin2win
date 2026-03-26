@@ -5,6 +5,8 @@ import { useBetStore } from '@/domain/bet'
 
 export default function WinDisplay() {
 	const lastWin = useBetStore(state => state.lastWin)
+	const billInfo = useBetStore(state => state.billInfo)
+	const precision = billInfo.precision
 	const { playSound } = useClickSound()
 	const winRef = useRef(null)
 
@@ -27,7 +29,7 @@ export default function WinDisplay() {
 		<div className='win-display' ref={winRef} style={{ opacity: 0 }}>
 			<img className='win-display__img' src='/img/reward-coins.svg' />
 			<div className='win-display__amount'>
-				{lastWin > 0 && `${lastWin.toFixed(2).replace('.', ',')}`}
+				{lastWin > 0 && `${lastWin.toFixed(precision).replace('.', ',')}`}
 			</div>
 		</div>
 	)

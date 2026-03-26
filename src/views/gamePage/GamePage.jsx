@@ -8,7 +8,7 @@ import { usePreloadImages } from '@/shared/model'
 import { Menu } from '@/domain/menu'
 import JackpotSlider from '@/domain/jackpot'
 import Round from '@/domain/round'
-import Balance from '@/domain/balance'
+import Balance, { useBalancePolling } from '@/domain/balance'
 import { ButtonFullscreen, ButtonMute } from '@/shared/ui'
 import { Roulette } from '@/domain/roulette'
 import { useDrawStore } from '@/domain/draw/model/store/store'
@@ -27,18 +27,17 @@ export default function GamePage() {
 	const isReady = useDrawStore(state => state.isReady)
 	const hasError = useDrawStore(state => state.hasError)
 
+	useBalancePolling()
+
 	useEffect(() => {
 		fetchCurrentData()
 	}, [])
 
 	return (
 		<main className='game'>
-			{hasError && (
-				<div>
-					Ошибкa. Перезагрузите страницу.
-				</div>
-			)}
-			{isReady && (
+			{hasError ? (
+				<div className='game__error'>Ошибкa. Перезагрузите страницу.</div>
+			) : isReady ? (
 				<AdaptiveFrame>
 					<div className='game__container-main'>
 						<Statistic />
@@ -63,6 +62,8 @@ export default function GamePage() {
 					</div>
 					<Menu />
 				</AdaptiveFrame>
+			) : (
+				<div className='game__load'>ЗАГРУЗКА</div>
 			)}
 
 			<div className='game__media-phone'>

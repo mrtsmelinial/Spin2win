@@ -122,6 +122,15 @@
 	justify-content: end;
 }
 
+.game__load, .game__error {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 4rem;
+	color: #fff;
+}
+
 @media (max-width: 360px) {
 	.game__media-phone{
 		display: block;

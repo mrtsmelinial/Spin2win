@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import { useClickSound } from '@/shared/model'
-import { useRouletteStore } from '@/domain/roulette'
 import {
 	useBetStore,
 	clearBets,
@@ -9,9 +8,10 @@ import {
 	undo,
 } from '@/domain/bet'
 import { PHASES } from '@/shared/constants'
+import { useDrawStore } from '@/domain/draw'
 
-export default function BetControl({ setSelectedChip, sumBet }) {
-	const phase = useRouletteStore(state => state.phase)
+export default function BetControl({ setSelectedChip, betAmounts, precision }) {
+	const phase = useDrawStore(state => state.phase)
 	const isBetting = phase === PHASES.PLACE_BETS
 	const savedRounds = useBetStore(state => state.savedRounds)
 	const [currentBetIndex, setCurrentBetIndex] = useState(0)
@@ -37,13 +37,22 @@ export default function BetControl({ setSelectedChip, sumBet }) {
 
 	const handleClick = useCallback(() => {
 		if (!isBetting) return
-		const nextIndex = (currentBetIndex + 1) % sumBet.length
+		const nextIndex = (currentBetIndex + 1) % betAmounts.length
 		setCurrentBetIndex(nextIndex)
 
-		const newChip = parseFloat(sumBet[nextIndex].replace(',', '.'))
+		const newChip = parseFloat(
+			betAmounts[nextIndex].toFixed(precision),
+		)
 		setSelectedChip(newChip)
 		playSound('button')
-	}, [isBetting, currentBetIndex, sumBet, setSelectedChip, playSound])
+	}, [
+		isBetting,
+		currentBetIndex,
+		betAmounts,
+		setSelectedChip,
+		playSound,
+		precision,
+	])
 
 	const handleRebet = useCallback(() => {
 		if (!isBetting) return
@@ -123,7 +132,9 @@ export default function BetControl({ setSelectedChip, sumBet }) {
 				type='button'
 				onClick={handleClick}
 			>
-				<span className='bet-control__text'>{sumBet[currentBetIndex]}</span>
+				<span className='bet-control__text'>
+					{betAmounts[currentBetIndex].toFixed(precision).replace('.', ',')}
+				</span>
 				<span>BET</span>
 			</button>
 

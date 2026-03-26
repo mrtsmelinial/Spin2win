@@ -4,13 +4,11 @@ export {
 	clearBets,
 	doubleBets,
 	loadRound,
-	spinComplete,
-	spinReset,
+	betReset,
 	useBetStore,
 	setBillInfo,
+	setLastWins,
+	
 } from './betStore.js'
 
-export {
-	toggleDialog,
-	useMyBetsStore,
-} from './myBetsStore'
+export { toggleDialog, useMyBetsStore, handleReady } from './myBetsStore'

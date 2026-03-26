@@ -1,29 +1,22 @@
 import React, { useEffect } from 'react'
-import { useWheelAnimation } from '@/domain/roulette'
-import { setActive, setResultCell } from '../../roulette/model/store'
 import gsap from 'gsap'
-import { spinReset as spinRouletteReset } from '@/domain/roulette'
-import { spinReset as spinBetReset } from '@/domain/bet'
-import { setRoundData } from '@/domain/round'
-import { useCurrentData } from './useCurrentData'
-import { setError, setTime, useDrawStore } from './store/store'
+import { handlePases, setError, setTime, useDrawStore } from '@/domain/draw'
+import { useWheelAnimation } from '@/domain/roulette'
 import { DRAW_TIME_SHIFT } from '../config/drawTimeShift'
-import { getUrlParams } from '@/shared/lib'
-import { getCurrentData } from '../api/getCurrentData'
 import { wheelSlots } from '@/shared/constants'
+import { setRoundData } from '@/domain/round'
 import { setLastEvents } from '@/domain/history'
 import { setStatistic } from '@/domain/statistic'
 import { setJackpots } from '@/domain/jackpot'
+import { useCurrentData } from './useCurrentData'
+import { betReset, setLastWins } from '@/domain/bet'
+import { useReceipt } from '@/domain/bet/model/useMakeReceipt'
+import { setBalance } from '@/domain/balance'
 
-const RETRY_DELAY = 1000
-const MAX_RETRIES = 15
+export default function useDrawCycle({ refs, result, onSlotChange }) {
+	const { pollResult } = useCurrentData()
+	const { sendReceipt, resetReceipt, balanceRef } = useReceipt()
 
-export default function useDrawCycle({
-	refs,
-	initialCell,
-	onSpinComplete,
-	onSlotChange,
-}) {
 	const { wheelRef, progressRef, pointerRef, playSoundRef } = {
 		wheelRef: refs.wheel,
 		progressRef: refs.progress,
@@ -31,44 +24,24 @@ export default function useDrawCycle({
 		playSoundRef: refs.playSoundRef,
 	}
 
-	const { fetchCurrentData } = useCurrentData()
-
 	const { init, startTimer, SpinStart, SpinWait, SpinToCell } =
 		useWheelAnimation({
 			wheelRef,
 			progressRef,
 			playSoundRef,
 			pointerRef,
-			initialAngle: initialCell.angle,
+			initialAngle: result.angle,
 			onSlotChange,
 			onWaitTimeout: () => {
-				setError(true)
+				setError()
 			},
 		})
-
-	async function pollResult(retries = 0) {
-		if (retries >= MAX_RETRIES) {
-			setError()
-			throw new Error('Max retries exceeded')
-		}
-
-		const { uid, gameId } = getUrlParams()
-		const data = await getCurrentData({ uid, gameId })
-		console.log('результат спина от сервера:', data)
-
-		if (data.result === '99' || data.result === 99) {
-			await new Promise(resolve => setTimeout(resolve, RETRY_DELAY))
-			return pollResult(retries + 1)
-		}
-
-		return data
-	}
 
 	useEffect(() => {
 		init()
 
 		const onTimerEnd = () => {
-			setActive(false)
+			handlePases('draw')
 
 			SpinStart(() => {
 				const target = {}
@@ -76,13 +49,24 @@ export default function useDrawCycle({
 				SpinWait(target, () => {
 					SpinToCell(cell => {
 						onSlotChange(cell)
-						onSpinComplete(cell)
 
 						const serverData = target.serverData
+						const wins = target.wins
 						if (serverData) {
 							setLastEvents(serverData)
 							setStatistic(serverData)
+							useDrawStore.getState().setResultCell(serverData)
 						}
+
+						if (balanceRef.current !== null) {
+							setBalance(balanceRef.current)
+						}
+
+						if (wins) {
+							setLastWins(wins)
+						}
+
+						handlePases('winners')
 
 						gsap.delayedCall(5, () => {
 							if (serverData) {
@@ -90,10 +74,8 @@ export default function useDrawCycle({
 								setRoundData(serverData)
 								setJackpots(serverData)
 							}
-
-							spinBetReset()
-							spinRouletteReset()
-
+							betReset()
+							handlePases('place_bets')
 							const time = useDrawStore.getState().time
 							startTimer(onTimerEnd, time - DRAW_TIME_SHIFT)
 						})
@@ -101,9 +83,7 @@ export default function useDrawCycle({
 				})
 
 				pollResult()
-					.then(data => {
-						setResultCell(data.result)
-
+					.then(({ data, wins }) => {
 						const cell = {
 							number: Number(data.result),
 							...wheelSlots[data.result],
@@ -111,17 +91,19 @@ export default function useDrawCycle({
 
 						target.resolve?.(cell)
 						target.serverData = data
+						target.wins = wins
 					})
-					.catch(err => {
-						console.error('pollResult error:', err)
+					.catch(() => {
+						setError()
 					})
 			})
 		}
 
 		const start = async () => {
-			await fetchCurrentData()
-			const time = useDrawStore.getState().time
+			resetReceipt()
+			sendReceipt()
 
+			const time = useDrawStore.getState().time
 			if (time <= DRAW_TIME_SHIFT) {
 				onTimerEnd()
 			} else {
@@ -135,6 +117,7 @@ export default function useDrawCycle({
 			gsap.killTweensOf(refs.wheel.current)
 			gsap.killTweensOf(refs.progress.current)
 			gsap.killTweensOf(refs.pointer.current)
+			resetReceipt()
 		}
 	}, [])
 }

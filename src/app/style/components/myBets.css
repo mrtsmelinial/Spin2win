@@ -19,7 +19,43 @@
 	height: 100%;
 }
 
+.mybets__load {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000000b7;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	& > svg {
+		width: 120px;
+		height: 120px;
+		color: #fff;
+		animation: mybets__load-arc-anim 0.8s linear infinite;
+	}
+}
+
+.mybets__load-cercle {
+	fill: currentColor;
+}
+
+.mybets__load-arc {
+	fill: var(--color-gold);
+}
+
+@keyframes mybets__load-arc-anim {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 .mybets {
+	position: relative;
 	padding: 0;
 	box-sizing: border-box;
 	width: 96%;

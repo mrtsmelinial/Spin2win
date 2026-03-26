@@ -2,14 +2,16 @@ import React from 'react'
 import { useBetStore } from '@/domain/bet'
 
 export default function TotalBet() {
-	const bets = useBetStore(state => state.bets)
+	const totalStake = useBetStore(state => state.totalStake)
+	const billInfo = useBetStore(state => state.billInfo)
 
-	const total = bets.reduce((acc, cell) => acc + cell.betAmount, 0)
+	const precision = billInfo.precision
+
 	return (
 		<div className='total-bet'>
 			<span className='total-bet__text'>TOTAL AMOUNT OF BET:</span>
 			<span className='total-bet__amount'>
-				{total.toFixed(2).replace('.', ',')}
+				{totalStake.toFixed(precision).replace('.', ',')}
 			</span>
 		</div>
 	)

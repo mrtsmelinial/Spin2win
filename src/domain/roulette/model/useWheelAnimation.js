@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { usePointerAnimation } from './usePointerAnimation'
 import { useDrawTimer } from '@/domain/draw'
@@ -97,5 +97,38 @@ export function useWheelAnimation({
 		})
 	}
 
+	function tickGSAPWhileHidden(value) {
+		if (value === false) {
+			document.removeEventListener('visibilitychange', tickGSAPWhileHidden.fn)
+			clearInterval(tickGSAPWhileHidden.id)
+			return
+		}
+
+		const onChange = () => {
+			clearInterval(tickGSAPWhileHidden.id)
+			if (document.hidden) {
+				gsap.ticker.lagSmoothing(0)
+				tickGSAPWhileHidden.id = window.setInterval(gsap.ticker.tick, 500)
+			} else {
+				gsap.ticker.lagSmoothing(500, 33)
+			}
+		}
+
+		document.addEventListener('visibilitychange', onChange)
+		tickGSAPWhileHidden.fn = onChange
+		onChange()
+	}
+
+	tickGSAPWhileHidden.id = undefined
+	tickGSAPWhileHidden.fn = undefined
+
+	useEffect(() => {
+		tickGSAPWhileHidden(true)
+		return () => {
+			tickGSAPWhileHidden(false)
+		}
+	}, [])
+
 	return { init, startTimer, SpinStart, SpinWait, SpinToCell }
 }
+

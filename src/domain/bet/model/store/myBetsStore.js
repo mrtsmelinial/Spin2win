@@ -2,12 +2,17 @@ import { create } from 'zustand'
 
 export const useMyBetsStore = create(set => ({
 	isOpen: false,
+	isReady: false,
 	bets: [],
 	toggleDialog: () => set(state => ({ isOpen: !state.isOpen })),
-	addRound: bet =>
-		set(state => ({
-			bets: [bet, ...state.bets],
+	addRound: newBets =>
+		set(() => ({
+			bets: newBets,
 		})),
+	handleReady: value =>
+		set({
+			isReady: value,
+		}),
 }))
 
-export const { toggleDialog, addRound } = useMyBetsStore.getState()
+export const { toggleDialog, addRound, handleReady } = useMyBetsStore.getState()

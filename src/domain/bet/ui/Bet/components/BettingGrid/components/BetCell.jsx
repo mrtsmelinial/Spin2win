@@ -7,6 +7,7 @@ export const BetCell = React.memo(function BetCells({
 	onMouseEnter,
 	isBetting,
 	isWinner,
+	precision,
 }) {
 	const betAmount = useBetStore(
 		useCallback(
@@ -30,7 +31,7 @@ export const BetCell = React.memo(function BetCells({
 
 				{betAmount > 0 && (
 					<div className='betting-grid__amount'>
-						{betAmount.toFixed(2).replace('.', ',')}
+						{betAmount.toFixed(precision).replace('.', ',')}
 					</div>
 				)}
 			</button>

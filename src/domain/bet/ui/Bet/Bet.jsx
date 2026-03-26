@@ -2,20 +2,24 @@ import React, { useState } from 'react'
 import { BettingGrid } from './components'
 import { BetControl } from './components'
 import { TotalBet } from './components'
-
-const sumBet = ['0,50', '1,00', '2,00', '3,00', '5,00', '10,00']
+import { useBetStore } from '../../model'
 
 export default function Bet() {
-	const [selectedChip, setSelectedChip] = useState(
-		parseFloat(sumBet[0].replace(',', '.')),
-	)
+	const billInfo = useBetStore(state => state.billInfo)
+
+	const betAmounts = Object.values(billInfo.button_list)
+
+	const precision = billInfo.precision
+
+	const [selectedChip, setSelectedChip] = useState(parseFloat(betAmounts[0]))
 
 	return (
 		<div className='bet'>
-			<BettingGrid selectedChip={selectedChip} />
+			<BettingGrid selectedChip={selectedChip} precision={precision} />
 			<BetControl
 				setSelectedChip={setSelectedChip}
-				sumBet={sumBet}
+				betAmounts={betAmounts}
+				precision={precision}
 			/>
 			<TotalBet />
 		</div>

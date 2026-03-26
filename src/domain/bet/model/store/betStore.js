@@ -1,17 +1,14 @@
-import { MAX_BET } from '@/domain/bet/config/maxBet'
 import { createInitialBets } from '@/shared/lib'
-import calculateMultiplier from '@/domain/bet/lib/calculateMultiplier'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { devtools } from 'zustand/middleware'
-import { useRoundStore } from '@/domain/round/model'
-import { addRound } from './myBetsStore'
+import { addBalance, useBalanceStore } from '@/domain/balance'
 
 export const useBetStore = create(
 	devtools(
 		immer(set => ({
 			bets: createInitialBets(),
-			balance: 10000,
+			totalStake: 0,
 			lastWin: 0,
 			history: [],
 			savedRounds: [],
@@ -22,18 +19,15 @@ export const useBetStore = create(
 				set(
 					state => {
 						const { id, value, amount } = item
+						const balance = useBalanceStore.getState().balance
 						const betIndex = state.bets.findIndex(b => b.id === id)
 						if (betIndex === -1) return
 
-						const totalCurrentBets = state.bets.reduce(
-							(acc, b) => acc + b.betAmount,
-							0,
-						)
-						if (totalCurrentBets + amount > MAX_BET) return
-						if (amount > state.balance) return
+						if (state.totalStake + amount > state.billInfo.max_bet) return
+						if (state.totalStake + amount > balance) return
 
 						state.bets[betIndex].betAmount += amount
-						state.balance -= amount
+						state.totalStake += amount
 						state.history.push({ id, value, amount })
 					},
 					false,
@@ -52,7 +46,7 @@ export const useBetStore = create(
 								if (bet) bet.betAmount = b.amount
 							})
 							const refund = last.bets.reduce((acc, b) => acc + b.amount, 0)
-							state.balance += refund
+							state.totalStake -= refund
 							state.history.pop()
 							return
 						}
@@ -60,7 +54,7 @@ export const useBetStore = create(
 						const bet = state.bets.find(b => b.id === last.id)
 						if (!bet) return
 						bet.betAmount -= last.amount
-						state.balance += last.amount
+						state.totalStake -= last.amount
 						state.history.pop()
 					},
 					false,
@@ -77,7 +71,7 @@ export const useBetStore = create(
 						state.bets.forEach(b => {
 							b.betAmount = 0
 						})
-						state.balance += totalBets
+						state.totalStake -= totalBets
 						state.history = []
 						state.rebetUsed = false
 					},
@@ -88,8 +82,13 @@ export const useBetStore = create(
 			doubleBets: () =>
 				set(
 					state => {
+						const balance = useBalanceStore.getState().balance
 						const total = state.bets.reduce((acc, b) => acc + b.betAmount, 0)
-						if (total === 0 || total > state.balance || total * 2 > MAX_BET)
+						if (
+							total === 0 ||
+							total * 2 > balance ||
+							total * 2 > state.billInfo.max_bet
+						)
 							return
 
 						state.history.push({
@@ -101,7 +100,7 @@ export const useBetStore = create(
 						state.bets.forEach(b => {
 							b.betAmount *= 2
 						})
-						state.balance -= total
+						state.totalStake += total
 					},
 					false,
 					'bet/doubleBets',
@@ -115,14 +114,14 @@ export const useBetStore = create(
 						if (state.rebetUsed) return
 
 						const totalAmount = round.bets.reduce((acc, b) => acc + b.amount, 0)
-						if (totalAmount > state.balance) return
-						if (totalAmount > MAX_BET) return
+						if (totalAmount > state.totalStake) return
+						if (totalAmount > state.billInfo.max_bet) return
 
 						state.bets.forEach(bet => {
 							const saved = round.bets.find(b => b.id === bet.id)
 							bet.betAmount = saved ? saved.amount : 0
 						})
-						state.balance -= totalAmount
+						state.totalStake += totalAmount
 						state.history = round.bets.map(b => ({
 							id: b.id,
 							amount: b.amount,
@@ -143,72 +142,21 @@ export const useBetStore = create(
 					'bet/setBillInfo',
 				),
 
-			spinComplete: cell =>
+			setLastWins: amount =>
 				set(
 					state => {
-						const totalWin = state.bets.reduce((acc, bet) => {
-							if (bet.betAmount === 0) return acc
-							const multiplier = calculateMultiplier(bet, cell)
-							return acc + bet.betAmount * multiplier
-						}, 0)
+						if (!amount) return
+						if (amount.win_amount_bets === undefined) return
 
-						state.balance += totalWin
-						state.lastWin = totalWin
-
-						const activeBets = state.bets.filter(b => b.betAmount > 0)
-
-						if (activeBets.length > 0) {
-							state.savedRounds.push({
-								id: Date.now(),
-								bets: activeBets.map(b => ({ id: b.id, amount: b.betAmount })),
-							})
-
-							const currentRound = useRoundStore.getState().round
-							const currentData = new Date().toLocaleString('ru-RU')
-							const quantityBets = activeBets.length
-
-							const total = state.bets.reduce(
-								(acc, cells) => acc + cells.betAmount,
-								0,
-							)
-
-							const details = activeBets.map(item => {
-								const multiplier = calculateMultiplier(item, cell)
-								const winningAmount = item.betAmount * multiplier
-
-								let combination
-
-								if (item.type === 'range' || item.type === 'dozen') {
-									combination = `${item.value[0]}-${item.value[1]}`
-								} else combination = item.value
-
-								return {
-									id: '000000000',
-									status: winningAmount > 0 ? 'Win' : 'Lost',
-									combination: combination,
-									amount: item.betAmount,
-									odds: `x${multiplier}`,
-									win: winningAmount,
-								}
-							})
-
-							addRound({
-								id: currentRound,
-								date: currentData,
-								round: `#${currentRound}`,
-								result: { number: cell.number, color: cell.color },
-								bets: quantityBets,
-								amount: total,
-								win: totalWin,
-								details,
-							})
-						}
+						const winAmount = Number(amount.win_amount_bets)
+						state.lastWin = winAmount
+						addBalance(winAmount)
 					},
 					false,
-					'bet/spinComplete',
+					'bet/setLastWins',
 				),
 
-			spinReset: () =>
+			betReset: () =>
 				set(
 					state => {
 						state.bets.forEach(b => {
@@ -217,9 +165,10 @@ export const useBetStore = create(
 						state.history = []
 						state.rebetUsed = false
 						state.lastWin = 0
+						state.totalStake = 0
 					},
 					false,
-					'bet/spinReset',
+					'bet/betReset',
 				),
 		})),
 		{ name: 'BetStore' },
@@ -232,7 +181,7 @@ export const {
 	clearBets,
 	doubleBets,
 	loadRound,
-	spinComplete,
-	spinReset,
-	setBillInfo
+	betReset,
+	setBillInfo,
+	setLastWins,
 } = useBetStore.getState()

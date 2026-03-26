@@ -1,5 +1,12 @@
-export { default as useDrawTimer } from './model/useDrawTimer'
-export { default as useDrawCycle } from './model/useDrawCycle'
-export { default as useSpinComplete } from './model/useSpinComplete'
 export { getCurrentData } from './api/getCurrentData'
-export { setResult } from './model/store/store'
+export {
+	setTime,
+	setReady,
+	setError,
+	setResultCell,
+	handlePases,
+	useDrawStore,
+	useDrawTimer,
+	useDrawCycle,
+	useCurrentData,
+} from './model'
