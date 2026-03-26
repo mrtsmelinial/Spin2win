@@ -9,13 +9,10 @@ import { BetCell } from './components/BetCell'
 import { ZeroCell } from './components/ZeroCell'
 import { useDrawStore } from '@/domain/draw'
 
-const NUMBER_BETS = createInitialBets().filter(
-	bet => bet.type === 'number' && bet.value !== 0,
-)
-const ADD_BETS = createInitialBets().filter(bet => bet.type !== 'number')
-const ZERO_BET = createInitialBets().find(
-	bet => bet.type === 'number' && bet.value === 0,
-)
+const BETS = createInitialBets()
+const NUMBER_BETS = BETS.filter(bet => bet.type === 'number' && bet.value !== 0)
+const ADD_BETS = BETS.filter(bet => bet.type !== 'number')
+const ZERO_BET = BETS.find(bet => bet.type === 'number' && bet.value === 0)
 
 export default function BettingGrid({ selectedChip, precision }) {
 	const bets = useBetStore(state => state.bets)
@@ -67,11 +64,7 @@ export default function BettingGrid({ selectedChip, precision }) {
 	const winnerIds = useMemo(() => {
 		if (!showWinners) return new Set()
 
-		return new Set(
-			bets
-				.filter(bet => isWinner(bet, result))
-				.map(bet => bet.id),
-		)
+		return new Set(bets.filter(bet => isWinner(bet, result)).map(bet => bet.id))
 	}, [showWinners, result, bets])
 
 	return (
