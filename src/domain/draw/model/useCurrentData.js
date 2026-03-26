@@ -1,4 +1,4 @@
-import { getUrlParams } from '@/shared/lib'
+import { getUrlParams, sleep } from '@/shared/lib'
 import { getCurrentData } from '../api/getCurrentData'
 import { setError, setReady, setResultCell, setTime } from './store/store'
 import { setRoundData } from '@/domain/round'
@@ -16,7 +16,6 @@ export function useCurrentData() {
 	async function fetchCurrentData() {
 		try {
 			const data = await getCurrentData({ uid, gameId })
-
 			setTime(data)
 			setRoundData(data)
 			setLastEvents(data)
@@ -24,10 +23,10 @@ export function useCurrentData() {
 			setJackpots(data)
 			setBillInfo(data)
 			setResultCell(data)
-
 			setReady(true)
-		} catch {
-			console.error('Failed to fetch current data')
+		} catch (err) {
+			console.error('Failed to fetch current data', err)
+			setError()
 		}
 	}
 
@@ -42,17 +41,12 @@ export function useCurrentData() {
 		const data = await getCurrentData({ uid, gameId })
 
 		if (data.result === '99' || data.result === 99) {
-			await new Promise(resolve => setTimeout(resolve, RETRY_DELAY))
-
+			await sleep(RETRY_DELAY)
 			return pollResult(retries + 1)
 		}
 
-
-		const wins = await new Promise(resolve => {
-			setTimeout(async () => {
-				resolve(await getUserWinsByEvent({ uid, eventId }))
-			}, 1000)
-		})
+		await sleep(1000)
+		const wins = await getUserWinsByEvent({ uid, eventId })
 
 		return { data, wins }
 	}

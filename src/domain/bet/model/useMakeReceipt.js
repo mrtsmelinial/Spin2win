@@ -1,15 +1,11 @@
 import { useRef, useCallback } from 'react'
 import { makeReceipt } from '../api/makeReceipt'
-import { getUrlParams } from '@/shared/lib'
+import { getUrlParams, sleep } from '@/shared/lib'
 import { useDrawStore } from '@/domain/draw'
 import { useRoundStore } from '@/domain/round/model'
 import { betReset } from './store'
 
 export const RECEIPT_TIME_SHIFT = 6000
-
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms))
-}
 
 export function useReceipt() {
 	const abortControllerRef = useRef(null)

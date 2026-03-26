@@ -64,14 +64,10 @@ export const useBetStore = create(
 			clearBets: () =>
 				set(
 					state => {
-						const totalBets = state.bets.reduce(
-							(acc, bet) => acc + bet.betAmount,
-							0,
-						)
 						state.bets.forEach(b => {
 							b.betAmount = 0
 						})
-						state.totalStake -= totalBets
+						state.totalStake = 0
 						state.history = []
 						state.rebetUsed = false
 					},
@@ -121,7 +117,7 @@ export const useBetStore = create(
 							const saved = round.bets.find(b => b.id === bet.id)
 							bet.betAmount = saved ? saved.amount : 0
 						})
-						state.totalStake += totalAmount
+						state.totalStake = totalAmount
 						state.history = round.bets.map(b => ({
 							id: b.id,
 							amount: b.amount,
